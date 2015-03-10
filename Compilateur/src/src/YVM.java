@@ -1,4 +1,3 @@
-package src;
 
 abstract class YVM {
 	

@@ -23,7 +23,11 @@ public class Yaka {
   public static void main(String args[]) { 
     Yaka analyseur;
     java.io.InputStream input;
-
+	public static Declaration declaration;
+	public static Expression expression;
+	public static TabIdent tabIdent;
+	public static YVMasm yvmAsm;
+	
     if (args.length==1) {
       System.out.print(args[args.length-1] + ": ");
       try {
@@ -137,35 +141,36 @@ TOKEN  :
 /**************************************/
 void analyse() : {}
 {
-   <PROGRAMME> <ident>	
+   <PROGRAMME> <ident>	{yvmAsm.entete(GramTokenManager.identLu);}
    bloc()
-   <FPROGRAMME> 
+   <FPROGRAMME> {yvmAsm.queue();}
 }
 
 void bloc() : {}{
  (declConst())*
  (declVar())*		
-   suiteExpr() 
+ suiteExpr() 
 }
 
 void declConst() : {}
 {
-  <CONST>  defConst() ( "," defConst())* ";"
+  <CONST>
+  defConst() ( "," defConst())* ";"
 }
 
 void defConst() : {}
 {
 	
-  <ident>  	  	
+  <ident> {declaration.saveName = GramTokenManager.identLu;}
    "=" valConst()
     
 }
 
 void valConst() : {}{
-  <entier> 		
- | <ident>		
- | <VRAI> 		
- | <FAUX> 		
+  <entier> 	{tabIdent.rangeIdent(nom, declaration.createIdentConst(ENTIER, GramTokenManager.entierLu));}
+ | <ident>	{tabIdent.rangeIdent(nom, tabIdent.chercheIdent(GramTokenManager.identLu));}	
+ | <VRAI> 	{tabIdent.rangeIdent(nom, declaration.createIdentConst(BOOLEEN, VRAI));}	
+ | <FAUX> 	{tabIdent.rangeIdent(nom, declaration.createIdentConst(BOOLEEN, FAUX));}	
 }
 
 

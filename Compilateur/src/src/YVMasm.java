@@ -1,194 +1,194 @@
-package src;
+import java.io.OutputStream;
+
 
 
 public class YVMasm extends YVM{
 	
-	
-	public YVMasm(String nom){
-
-	}
+	OutputStream file;
 	
 	@Override
 	public void iadd() {
-		System.out.println("pop bx");
-		System.out.println("pop ax");
-		System.out.println("add ax,bx");
-		System.out.println("push ax");
+		Ecriture.ecrireStringln(file,"pop bx");
+		Ecriture.ecrireStringln(file,"pop ax");
+		Ecriture.ecrireStringln(file,"add ax,bx");
+		Ecriture.ecrireStringln(file,"push ax");
 	}
 
 	@Override
 	public void isub() {
-		System.out.println("pop bx");
-		System.out.println("pop ax");
-		System.out.println("sub ax,bx");
-		System.out.println("push ax");
+		Ecriture.ecrireStringln(file,"pop bx");
+		Ecriture.ecrireStringln(file,"pop ax");
+		Ecriture.ecrireStringln(file,"sub ax,bx");
+		Ecriture.ecrireStringln(file,"push ax");
 	}
 
 	@Override
 	public void imul() {
-		System.out.println("pop bx");
-		System.out.println("pop ax");
-		System.out.println("imul bx");
-		System.out.println("push ax");
+		Ecriture.ecrireStringln(file,"pop bx");
+		Ecriture.ecrireStringln(file,"pop ax");
+		Ecriture.ecrireStringln(file,"imul bx");
+		Ecriture.ecrireStringln(file,"push ax");
 	}
 
 	@Override
 	public void idiv() {
-		System.out.println("pop bx");
-		System.out.println("pop ax");
-		System.out.println("cwd");
-		System.out.println("idiv bx");
-		System.out.println("push ax");
+		Ecriture.ecrireStringln(file,"pop bx");
+		Ecriture.ecrireStringln(file,"pop ax");
+		Ecriture.ecrireStringln(file,"cwd");
+		Ecriture.ecrireStringln(file,"idiv bx");
+		Ecriture.ecrireStringln(file,"push ax");
 	}
 
 	@Override
 	public void inot() {
-		System.out.println("pop ax");
-		System.out.println("not ax");
-		System.out.println("push ax");
+		Ecriture.ecrireStringln(file,"pop ax");
+		Ecriture.ecrireStringln(file,"not ax");
+		Ecriture.ecrireStringln(file,"push ax");
 	}
 
 	@Override
 	public void ineg() {
-		System.out.println("pop ax");
-		System.out.println("neg ax");
-		System.out.println("push ax");
+		Ecriture.ecrireStringln(file,"pop ax");
+		Ecriture.ecrireStringln(file,"neg ax");
+		Ecriture.ecrireStringln(file,"push ax");
 	}
 
 	@Override
 	public void ior() {
-		System.out.println("pop bx");
-		System.out.println("pop ax");
-		System.out.println("or ax,bx");
-		System.out.println("push ax");
+		Ecriture.ecrireStringln(file,"pop bx");
+		Ecriture.ecrireStringln(file,"pop ax");
+		Ecriture.ecrireStringln(file,"or ax,bx");
+		Ecriture.ecrireStringln(file,"push ax");
 	}
 
 	@Override
 	public void iand() {
-		System.out.println("pop bx");
-		System.out.println("pop ax");
-		System.out.println("and ax,bx");
-		System.out.println("push ax");
+		Ecriture.ecrireStringln(file,"pop bx");
+		Ecriture.ecrireStringln(file,"pop ax");
+		Ecriture.ecrireStringln(file,"and ax,bx");
+		Ecriture.ecrireStringln(file,"push ax");
 	}
 
 	@Override
 	public void iinf() {
-		System.out.println("pop bx");
-		System.out.println("pop ax");
-		System.out.println("cmp ax,bx");
-		System.out.println("jge $+6");
-		System.out.println("push -1");
-		System.out.println("jump $+4");
-		System.out.println("push 0");
+		Ecriture.ecrireStringln(file,"pop bx");
+		Ecriture.ecrireStringln(file,"pop ax");
+		Ecriture.ecrireStringln(file,"cmp ax,bx");
+		Ecriture.ecrireStringln(file,"jge $+6");
+		Ecriture.ecrireStringln(file,"push -1");
+		Ecriture.ecrireStringln(file,"jump $+4");
+		Ecriture.ecrireStringln(file,"push 0");
 	}
 
 	@Override
 	public void isup() {
-		System.out.println("pop bx");
-		System.out.println("pop ax");
-		System.out.println("cmp ax,bx");
-		System.out.println("jle $+6");
-		System.out.println("push -1");
-		System.out.println("jump $+4");
-		System.out.println("push 0");
+		Ecriture.ecrireStringln(file,"pop bx");
+		Ecriture.ecrireStringln(file,"pop ax");
+		Ecriture.ecrireStringln(file,"cmp ax,bx");
+		Ecriture.ecrireStringln(file,"jle $+6");
+		Ecriture.ecrireStringln(file,"push -1");
+		Ecriture.ecrireStringln(file,"jump $+4");
+		Ecriture.ecrireStringln(file,"push 0");
 	}
 
 	@Override
 	public void iinfegal() {
-		System.out.println("pop bx");
-		System.out.println("pop ax");
-		System.out.println("cmp ax,bx");
-		System.out.println("jg $+6");
-		System.out.println("push -1");
-		System.out.println("jump $+4");
-		System.out.println("push 0");
+		Ecriture.ecrireStringln(file,"pop bx");
+		Ecriture.ecrireStringln(file,"pop ax");
+		Ecriture.ecrireStringln(file,"cmp ax,bx");
+		Ecriture.ecrireStringln(file,"jg $+6");
+		Ecriture.ecrireStringln(file,"push -1");
+		Ecriture.ecrireStringln(file,"jump $+4");
+		Ecriture.ecrireStringln(file,"push 0");
 	}
 
 	@Override
 	public void isupegal() {
-		System.out.println("pop bx");
-		System.out.println("pop ax");
-		System.out.println("cmp ax,bx");
-		System.out.println("jl $+6");
-		System.out.println("push -1");
-		System.out.println("jump $+4");
-		System.out.println("push 0");
+		Ecriture.ecrireStringln(file,"pop bx");
+		Ecriture.ecrireStringln(file,"pop ax");
+		Ecriture.ecrireStringln(file,"cmp ax,bx");
+		Ecriture.ecrireStringln(file,"jl $+6");
+		Ecriture.ecrireStringln(file,"push -1");
+		Ecriture.ecrireStringln(file,"jump $+4");
+		Ecriture.ecrireStringln(file,"push 0");
 	}
 
 	@Override
 	public void iegal() {
-		System.out.println("pop bx");
-		System.out.println("pop ax");
-		System.out.println("cmp ax,bx");
-		System.out.println("jne $+6");
-		System.out.println("push -1");
-		System.out.println("jump $+4");
-		System.out.println("push 0");
+		Ecriture.ecrireStringln(file,"pop bx");
+		Ecriture.ecrireStringln(file,"pop ax");
+		Ecriture.ecrireStringln(file,"cmp ax,bx");
+		Ecriture.ecrireStringln(file,"jne $+6");
+		Ecriture.ecrireStringln(file,"push -1");
+		Ecriture.ecrireStringln(file,"jump $+4");
+		Ecriture.ecrireStringln(file,"push 0");
 	}
 
 	@Override
 	public void idiff() {
-		System.out.println("pop bx");
-		System.out.println("pop ax");
-		System.out.println("cmp ax,bx");
-		System.out.println("je $+6");
-		System.out.println("push -1");
-		System.out.println("jmp $+4");
-		System.out.println("push 0");
+		Ecriture.ecrireStringln(file,"pop bx");
+		Ecriture.ecrireStringln(file,"pop ax");
+		Ecriture.ecrireStringln(file,"cmp ax,bx");
+		Ecriture.ecrireStringln(file,"je $+6");
+		Ecriture.ecrireStringln(file,"push -1");
+		Ecriture.ecrireStringln(file,"jmp $+4");
+		Ecriture.ecrireStringln(file,"push 0");
 	}
 
 	@Override
 	public void iload(int offset) {
-		System.out.println("push word ptr[bp"+offset+"]");
+		Ecriture.ecrireStringln(file,"push word ptr[bp"+offset+"]");
 	}
 
 	@Override
 	public void istore(int offset) {
-		System.out.println("pop ax");
-		System.out.println("mov word ptr[bp"+offset+"],ax");
+		Ecriture.ecrireStringln(file,"pop ax");
+		Ecriture.ecrireStringln(file,"mov word ptr[bp"+offset+"],ax");
 	}
 
 	@Override
 	public void iconst(int constante) {
-		System.out.println("push "+constante);
+		Ecriture.ecrireStringln(file,"push "+constante);
 	}
 
 	@Override
 	public void ifeq(String etiquette) {
-		System.out.println("pop ax");
-		System.out.println("cmp ax,0");
-		System.out.println("je "+etiquette);
+		Ecriture.ecrireStringln(file,"pop ax");
+		Ecriture.ecrireStringln(file,"cmp ax,0");
+		Ecriture.ecrireStringln(file,"je "+etiquette);
 	}
 	
 	public void iffaux(String etiquette){
-		System.out.println("pop ax");
-		System.out.println("cmp ax,0");
-		System.out.println("jne "+etiquette);
+		Ecriture.ecrireStringln(file,"pop ax");
+		Ecriture.ecrireStringln(file,"cmp ax,0");
+		Ecriture.ecrireStringln(file,"jne "+etiquette);
 	}
 
 	@Override
 	public void jump(String etiquette) {
-		System.out.println("jmp "+etiquette);
+		Ecriture.ecrireStringln(file,"jmp "+etiquette);
 	}
 	
-	public void entete(){
-		System.out.println(".model SMALL");
-		System.out.println(".586");
-		System.out.println(".CODE");
-		System.out.println("debut :");
-		System.out.println("	STARUPCODE");
+	public void entete(String nomProgramme){
+		file = Ecriture.ouvrir(nomProgramme);
+		Ecriture.ecrireStringln(file,".model SMALL");
+		Ecriture.ecrireStringln(file,".586");
+		Ecriture.ecrireStringln(file,".CODE");
+		Ecriture.ecrireStringln(file,"debut :");
+		Ecriture.ecrireStringln(file,"	STARUPCODE");
 	}
 
 	@Override
 	public void ouvrePrinc(int taille) {
-		System.out.println("mov bp,sp");
+		Ecriture.ecrireStringln(file,"mov bp,sp");
 	}
 	
 	@Override
 	public void queue(){
-		System.out.println("nop");
-		System.out.println("exitcode");
-		System.out.println("end debut");
+		Ecriture.ecrireStringln(file,"nop");
+		Ecriture.ecrireStringln(file,"exitcode");
+		Ecriture.ecrireStringln(file,"end debut");
+		Ecriture.fermer(file);
 	}
 
 }
