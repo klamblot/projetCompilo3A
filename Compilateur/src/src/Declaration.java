@@ -1,0 +1,13 @@
+package src;
+
+
+public class Declaration {
+	
+	public Ident createIdentVar(String type, int offset){
+		return new IdVar(type,offset);
+	}
+	
+	public Ident createIdentConst(String type, int valeur){
+		return new IdConst(type, valeur);
+	}
+}
