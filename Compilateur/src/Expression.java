@@ -1,5 +1,4 @@
-
-
+import java.io.InputStream;
 import java.util.Stack;
 
 
@@ -93,17 +92,10 @@ public class Expression{
 	}
 
 	
-	public void pushType(tip type1){
-		type.push(type1);
-	}
-	
 	public tip popType(){
 		return type.pop();
 	}
 	
-	public void pushOpera(op opera1){
-		oper.push(opera1);
-	}
 	
 	public op popOpera(){
 		return oper.pop();
