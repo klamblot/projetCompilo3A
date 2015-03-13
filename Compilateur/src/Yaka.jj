@@ -160,7 +160,6 @@ void declConst() : {}
 
 void defConst() : {}
 {
-<<<<<<< HEAD
   <ident> {declaration.setSaveName(GramTokenManager.identLu);}
    "=" valConst()   
 }
