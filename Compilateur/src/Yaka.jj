@@ -2,7 +2,7 @@
  *
  *       Auteur: Pedrono Marie-Jo
  *
- * 	création : 13 février 2002
+ * 	crÃ©ation : 13 fÃ©vrier 2002
  *
  *     nature : projet etudiant
  *
@@ -80,7 +80,7 @@ SKIP :
 }
 
 
-/* Mots réservés*/
+/* Mots rÃ©servÃ©s*/
 
 TOKEN :
 {
@@ -165,6 +165,7 @@ void defConst() : {}
 }
 
 void valConst() : {}{
+
   <entier> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst(ENTIER, YakaTokenManager.entierLu));}
  | <ident>	{	if(tabIdent.existeIdent(YakaTokenManager.identLu)){
  					tabIdent.rangeIdent(declaration.getSaveName(), tabIdent.chercheIdent(YakaTokenManager.identLu));
@@ -181,16 +182,15 @@ void declVar() : {}
   <VAR> type()	
   <ident>		{
   					if(tabIdent.existeIdent(GramTokenManager.identLu)){
-  						System.out.println("Erreur : Variable déjà déclarée");
+  						System.out.println("Erreur : Variable deja  declaree");
   					}else{
   						tabIdent.rangeIdent(GramTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName());
   					}
   				}	
   ("," 
-<<<<<<< HEAD
       <ident> 	{
 					if(tabIdent.existeIdent(GramTokenManager.identLu)){
-  						System.out.println("Erreur : Variable déjà déclarée");
+  						System.out.println("Erreur : Variable deja  declaree");
   					}else{
   						tabIdent.rangeIdent(GramTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName());
   					}
@@ -209,8 +209,31 @@ void type() :{}
 /*
  * Syntaxe des instructions.
  */
-void suiteExpr() : {}
-{ (expression() (";" (expression())? )*)? }
+
+void suiteInstr() : {}
+{ (instruction() (";" (instruction())? )*) }
+
+void instruction() : {}
+{
+  affectation
+ |lecture()
+ |ecriture()	
+}
+
+void affectation() : {}
+{
+  <ident> "=" expression()
+}
+
+void lecture() : {}
+{
+  <LIRE> "(" <ident> ")"
+}
+
+void ecriture() : {}
+{
+  (<ECRIRE> "(" expression() | <chaine> ")" ) | <ALALIGNE>
+}
 
 
 
