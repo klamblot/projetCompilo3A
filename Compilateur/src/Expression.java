@@ -39,31 +39,50 @@ public class Expression{
 
 	public void testType2Argv(){
 		
+		tip type1=popType();
+		tip type2=popType();
+		op o= popOpera();  
+		
 		if(!type.isEmpty() && !oper.isEmpty()){
-
-			tip tp = type.pop();
-			op o = oper.pop();
 			
-			if(type.pop()!=tp)
-			{
-				type.push(tip.ERREUR);
-			}
-			else
-			{
-				switch(o){
-
-				case EGAL:
+			switch(o){
+				case PLUS :
+				case MOINS :
+				case DIV :
+				case MUL :
+					if(type1==tip.ENTIER && type2==tip.ENTIER){
+						type.push(tip.ENTIER);
+					}else type.push(tip.ERREUR);
+					break;
+				
 				case INF:
 				case SUP:
 				case SUPEGAL:
 				case INFEGAL:
-				case DIFF:
-					type.push(tip.BOOL);
+					if(type1==tip.ENTIER && type2==tip.ENTIER){
+						type.push(tip.BOOL);
+					}else type.push(tip.ERREUR);
 					break;
-				default:
-					type.push(tip.ENTIER);
-				}
+					
+				case EGAL:
+				case DIFF :
+					if(type1==tip.ERREUR || type2==tip.ERREUR){
+						type.push(tip.ERREUR);
+					}else type.push(tip.BOOL);
+					break;
+					
+				case ET :
+				case OU :
+					if(type1==tip.BOOL && type2==tip.BOOL){
+						type.push(tip.BOOL);
+					}else type.push(tip.ERREUR);
+					break;
+				
+				default :
+					type.push(tip.ERREUR);
+			
 			}
+			
 		}
 			
 	}
