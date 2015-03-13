@@ -2,7 +2,7 @@
  *
  *       Auteur: Pedrono Marie-Jo
  *
- * 	création : 13 février 2002
+ * 	crÃ©ation : 13 fÃ©vrier 2002
  *
  *     nature : projet etudiant
  *
@@ -84,7 +84,7 @@ SKIP :
 }
 
 
-/* Mots réservés*/
+/* Mots rÃ©servÃ©s*/
 
 TOKEN :
 {
@@ -142,7 +142,9 @@ TOKEN  :
 /**************************************/
 void analyse() : {}
 {
-   <PROGRAMME> <ident>	
+
+   <PROGRAMME> <ident>	{yvmAsm.entete(YakaTokenManager.identLu);}
+
    bloc()
    <FPROGRAMME> 
 }
@@ -162,16 +164,19 @@ void defConst() : {}
 {
   <ident> {declaration.setSaveName(GramTokenManager.identLu);}
    "=" valConst()   
+
 }
 
 void valConst() : {}{
-  <entier> 	{tabIdent.rangeIdent(nomdeclaration.createIdentConst(ENTIER, GramTokenManager.entierLu));}
- | <ident>	{	if(tabIdent.existeIdent(GramTokenManager.identLu)){
- 					tabIdent.rangeIdent(nom, tabIdent.chercheIdent(GramTokenManager.identLu));
+
+  <entier> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst(ENTIER, YakaTokenManager.entierLu));}
+ | <ident>	{	if(tabIdent.existeIdent(YakaTokenManager.identLu)){
+ 					tabIdent.rangeIdent(declaration.getSaveName(), tabIdent.chercheIdent(YakaTokenManager.identLu));
  				}else System.out.println("Erreur : Variable non déclarée");
  			}	
  | <VRAI> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst(BOOLEEN, VRAI));}	
  | <FAUX> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst(BOOLEEN, FAUX));}	
+
 }
 
 
@@ -180,7 +185,7 @@ void declVar() : {}
   <VAR> type()	
   <ident>		{
   					if(tabIdent.existeIdent(GramTokenManager.identLu)){
-  						System.out.println("Erreur : Variable déjà déclarée");
+  						System.out.println("Erreur : Variable deja  declaree");
   					}else{
   						tabIdent.rangeIdent(GramTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName());
   					}
@@ -188,7 +193,7 @@ void declVar() : {}
   ("," 
       <ident> 	{
 					if(tabIdent.existeIdent(GramTokenManager.identLu)){
-  						System.out.println("Erreur : Variable déjà déclarée");
+  						System.out.println("Erreur : Variable deja  declaree");
   					}else{
   						tabIdent.rangeIdent(GramTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName());
   					}
@@ -207,8 +212,31 @@ void type() :{}
 /*
  * Syntaxe des instructions.
  */
-void suiteExpr() : {}
-{ (expression() (";" (expression())? )*)? }
+
+void suiteInstr() : {}
+{ (instruction() (";" (instruction())? )*) }
+
+void instruction() : {}
+{
+  affectation
+ |lecture()
+ |ecriture()	
+}
+
+void affectation() : {}
+{
+  <ident> "=" expression()
+}
+
+void lecture() : {}
+{
+  <LIRE> "(" <ident> ")"
+}
+
+void ecriture() : {}
+{
+  (<ECRIRE> "(" expression() | <chaine> ")" ) | <ALALIGNE>
+}
 
 
 
@@ -220,6 +248,7 @@ void expression() : {}
   simpleExpr() 
   (opRel()
   simpleExpr() {exp.testType2Argv();}
+
   )?
 }
 
@@ -230,6 +259,7 @@ void simpleExpr() : {}
    terme() 
    (opAdd()
    terme() {exp.testType2Argv();}
+
    )*
 } 
 void terme() : {}
@@ -237,6 +267,7 @@ void terme() : {}
   facteur() 
   (opMul()
   facteur()	{exp.testType2Argv();}
+
   )*
 }
 void facteur() : {}
@@ -252,35 +283,43 @@ void primaire (): {}
 }
 
 void valeur () : {}
+
 { <entier> {exp.saveType(Expression.tip.ENTIER);} 		
- | <ident> 		
+ | <ident> 	{exp.saveType(TabIdent.chercheIdent(YakaTokenManager.identLu).getType());}	
  | <VRAI> 	{exp.saveType(Expression.tip.BOOL);} 
  | <FAUX> 	{exp.saveType(Expression.tip.BOOL);} 
+
  
 }
 
 void opRel() : {}
 {
+
    "=" 		{exp.saveOp(Expression.op.EGAL);}
  | "<>" 	{exp.saveOp(Expression.op.DIFF);}
  | "<" 		{exp.saveOp(Expression.op.INF);}
  | "<=" 	{exp.saveOp(Expression.op.INFEGAL);}
  | ">" 		{exp.saveOp(Expression.op.SUP);}
  | ">=" 	{exp.saveOp(Expression.op.SUPEGAL);}
+
 } 
 
 void opAdd() : {}
 {
+
     "+"	 {exp.saveOp(Expression.op.PLUS);}	
   |  "-" {exp.saveOp(Expression.op.MOINS);}	
   | <OU> {exp.saveOp(Expression.op.OU);}	
+
 }
 
 void opMul() : {}
 {
+
   "*"	{exp.saveOp(Expression.op.MUL);}	
   | "/"	{exp.saveOp(Expression.op.DIV);}	
   | <ET> {exp.saveOp(Expression.op.ET);}	
+
 } 
 
 void opNeg() : {}

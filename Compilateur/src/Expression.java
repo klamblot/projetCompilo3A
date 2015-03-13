@@ -1,25 +1,3 @@
-<<<<<<< HEAD:Compilateur/src/Expression.java
-
-
-
-public class Expression {
-
-/**
-    Vérifie le type des opérandes d'une expression
-    @param type1 Type du premier opérande 
-    @param type2 Type du deuxième opérande
-    @param op Opérateur (1:{+,-,*,/}  2:{<,>,<=,>=}  3:{=,!=} 4:{&&,||}  
-    @return Type du résultat de l'opération (rend "erreur" si type incorrect)
-*/
-	public String controleType(String type1, String type2, int op){
-		String resul = "";
-		switch(op){
-			case 1 :
-				if(type1.equals("entier") && type2.equals("entier")){
-					resul = "entier";
-				}else resul = "erreur";
-				break;
-=======
 import java.io.InputStream;
 import java.util.Stack;
 
@@ -48,8 +26,8 @@ public class Expression{
 		NON;	  
 	};
 
-	Stack<tip> type = new Stack();
-	Stack<op> oper = new Stack();
+	Stack<tip> type = new Stack<tip>();
+	Stack<op> oper = new Stack<op>();
 
 	public void saveType(tip t){
 		type.push(t);
@@ -61,37 +39,56 @@ public class Expression{
 
 	public void testType2Argv(){
 		
+		tip type1=popType();
+		tip type2=popType();
+		op o= popOpera();  
+		
 		if(!type.isEmpty() && !oper.isEmpty()){
-
-			tip tp = type.pop();
-			op o = oper.pop();
->>>>>>> 33ff767f7ede199cc3405924ed1b31cd6f77a7b0:Compilateur/src/src/Expression.java
 			
-			if(type.pop()!=tp)
-			{
-				type.push(tip.ERREUR);
-			}
-			else
-			{
-				switch(o){
-
-				case EGAL:
+			switch(o){
+				case PLUS :
+				case MOINS :
+				case DIV :
+				case MUL :
+					if(type1==tip.ENTIER && type2==tip.ENTIER){
+						type.push(tip.ENTIER);
+					}else type.push(tip.ERREUR);
+					break;
+				
 				case INF:
 				case SUP:
 				case SUPEGAL:
 				case INFEGAL:
-				case DIFF:
-					type.push(tip.BOOL);
-				default:
-					type.push(tip.ENTIER);
-				}
+					if(type1==tip.ENTIER && type2==tip.ENTIER){
+						type.push(tip.BOOL);
+					}else type.push(tip.ERREUR);
+					break;
+					
+				case EGAL:
+				case DIFF :
+					if(type1==tip.ERREUR || type2==tip.ERREUR){
+						type.push(tip.ERREUR);
+					}else type.push(tip.BOOL);
+					break;
+					
+				case ET :
+				case OU :
+					if(type1==tip.BOOL && type2==tip.BOOL){
+						type.push(tip.BOOL);
+					}else type.push(tip.ERREUR);
+					break;
+				
+				default :
+					type.push(tip.ERREUR);
+			
 			}
+			
 		}
 			
 	}
 
 	public void testType1Argv(){
-		
+
 		if(!type.isEmpty() && !oper.isEmpty()){
 
 			if(type.peek() == tip.ENTIER && oper.peek()==op.MOINS)
@@ -112,5 +109,17 @@ public class Expression{
 			}
 		}
 	}
+
+	
+	public tip popType(){
+		return type.pop();
+	}
+	
+	
+	public op popOpera(){
+		return oper.pop();
+	}
+
+
 
 }

@@ -1,10 +1,12 @@
 
 
+
 public class Declaration {
 
 	private int offSet = 0;
 	private String saveName;
 	
+
 	public int getOffSet() {
 		return offSet;
 	}
