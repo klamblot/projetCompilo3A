@@ -1,77 +1,114 @@
+
+
 import java.util.Stack;
 
 
+public class Expression{
 
-public class Expression {
-	
-	private Stack<String> type;
-	private Stack<Integer> opera;
+	public enum tip {
+		ENTIER,
+		BOOL,
+		ERREUR;	
+	};
 
-	public Expression(){
-		type=new Stack<String>();
-		opera=new Stack<Integer>();
+	public enum op {
+		PLUS,
+		MOINS,
+		DIV,
+		MUL,
+		DIFF,
+		EGAL,
+		INF,
+		INFEGAL,
+		SUP,
+		SUPEGAL,
+		OU,
+		ET,
+		NON;	  
+	};
+
+	Stack<tip> type = new Stack<tip>();
+	Stack<op> oper = new Stack<op>();
+
+	public void saveType(tip t){
+		type.push(t);
 	}
-	
-/**
-    Verifie le type des operandes d'une expression
-    @param type1 Type du premier operande 
-    @param type2 Type du deuxième operande
-    @param op Operateur (1:{+,-,*,/}  2:{<,>,<=,>=}  3:{=,!=} 4:{&&,||}  
-    @return Type du resultat de l'operation (rend "ERREUR" si type incorrect)
-*/
-	public String controleType(){
-		String type1=popType();
-		String type2=popType();
-		int op= (int) popOpera();  
-				
-		String resul = "";
-		switch(op){
-			case 1 :
-				if(type1.equals("ENTIER") && type2.equals("ENTIER")){
-					resul = "ENTIER";
-				}else resul = "ERREUR";
-				break;
-			
-			case 2 :
-				if(type1.equals("ENTIER") && type2.equals("ENTIER")){
-					resul = "BOOLEEN";
-				}else resul = "ERREUR";
-				break;
-				
-			case 3 :
-				if(type1.equals("ERREUR") || type2.equals("ERREUR")){
-					resul = "ERREUR";
-				}else resul = "BOOLEEN";
-				break;
-				
-			case 4 :
-				if(type1.equals("BOOLEEN") && type2.equals("BOOLEEN")){
-					resul = "BOOLEEN";
-				}else resul = "ERREUR";
-				break;
-			
-			default :
-				resul = "ERREUR";
+
+	public void saveOp(op p){
+		oper.push(p);
+	}
+
+	public void testType2Argv(){
 		
+		if(!type.isEmpty() && !oper.isEmpty()){
+
+			tip tp = type.pop();
+			op o = oper.pop();
+			
+			if(type.pop()!=tp)
+			{
+				type.push(tip.ERREUR);
+			}
+			else
+			{
+				switch(o){
+
+				case EGAL:
+				case INF:
+				case SUP:
+				case SUPEGAL:
+				case INFEGAL:
+				case DIFF:
+					type.push(tip.BOOL);
+					break;
+				default:
+					type.push(tip.ENTIER);
+				}
+			}
 		}
-		
-		return resul;
+			
 	}
+
+	public void testType1Argv(){
+
+		if(!type.isEmpty() && !oper.isEmpty()){
+
+			if(type.peek() == tip.ENTIER && oper.peek()==op.MOINS)
+			{
+				type.pop();
+				oper.pop();
+				type.push(tip.ENTIER);
+			}
+			else if(type.peek() == tip.BOOL && oper.peek()==op.NON)
+			{	
+				type.pop();
+				oper.pop();
+				type.push(tip.BOOL);
+			}
+			else{
+
+				type.push(tip.ERREUR);
+			}
+		}
+	}
+
 	
-	public void pushType(String type1){
+	public void pushType(tip type1){
 		type.push(type1);
 	}
 	
-	public String popType(){
+	public tip popType(){
 		return type.pop();
 	}
 	
-	public void pushOpera(int opera1){
-		opera.push(opera1);
+	public void pushOpera(op opera1){
+		oper.push(opera1);
 	}
 	
-	public int popOpera(){
-		return (int) opera.pop();
+	public op popOpera(){
+		return oper.pop();
 	}
+
+
 
 }

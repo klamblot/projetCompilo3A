@@ -1,4 +1,6 @@
 
+
+
 public class Declaration {
 	
 	private int offSet = 0;
