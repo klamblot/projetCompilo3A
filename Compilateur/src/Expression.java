@@ -1,3 +1,4 @@
+<<<<<<< HEAD:Compilateur/src/Expression.java
 
 
 
@@ -18,33 +19,98 @@ public class Expression {
 					resul = "entier";
 				}else resul = "erreur";
 				break;
-			
-			case 2 :
-				if(type1.equals("entier") && type2.equals("entier")){
-					resul = "booleen";
-				}else resul = "erreur";
-				break;
-				
-			case 3 :
-				if(type1.equals("erreur") || type2.equals("erreur")){
-					resul = "erreur";
-				}else resul = "booleen";
-				break;
-				
-			case 4 :
-				if(type1.equals("booleen") && type2.equals("booleen")){
-					resul = "booleen";
-				}else resul = "erreur";
-				break;
-			
-			default :
-				resul = "erreur";
-		
-		}
-		
-		return resul;
-	}
-	
+=======
+import java.io.InputStream;
+import java.util.Stack;
 
+
+public class Expression{
+
+	public enum tip {
+		ENTIER,
+		BOOL,
+		ERREUR;	
+	};
+
+	public enum op {
+		PLUS,
+		MOINS,
+		DIV,
+		MUL,
+		DIFF,
+		EGAL,
+		INF,
+		INFEGAL,
+		SUP,
+		SUPEGAL,
+		OU,
+		ET,
+		NON;	  
+	};
+
+	Stack<tip> type = new Stack();
+	Stack<op> oper = new Stack();
+
+	public void saveType(tip t){
+		type.push(t);
+	}
+
+	public void saveOp(op p){
+		oper.push(p);
+	}
+
+	public void testType2Argv(){
+		
+		if(!type.isEmpty() && !oper.isEmpty()){
+
+			tip tp = type.pop();
+			op o = oper.pop();
+>>>>>>> 33ff767f7ede199cc3405924ed1b31cd6f77a7b0:Compilateur/src/src/Expression.java
+			
+			if(type.pop()!=tp)
+			{
+				type.push(tip.ERREUR);
+			}
+			else
+			{
+				switch(o){
+
+				case EGAL:
+				case INF:
+				case SUP:
+				case SUPEGAL:
+				case INFEGAL:
+				case DIFF:
+					type.push(tip.BOOL);
+				default:
+					type.push(tip.ENTIER);
+				}
+			}
+		}
+			
+	}
+
+	public void testType1Argv(){
+		
+		if(!type.isEmpty() && !oper.isEmpty()){
+
+			if(type.peek() == tip.ENTIER && oper.peek()==op.MOINS)
+			{
+				type.pop();
+				oper.pop();
+				type.push(tip.ENTIER);
+			}
+			else if(type.peek() == tip.BOOL && oper.peek()==op.NON)
+			{	
+				type.pop();
+				oper.pop();
+				type.push(tip.BOOL);
+			}
+			else{
+
+				type.push(tip.ERREUR);
+			}
+		}
+	}
 
 }
