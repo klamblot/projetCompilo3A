@@ -161,7 +161,7 @@ void declConst() : {}
 void defConst() : {}
 {
 	
-  <ident> {declaration.saveName = GramTokenManager.identLu;}
+  <ident> {declaration. = GramTokenManager.identLu;}
    "=" valConst()
     
 }
