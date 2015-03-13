@@ -161,14 +161,17 @@ void declConst() : {}
 void defConst() : {}
 {
 	
-  <ident> {declaration.saveName = GramTokenManager.identLu;}
-   "=" valConst()
+  <ident> {declaration.setSaveName() = GramTokenManager.identLu;}
+   "=" valConst() 
     
 }
 
 void valConst() : {}{
-  <entier> 	{tabIdent.rangeIdent(nom, declaration.createIdentConst(ENTIER, GramTokenManager.entierLu));}
- | <ident>	{tabIdent.rangeIdent(nom, tabIdent.chercheIdent(GramTokenManager.identLu));}	
+  <entier> 	{tabIdent.rangeIdent(nomdeclaration.createIdentConst(ENTIER, GramTokenManager.entierLu));}
+ | <ident>	{	if(tabIdent.existeIdent(GramTokenManager.identLu)){
+ 					tabIdent.rangeIdent(nom, tabIdent.chercheIdent(GramTokenManager.identLu));
+ 				}else System.out.println("Erreur : Variable non déclarée");
+ 			}	
  | <VRAI> 	{tabIdent.rangeIdent(nom, declaration.createIdentConst(BOOLEEN, VRAI));}	
  | <FAUX> 	{tabIdent.rangeIdent(nom, declaration.createIdentConst(BOOLEEN, FAUX));}	
 }
@@ -180,7 +183,7 @@ void declVar() : {}
   <ident>		
   ("," 
       <ident>  
-  )* ";"
+  )* ";"3+.6
 	
 }
 
