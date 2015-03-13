@@ -2,7 +2,7 @@
  *
  *       Auteur: Pedrono Marie-Jo
  *
- * 	crÈation : 13 fÈvrier 2002
+ * 	cr√©ation : 13 f√©vrier 2002
  *
  *     nature : projet etudiant
  *
@@ -80,7 +80,7 @@ SKIP :
 }
 
 
-/* Mots rÈservÈs*/
+/* Mots r√©serv√©s*/
 
 TOKEN :
 {
@@ -165,7 +165,7 @@ void valConst() : {}{
   <entier> 	{tabIdent.rangeIdent(nomdeclaration.createIdentConst(ENTIER, GramTokenManager.entierLu));}
  | <ident>	{	if(tabIdent.existeIdent(GramTokenManager.identLu)){
  					tabIdent.rangeIdent(nom, tabIdent.chercheIdent(GramTokenManager.identLu));
- 				}else System.out.println("Erreur : Variable non dÈclarÈe");
+ 				}else System.out.println("Erreur : Variable non d√©clar√©e");
  			}	
  | <VRAI> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst(BOOLEEN, VRAI));}	
  | <FAUX> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst(BOOLEEN, FAUX));}	
@@ -177,7 +177,7 @@ void declVar() : {}
   <VAR> type()	
   <ident>		{
   					if(tabIdent.existeIdent(GramTokenManager.identLu)){
-  						System.out.println("Erreur : Variable dÈj‡ dÈclarÈe");
+  						System.out.println("Erreur : Variable d√©j√† d√©clar√©e");
   					}else{
   						tabIdent.rangeIdent(GramTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName());
   					}
@@ -186,7 +186,7 @@ void declVar() : {}
 <<<<<<< HEAD
       <ident> 	{
 					if(tabIdent.existeIdent(GramTokenManager.identLu)){
-  						System.out.println("Erreur : Variable dÈj‡ dÈclarÈe");
+  						System.out.println("Erreur : Variable d√©j√† d√©clar√©e");
   					}else{
   						tabIdent.rangeIdent(GramTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName());
   					}
@@ -205,8 +205,31 @@ void type() :{}
 /*
  * Syntaxe des instructions.
  */
-void suiteExpr() : {}
-{ (expression() (";" (expression())? )*)? }
+
+void suiteInstr() : {}
+{ (instruction() (";" (instruction())? )*) }
+
+void instruction() : {}
+{
+  affectation
+ |lecture()
+ |ecriture()	
+}
+
+void affectation() : {}
+{
+  <ident> "=" expression()
+}
+
+void lecture() : {}
+{
+  <LIRE> "(" <ident> ")"
+}
+
+void ecriture() : {}
+{
+  (<ECRIRE> "(" expression() | <chaine> ")" ) | <ALALIGNE>
+}
 
 
 
