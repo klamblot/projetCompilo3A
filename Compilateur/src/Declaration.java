@@ -1,7 +1,9 @@
-package src;
 
 
 public class Declaration {
+
+	private int offSet = 0;
+	private String saveName;
 	
 	public int getOffSet() {
 		return offSet;
@@ -18,11 +20,8 @@ public class Declaration {
 	public void setSaveName(String saveName) {
 		this.saveName = saveName;
 	}
-
-	private int offSet = 0;
-	private String saveName;
 	
-	public Ident createIdentVar(String type, int offset){
+	public Ident createIdentVar(String type){
 		offSet-=2;
 		return new IdVar(type,offSet);
 	}

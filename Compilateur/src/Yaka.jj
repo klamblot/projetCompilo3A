@@ -160,7 +160,7 @@ void declConst() : {}
 
 void defConst() : {}
 {
-  <ident> {declaration.setSaveName() = GramTokenManager.identLu;}
+  <ident> {declaration.setSaveName(GramTokenManager.identLu);}
    "=" valConst()   
 }
 
@@ -170,25 +170,37 @@ void valConst() : {}{
  					tabIdent.rangeIdent(nom, tabIdent.chercheIdent(GramTokenManager.identLu));
  				}else System.out.println("Erreur : Variable non déclarée");
  			}	
- | <VRAI> 	{tabIdent.rangeIdent(nom, declaration.createIdentConst(BOOLEEN, VRAI));}	
- | <FAUX> 	{tabIdent.rangeIdent(nom, declaration.createIdentConst(BOOLEEN, FAUX));}	
+ | <VRAI> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst(BOOLEEN, VRAI));}	
+ | <FAUX> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst(BOOLEEN, FAUX));}	
 }
 
 
 void declVar() : {}
 {
   <VAR> type()	
-  <ident>		
+  <ident>		{
+  					if(tabIdent.existeIdent(GramTokenManager.identLu)){
+  						System.out.println("Erreur : Variable déjà déclarée");
+  					}else{
+  						tabIdent.rangeIdent(GramTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName());
+  					}
+  				}	
   ("," 
-      <ident>  
-  )* ";"3+.6
+      <ident> 	{
+					if(tabIdent.existeIdent(GramTokenManager.identLu)){
+  						System.out.println("Erreur : Variable déjà déclarée");
+  					}else{
+  						tabIdent.rangeIdent(GramTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName());
+  					}
+				}
+  )* ";"
 	
 }
 
 void type() :{}
 {
-   <ENTIER> 			
- | <BOOLEEN>	
+   <ENTIER> 	{declaration.setSaveName("ENTIER");} 		
+ | <BOOLEEN>	{declaration.setSaveName("BOOLEEN");}	
 }
 /*
  * Syntaxe des instructions.

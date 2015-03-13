@@ -1,4 +1,6 @@
 
+
+
 abstract class YVM {
 	
 	public YVM(){
