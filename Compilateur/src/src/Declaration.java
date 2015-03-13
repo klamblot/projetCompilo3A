@@ -3,6 +3,22 @@ package src;
 
 public class Declaration {
 	
+	public int getOffSet() {
+		return offSet;
+	}
+
+	public void setOffSet(int offSet) {
+		this.offSet = offSet;
+	}
+
+	public String getSaveName() {
+		return saveName;
+	}
+
+	public void setSaveName(String saveName) {
+		this.saveName = saveName;
+	}
+
 	private int offSet = 0;
 	private String saveName;
 	
@@ -14,5 +30,6 @@ public class Declaration {
 	public Ident createIdentConst(String type, int valeur){
 		return new IdConst(type, valeur);
 	}
+	
 	
 }
