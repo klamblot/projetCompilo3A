@@ -141,7 +141,7 @@ TOKEN  :
 /**************************************/
 void analyse() : {}
 {
-   <PROGRAMME> <ident>	{yvmAsm.entete(GramTokenManager.identLu);}
+   <PROGRAMME> <ident>	{yvmAsm.entete(YakaTokenManager.identLu);}
    bloc()
    <FPROGRAMME> {yvmAsm.queue();}
 }
@@ -161,19 +161,19 @@ void declConst() : {}
 void defConst() : {}
 {
 	
-  <ident> {declaration.setSaveName() = GramTokenManager.identLu;}
+  <ident> {declaration.setSaveName() = YakaTokenManager.identLu;}
    "=" valConst() 
     
 }
 
 void valConst() : {}{
-  <entier> 	{tabIdent.rangeIdent(nomdeclaration.createIdentConst(ENTIER, GramTokenManager.entierLu));}
- | <ident>	{	if(tabIdent.existeIdent(GramTokenManager.identLu)){
- 					tabIdent.rangeIdent(nom, tabIdent.chercheIdent(GramTokenManager.identLu));
+  <entier> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst(ENTIER, YakaTokenManager.entierLu));}
+ | <ident>	{	if(tabIdent.existeIdent(YakaTokenManager.identLu)){
+ 					tabIdent.rangeIdent(declaration.getSaveName(), tabIdent.chercheIdent(YakaTokenManager.identLu));
  				}else System.out.println("Erreur : Variable non déclarée");
  			}	
- | <VRAI> 	{tabIdent.rangeIdent(nom, declaration.createIdentConst(BOOLEEN, VRAI));}	
- | <FAUX> 	{tabIdent.rangeIdent(nom, declaration.createIdentConst(BOOLEEN, FAUX));}	
+ | <VRAI> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst(BOOLEEN, VRAI));}	
+ | <FAUX> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst(BOOLEEN, FAUX));}	
 }
 
 
@@ -183,7 +183,7 @@ void declVar() : {}
   <ident>		
   ("," 
       <ident>  
-  )* ";"3+.6
+  )* ";"
 	
 }
 
@@ -207,7 +207,7 @@ void expression() : {}
 {
   simpleExpr() 
   (opRel() 
-  simpleExpr() 
+  simpleExpr() { Expression.controleType();}
   )?
 }
 
@@ -217,14 +217,14 @@ void simpleExpr() : {}
 {
    terme() 
    (opAdd() 
-   terme()	
+   terme() { Expression.controleType();}	
    )*
 } 
 void terme() : {}
 {
   facteur() 
   (opMul() 
-  facteur()	
+  facteur()	{ Expression.controleType();}
   )*
 }
 void facteur() : {}
@@ -240,35 +240,35 @@ void primaire (): {}
 }
 
 void valeur () : {}
-{ <entier> 		
- | <ident> 		
- | <VRAI> 		
- | <FAUX> 		
+{ <entier> { Expression.pushType("ENTIER");}			
+ | <ident> { Expression.pushType(TabIdent.chercheIdent(YakaTokenManager.identLu).getType();}		
+ | <VRAI>  { Expression.pushType("BOOLEEN");}	
+ | <FAUX>  { Expression.pushType("BOOLEEN");}		
  
 }
 
 void opRel() : {}
 {
-   "=" 		
- | "<>" 	
- | "<" 		
- | "<=" 	
- | ">" 		
- | ">=" 	
+   "=" 	{ Expression.pushOpera(3);}	
+ | "<>" { Expression.pushOpera(2);}	
+ | "<" 	{ Expression.pushOpera(2);}	
+ | "<=" { Expression.pushOpera(2);}	
+ | ">" 	{ Expression.pushOpera(2);}	
+ | ">=" { Expression.pushOpera(2);}	
 } 
 
 void opAdd() : {}
 {
-    "+"		
-  |  "-"  
-  | <OU> 	
+    "+"	 { Expression.pushOpera(1);}		
+  |  "-" { Expression.pushOpera(1);}	 
+  | <OU> { Expression.pushOpera(4);}		
 }
 
 void opMul() : {}
 {
-  "*"		
-  | "/"		
-  | <ET>	
+  "*"	 { Expression.pushOpera(1);}		
+  | "/"	 { Expression.pushOpera(1);}		
+  | <ET> { Expression.pushOpera(4);}		
 } 
 
 void opNeg() : {}
