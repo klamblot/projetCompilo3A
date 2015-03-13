@@ -19,15 +19,12 @@ PARSER_BEGIN(Yaka)
 
 public class Yaka {
 
-
+	static Expression exp;
+	
   public static void main(String args[]) { 
     Yaka analyseur;
     java.io.InputStream input;
-	public static Declaration declaration;
-	public static Expression expression;
-	public static TabIdent tabIdent;
-	public static YVMasm yvmAsm;
-	
+
     if (args.length==1) {
       System.out.print(args[args.length-1] + ": ");
       try {
@@ -141,37 +138,35 @@ TOKEN  :
 /**************************************/
 void analyse() : {}
 {
-   <PROGRAMME> <ident>	{yvmAsm.entete(GramTokenManager.identLu);}
+   <PROGRAMME> <ident>	
    bloc()
-   <FPROGRAMME> {yvmAsm.queue();}
+   <FPROGRAMME> 
 }
 
 void bloc() : {}{
  (declConst())*
  (declVar())*		
- suiteExpr() 
+   suiteExpr() 
 }
 
 void declConst() : {}
 {
-  <CONST>
-  defConst() ( "," defConst())* ";"
+  <CONST>  defConst() ( "," defConst())* ";"
 }
 
 void defConst() : {}
 {
-  <ident> {declaration.setSaveName() = GramTokenManager.identLu;}
-   "=" valConst()   
+	
+  <ident>  	  	
+   "=" valConst()
+    
 }
 
 void valConst() : {}{
-  <entier> 	{tabIdent.rangeIdent(nomdeclaration.createIdentConst(ENTIER, GramTokenManager.entierLu));}
- | <ident>	{	if(tabIdent.existeIdent(GramTokenManager.identLu)){
- 					tabIdent.rangeIdent(nom, tabIdent.chercheIdent(GramTokenManager.identLu));
- 				}else System.out.println("Erreur : Variable non déclarée");
- 			}	
- | <VRAI> 	{tabIdent.rangeIdent(nom, declaration.createIdentConst(BOOLEEN, VRAI));}	
- | <FAUX> 	{tabIdent.rangeIdent(nom, declaration.createIdentConst(BOOLEEN, FAUX));}	
+  <entier> 		
+ | <ident>		
+ | <VRAI> 		
+ | <FAUX> 		
 }
 
 
@@ -181,14 +176,14 @@ void declVar() : {}
   <ident>		
   ("," 
       <ident>  
-  )* ";"3+.6
+  )* ";"
 	
 }
 
 void type() :{}
 {
-   <ENTIER> 			
- | <BOOLEEN>	
+   <ENTIER>			
+ | <BOOLEEN>
 }
 /*
  * Syntaxe des instructions.
@@ -204,8 +199,8 @@ void suiteExpr() : {}
 void expression() : {}
 {
   simpleExpr() 
-  (opRel() 
-  simpleExpr() 
+  (opRel()
+  simpleExpr() {exp.testType2Argv();}
   )?
 }
 
@@ -214,20 +209,20 @@ void expression() : {}
 void simpleExpr() : {}
 {
    terme() 
-   (opAdd() 
-   terme()	
+   (opAdd()
+   terme() {exp.testType2Argv();}
    )*
 } 
 void terme() : {}
 {
   facteur() 
-  (opMul() 
-  facteur()	
+  (opMul()
+  facteur()	{exp.testType2Argv();}
   )*
 }
 void facteur() : {}
 {   primaire() 
-  |  opNeg() primaire() 
+  |  opNeg() primaire() {exp.testType1Argv();} 
 }
 
 void primaire (): {}
@@ -238,40 +233,41 @@ void primaire (): {}
 }
 
 void valeur () : {}
-{ <entier> 		
+{ <entier> {exp.saveType(Expression.tip.ENTIER);} 		
  | <ident> 		
- | <VRAI> 		
- | <FAUX> 		
+ | <VRAI> 	{exp.saveType(Expression.tip.BOOL);} 
+ | <FAUX> 	{exp.saveType(Expression.tip.BOOL);} 
  
 }
 
 void opRel() : {}
 {
-   "=" 		
- | "<>" 	
- | "<" 		
- | "<=" 	
- | ">" 		
- | ">=" 	
+   "=" 		{exp.saveOp(Expression.op.EGAL);}
+ | "<>" 	{exp.saveOp(Expression.op.DIFF);}
+ | "<" 		{exp.saveOp(Expression.op.INF);}
+ | "<=" 	{exp.saveOp(Expression.op.INFEGAL);}
+ | ">" 		{exp.saveOp(Expression.op.SUP);}
+ | ">=" 	{exp.saveOp(Expression.op.SUPEGAL);}
 } 
 
 void opAdd() : {}
 {
-    "+"		
-  |  "-"  
-  | <OU> 	
+    "+"	 {exp.saveOp(Expression.op.PLUS);}	
+  |  "-" {exp.saveOp(Expression.op.MOINS);}	
+  | <OU> {exp.saveOp(Expression.op.OU);}	
 }
 
 void opMul() : {}
 {
-  "*"		
-  | "/"		
-  | <ET>	
+  "*"	{exp.saveOp(Expression.op.MUL);}	
+  | "/"	{exp.saveOp(Expression.op.DIV);}	
+  | <ET> {exp.saveOp(Expression.op.ET);}	
 } 
 
 void opNeg() : {}
-{ "-" 		
- | <NON>	
+{ 
+ "-" 		{exp.saveOp(Expression.op.MOINS);}	
+ | <NON>	{exp.saveOp(Expression.op.NON);}
 }
 
 
