@@ -66,7 +66,7 @@ public class Expression{
 					
 				case EGAL:
 				case DIFF :
-					if(type1==tip.ERREUR || type2==tip.ERREUR){
+					if(type1==tip.ERREUR || type2==tip.ERREUR || type1!=type2){
 						type.push(tip.ERREUR);
 					}else type.push(tip.BOOL);
 					break;
