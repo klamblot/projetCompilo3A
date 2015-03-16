@@ -228,7 +228,9 @@ void type() :{}
  */
 
 void suiteInstr() : {}
-{ (instruction() (";" (instruction())? )*) }
+{ 
+(instruction() (";" (instruction())? )*) 
+}
 
 void instruction() : {}
 {
@@ -269,7 +271,36 @@ void expression() : {}
 {
   simpleExpr() 
   (opRel()
-  simpleExpr() {exp.testType2Argv();}
+  simpleExpr() {
+  				op o = exp.peekOpera();
+	   			switch(o){
+	   				case EGAL :
+	   					yvm.iegal();
+	   					yvmAsm.iegal();
+	   					break;
+	   				case DIFF :
+	   					yvm.idiff()
+	   					yvmAsm.idiff();
+	   					break;
+	   				case INF :
+	   					yvm.iinf();
+	   					yvmAsm.iinf();
+	   					break;
+	   				case INFEGAL :
+	   					yvm.iinfegal();
+	   					yvmAsm.iinfegal();
+	   					break;
+	   				case SUP :
+	   					yvm.isup()
+	   					yvmAsm.isup();
+	   					break;
+	   				case SUPEGAL :
+	   					yvm.isupegal();
+	   					yvmAsm.isupegal();
+	   					break;
+	   				default :
+	   			}
+  				exp.testType2Argv();}
 
   )?
 }
@@ -280,7 +311,25 @@ void simpleExpr() : {}
 {
    terme() 
    (opAdd()
-   terme() {exp.testType2Argv();}
+   terme() {
+   			op o = exp.peekOpera();
+   			switch(o){
+   				case PLUS :
+   					yvm.iadd();
+   					yvmAsm.iadd();
+   					break;
+   				case MOINS :
+   					yvm.isub()
+   					yvmAsm.isub();
+   					break;
+   				case OU :
+   					yvm.ior();
+   					yvmAsm.ior();
+   					break;
+   				default :
+   			}
+   			exp.testType2Argv();
+   			}
 
    )*
 } 
@@ -288,13 +337,45 @@ void terme() : {}
 {
   facteur() 
   (opMul()
-  facteur()	{exp.testType2Argv();}
+  facteur()	{
+  			op o = exp.peekOpera();
+   			switch(o){
+   				case MUL :
+   					yvm.imul();
+   					yvmAsm.imul();
+   					break;
+   				case DIV :
+   					yvm.idiv()
+   					yvmAsm.idiv();
+   					break;
+   				case ET :
+   					yvm.iand();
+   					yvmAsm.iand();
+   					break;
+   				default :
+   			}
+  			exp.testType2Argv();
+  			}
 
   )*
 }
 void facteur() : {}
 {   primaire() 
-  |  opNeg() primaire() {exp.testType1Argv();} 
+  |  opNeg() primaire() {
+  						op o = exp.peekOpera();
+			   			switch(o){
+			   				case NON :
+			   					yvm.inot();
+			   					yvmAsm.inot();
+			   					break;
+			   				case MOINS :
+			   					yvm.ineg()
+			   					yvmAsm.ineg();
+			   					break;
+			   				default :
+			   			}
+  						exp.testType1Argv();
+  						} 
 }
 
 void primaire (): {}

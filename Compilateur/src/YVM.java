@@ -1,8 +1,5 @@
 import java.io.OutputStream;
 
-
-
-
 public class YVM {
 	
 	OutputStream file;
@@ -112,4 +109,27 @@ public class YVM {
 		Ecriture.fermer(file);
 	}
 	/*--------------------*/
+	
+	/*Méthode de d'instruction */
+	
+	public void ecrireEnt(){
+		Ecriture.ecrireStringln(file,"\t;ecrireEnt");
+	}
+	
+	public void ecrireChaine(String chaine){
+		Ecriture.ecrireStringln(file,"\t;ecrireChaine \""+chaine+"\"");	
+	}
+	
+	public void lireEnt(int offset){
+		Ecriture.ecrireStringln(file,"\t;lireEnt "+offset);
+	}
+	
+	public void aLaLigne() {
+		Ecriture.ecrireStringln(file,"\t;aLaLigne");
+	}
+	
+	public void ecrireBool(){
+		Ecriture.ecrireStringln(file,"\t;ecrireBool");
+	}
+	
 }

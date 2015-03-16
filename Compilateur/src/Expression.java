@@ -2,6 +2,9 @@ import java.util.Stack;
 
 
 public class Expression{
+	
+	private Stack<tip> type;
+	private Stack<op> oper;
 
 	public enum tip {
 		ENTIER,
@@ -25,8 +28,10 @@ public class Expression{
 		NON;	  
 	};
 
-	Stack<tip> type = new Stack<tip>();
-	Stack<op> oper = new Stack<op>();
+	public Expression(){
+		type = new Stack<tip>();
+		oper = new Stack<op>();
+	}
 
 	public void saveType(tip t){
 		type.push(t);
@@ -110,15 +115,15 @@ public class Expression{
 	}
 
 	
-	public tip popType(){
-		return type.pop();
+	public tip peekType(){
+		return type.peek();
 	}
 	
 	
-	public op popOpera(){
-		return oper.pop();
+	public op peekOpera(){
+		return oper.peek();
 	}
 
-
+	
 
 }
