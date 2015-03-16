@@ -20,10 +20,10 @@ PARSER_BEGIN(Yaka)
 public class Yaka {
 
 	static Expression exp = new Expression();
-	static Declaration declaration;
+	static Declaration declaration = new Declaration();
 	static TabIdent tabIdent = new TabIdent();
-	static YVM yvm;
-	static YVMasm yvmAsm;
+	static YVM yvm = new YVM();
+	static YVMasm yvmAsm = new YVMasm();
 	
 	static int taille = 0;
 	static String typeAffect;
@@ -53,7 +53,7 @@ public class Yaka {
       System.out.println("analyse syntaxique reussie!");
     } catch (ParseException e) {
       String msg = e.getMessage();
-      msg = msg.substring(0,msg.indexOf("\n"));
+      /*msg = msg.substring(0,msg.indexOf("\n"));*/
       System.out.println("Erreur de syntaxe : "+msg);
     }
   } 
@@ -182,8 +182,8 @@ void valConst() : {}{
  					tabIdent.rangeIdent(declaration.getSaveName(), tabIdent.chercheIdent(YakaTokenManager.identLu));
  				}else System.out.println("Erreur : Variable non déclarée");
  			}	
- | <VRAI> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", VRAI));}	
- | <FAUX> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", FAUX));}	
+ | <VRAI> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", -1));}	
+ | <FAUX> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", 0));}	
 
 }
 
@@ -407,10 +407,32 @@ void primaire (): {}
 
 void valeur () : {}
 
-{ <entier> {exp.saveType(Expression.tip.ENTIER);} 		
- | <ident> 	{exp.saveType(exp.stringTotip(TabIdent.chercheIdent(YakaTokenManager.identLu).getType()));}	
- | <VRAI> 	{exp.saveType(Expression.tip.BOOL);} 
- | <FAUX> 	{exp.saveType(Expression.tip.BOOL);} 
+{ <entier> 	{	
+				exp.saveType(Expression.tip.ENTIER);
+				yvm.iconst(YakaTokenManager.entierLu);
+				yvmAsm.iconst(YakaTokenManager.entierLu);
+			} 		
+ | <ident> 	{
+ 				Ident ident = tabIdent.chercheIdent(YakaTokenManager.identLu);
+ 				exp.saveType(exp.stringTotip(ident.getType()));
+ 				if(ident instanceof IdConst){
+ 					yvm.iconst(((IdConst)ident).getValeur());
+ 					yvmAsm.iconst(((IdConst)ident).getValeur());
+ 				}else{
+ 					yvm.iload(((IdVar)ident).getOffset());
+ 					yvmAsm.iload(((IdVar)ident).getOffset());
+ 				}
+ 			}	
+ | <VRAI> 	{	
+ 				exp.saveType(Expression.tip.BOOL);
+ 				yvm.iconst(-1);
+				yvmAsm.iconst(-1);
+ 			} 
+ | <FAUX> 	{	
+ 				exp.saveType(Expression.tip.BOOL);
+ 				yvm.iconst(0);
+				yvmAsm.iconst(0);
+ 			} 
 
  
 }

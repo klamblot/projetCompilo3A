@@ -150,7 +150,7 @@ public class YVMasm extends YVM{
 
 	@Override
 	public void iconst(int constante) {
-		Ecriture.ecrireStringln(file,"push "+constante);
+		Ecriture.ecrireStringln(file,"\tpush "+constante);
 	}
 
 	@Override

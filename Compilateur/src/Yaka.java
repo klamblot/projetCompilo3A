@@ -2,10 +2,10 @@
 public class Yaka implements YakaConstants {
 
         static Expression exp = new Expression();
-        static Declaration declaration;
+        static Declaration declaration = new Declaration();
         static TabIdent tabIdent = new TabIdent();
-        static YVM yvm;
-        static YVMasm yvmAsm;
+        static YVM yvm = new YVM();
+        static YVMasm yvmAsm = new YVMasm();
 
         static int taille = 0;
         static String typeAffect;
@@ -35,7 +35,7 @@ public class Yaka implements YakaConstants {
       System.out.println("analyse syntaxique reussie!");
     } catch (ParseException e) {
       String msg = e.getMessage();
-      msg = msg.substring(0,msg.indexOf("\n"));
+      /*msg = msg.substring(0,msg.indexOf("\n"));*/
       System.out.println("Erreur de syntaxe : "+msg);
     }
   }
@@ -124,11 +124,11 @@ public class Yaka implements YakaConstants {
       break;
     case VRAI:
       jj_consume_token(VRAI);
-                 tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", VRAI));
+                 tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", -1));
       break;
     case FAUX:
       jj_consume_token(FAUX);
-                 tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", FAUX));
+                 tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", 0));
       break;
     default:
       jj_la1[3] = jj_gen;
@@ -477,19 +477,33 @@ public class Yaka implements YakaConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case entier:
       jj_consume_token(entier);
-            exp.saveType(Expression.tip.ENTIER);
+                                exp.saveType(Expression.tip.ENTIER);
+                                yvm.iconst(YakaTokenManager.entierLu);
+                                yvmAsm.iconst(YakaTokenManager.entierLu);
       break;
     case ident:
       jj_consume_token(ident);
-                 exp.saveType(exp.stringTotip(TabIdent.chercheIdent(YakaTokenManager.identLu).getType()));
+                                Ident ident = tabIdent.chercheIdent(YakaTokenManager.identLu);
+                                exp.saveType(exp.stringTotip(ident.getType()));
+                                if(ident instanceof IdConst){
+                                        yvm.iconst(((IdConst)ident).getValeur());
+                                        yvmAsm.iconst(((IdConst)ident).getValeur());
+                                }else{
+                                        yvm.iload(((IdVar)ident).getOffset());
+                                        yvmAsm.iload(((IdVar)ident).getOffset());
+                                }
       break;
     case VRAI:
       jj_consume_token(VRAI);
-                 exp.saveType(Expression.tip.BOOL);
+                                exp.saveType(Expression.tip.BOOL);
+                                yvm.iconst(-1);
+                                yvmAsm.iconst(-1);
       break;
     case FAUX:
       jj_consume_token(FAUX);
-                 exp.saveType(Expression.tip.BOOL);
+                                exp.saveType(Expression.tip.BOOL);
+                                yvm.iconst(0);
+                                yvmAsm.iconst(0);
       break;
     default:
       jj_la1[16] = jj_gen;

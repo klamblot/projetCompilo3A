@@ -43,11 +43,11 @@ public class Expression{
 
 	public void testType2Argv(){
 		
-		tip type1=popType();
-		tip type2=popType();
-		op o= popOpera();  
 		
 		if(!type.isEmpty() && !oper.isEmpty()){
+			tip type1=popType();
+			tip type2=popType();
+			op o= popOpera();  
 			
 			switch(o){
 				case PLUS :
