@@ -2,7 +2,7 @@
  *
  *       Auteur: Pedrono Marie-Jo
  *
- * 	création : 13 février 2002
+ * 	crÃ©ation : 13 fÃ©vrier 2002
  *
  *     nature : projet etudiant
  *
@@ -84,7 +84,7 @@ SKIP :
 }
 
 
-/* Mots réservés*/
+/* Mots rÃ©servÃ©s*/
 
 TOKEN :
 {
@@ -172,7 +172,7 @@ void valConst() : {}{
   <entier> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst(ENTIER, YakaTokenManager.entierLu));}
  | <ident>	{	if(tabIdent.existeIdent(YakaTokenManager.identLu)){
  					tabIdent.rangeIdent(declaration.getSaveName(), tabIdent.chercheIdent(YakaTokenManager.identLu));
- 				}else System.out.println("Erreur : Variable non d�clar�e");
+ 				}else System.out.println("Erreur : Variable non déclarée");
  			}	
  | <VRAI> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst(BOOLEEN, VRAI));}	
  | <FAUX> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst(BOOLEEN, FAUX));}	
@@ -185,7 +185,7 @@ void declVar() : {}
   <VAR> type()	
   <ident>		{
   					if(tabIdent.existeIdent(GramTokenManager.identLu)){
-  						System.out.println("Erreur : Variable deja� declaree");
+  						System.out.println("Erreur : Variable deja  declaree");
   					}else{
   						tabIdent.rangeIdent(GramTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName());
   					}
@@ -193,7 +193,7 @@ void declVar() : {}
   ("," 
       <ident> 	{
 					if(tabIdent.existeIdent(GramTokenManager.identLu)){
-  						System.out.println("Erreur : Variable deja� declaree");
+  						System.out.println("Erreur : Variable deja  declaree");
   					}else{
   						tabIdent.rangeIdent(GramTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName());
   					}
@@ -218,7 +218,7 @@ void suiteInstr() : {}
 
 void instruction() : {}
 {
-  affectation
+  affectation()
  |lecture()
  |ecriture()	
 }
