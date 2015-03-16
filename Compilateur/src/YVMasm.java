@@ -172,7 +172,7 @@ public class YVMasm extends YVM{
 	}
 	
 	public void entete(String nomProgramme){
-		file = Ecriture.ouvrir(nomProgramme);
+		file = Ecriture.ouvrir(nomProgramme+".asm");
 		Ecriture.ecrireStringln(file,".model SMALL");
 		Ecriture.ecrireStringln(file,".586");
 		Ecriture.ecrireStringln(file,".CODE");
@@ -183,6 +183,7 @@ public class YVMasm extends YVM{
 	@Override
 	public void ouvrePrinc(int taille) {
 		Ecriture.ecrireStringln(file,"mov bp,sp");
+		Ecriture.ecrireStringln(file,"sub sp,"+taille);
 	}
 	
 	@Override
