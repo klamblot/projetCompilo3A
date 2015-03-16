@@ -4,13 +4,13 @@ import java.util.HashMap;
 
 
 public class TabIdent {
-	HashMap<String,Ident> table;
+	static HashMap<String,Ident> table;
 	
 	public TabIdent(){
 		table = new HashMap<String,Ident>();
 	}
 	
-	public Ident chercheIdent(String clef){
+	public static Ident chercheIdent(String clef){
 		return table.get(clef);
 	}
 	

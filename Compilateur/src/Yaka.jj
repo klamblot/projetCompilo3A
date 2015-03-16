@@ -19,22 +19,18 @@ PARSER_BEGIN(Yaka)
 
 public class Yaka {
 
-	static Expression exp;
+	static Expression exp = new Expression();
+	static Declaration declaration;
+	static TabIdent tabIdent = new TabIdent();
+	static YVM yvm;
+	static YVMasm yvmAsm;
+	
+	static int taille = 0;
+	static String typeAffect;
 	
   public static void main(String args[]) { 
     Yaka analyseur;
     java.io.InputStream input;
-    
-	Declaration declaration;
-	TabIdent tabident = new TabIdent();
-	YVM yvm;
-	YVMasm yvmAsm;
-	Expression exp = new Expression();
-	
-	int taille = 0;
-	String typeAffect;
-	
-	String typeAffect;
 	
     if (args.length==1) {
       System.out.print(args[args.length-1] + ": ");
@@ -164,7 +160,7 @@ void bloc() : {}{
  					yvmAsm.ouvrePrinc(taille);
  					yvm.ouvrePrinc(taille);
  				}	
-   suiteExpr() 
+   suiteInstr() 
 }
 
 void declConst() : {}
@@ -181,13 +177,13 @@ void defConst() : {}
 
 void valConst() : {}{
 
-  <entier> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst(ENTIER, YakaTokenManager.entierLu));}
+  <entier> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("ENTIER", YakaTokenManager.entierLu));}
  | <ident>	{	if(tabIdent.existeIdent(YakaTokenManager.identLu)){
  					tabIdent.rangeIdent(declaration.getSaveName(), tabIdent.chercheIdent(YakaTokenManager.identLu));
  				}else System.out.println("Erreur : Variable non déclarée");
  			}	
- | <VRAI> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst(BOOLEEN, VRAI));}	
- | <FAUX> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst(BOOLEEN, FAUX));}	
+ | <VRAI> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", VRAI));}	
+ | <FAUX> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", FAUX));}	
 
 }
 
@@ -199,8 +195,8 @@ void declVar() : {}
   					if(tabIdent.existeIdent(YakaTokenManager.identLu)){
   						System.out.println("Erreur : Variable deja  declaree");
   					}else{
-  						tabIdent.rangeIdent(YakaTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName());
-  						taille +=2;
+  						tabIdent.rangeIdent(YakaTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName()));
+  						taille += 2;
   					}
   				}	
   ("," 
@@ -208,7 +204,7 @@ void declVar() : {}
 					if(tabIdent.existeIdent(YakaTokenManager.identLu)){
   						System.out.println("Erreur : Variable deja  declaree");
   					}else{
-  						tabIdent.rangeIdent(YakaTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName());
+  						tabIdent.rangeIdent(YakaTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName()));
   						taille +=2;
   					}
 				}
@@ -244,24 +240,26 @@ void instruction() : {}
 void affectation() : {}
 {
 
-  <ident> { declaration.setSaveName(YakaTokenManager.identLu);
-  			typeAffect = tabIdent.chercheIdent(declaration.getSaveName()).getType();}
+  <ident> 	{	declaration.setSaveName(YakaTokenManager.identLu);
+  				typeAffect = tabIdent.chercheIdent(declaration.getSaveName()).getType();
+  			}
   "=" expression() {
-  						if(typeAffect == exp.popType(){
-  							yvm.istore(tabIdent.chercheIdent(declaration.getSaveName()).getOffset());
-  							yvmAsm.istore(tabIdent.chercheIdent(declaration.getSaveName()).getOffset());
+  						if(typeAffect.equals(exp.tipToString(exp.popType()))){
+  							yvm.istore(((IdVar)tabIdent.chercheIdent(declaration.getSaveName())).getOffset());
+  							yvmAsm.istore(((IdVar)tabIdent.chercheIdent(declaration.getSaveName())).getOffset());
   						}
   						else{
-  							system.out.println("erreur de type au niveau de l'affectation");
+  							System.out.println("erreur de type au niveau de l'affectation");
 						}
+					}
 
 }
 void lecture() : {}
 {
   <LIRE> "(" <ident> {
-  						yvm.lireEnt(tabIdent.chercheIdent(declaration.getSaveName()).getOffset());
-  						yvmAsm.lireEnt(tabIdent.chercheIdent(declaration.getSaveName()).getOffset());
-  					}
+  						yvm.lireEnt(((IdVar)tabIdent.chercheIdent(declaration.getSaveName())).getOffset());
+  						yvmAsm.lireEnt(((IdVar)tabIdent.chercheIdent(declaration.getSaveName())).getOffset());
+  					  }
   ")" 
 }
 
@@ -293,14 +291,14 @@ void expression() : {}
   simpleExpr() 
   (opRel()
   simpleExpr() {
-  				op o = exp.peekOpera();
+  				Expression.op o = exp.peekOpera();
 	   			switch(o){
 	   				case EGAL :
 	   					yvm.iegal();
 	   					yvmAsm.iegal();
 	   					break;
 	   				case DIFF :
-	   					yvm.idiff()
+	   					yvm.idiff();
 	   					yvmAsm.idiff();
 	   					break;
 	   				case INF :
@@ -312,7 +310,7 @@ void expression() : {}
 	   					yvmAsm.iinfegal();
 	   					break;
 	   				case SUP :
-	   					yvm.isup()
+	   					yvm.isup();
 	   					yvmAsm.isup();
 	   					break;
 	   				case SUPEGAL :
@@ -321,7 +319,8 @@ void expression() : {}
 	   					break;
 	   				default :
 	   			}
-  				exp.testType2Argv();}
+  				exp.testType2Argv();
+  				}
 
   )?
 }
@@ -333,14 +332,14 @@ void simpleExpr() : {}
    terme() 
    (opAdd()
    terme() {
-   			op o = exp.peekOpera();
+   			Expression.op o = exp.peekOpera();
    			switch(o){
    				case PLUS :
    					yvm.iadd();
    					yvmAsm.iadd();
    					break;
    				case MOINS :
-   					yvm.isub()
+   					yvm.isub();
    					yvmAsm.isub();
    					break;
    				case OU :
@@ -359,14 +358,14 @@ void terme() : {}
   facteur() 
   (opMul()
   facteur()	{
-  			op o = exp.peekOpera();
+  			Expression.op o = exp.peekOpera();
    			switch(o){
    				case MUL :
    					yvm.imul();
    					yvmAsm.imul();
    					break;
    				case DIV :
-   					yvm.idiv()
+   					yvm.idiv();
    					yvmAsm.idiv();
    					break;
    				case ET :
@@ -383,14 +382,14 @@ void terme() : {}
 void facteur() : {}
 {   primaire() 
   |  opNeg() primaire() {
-  						op o = exp.peekOpera();
+  						Expression.op o = exp.peekOpera();
 			   			switch(o){
 			   				case NON :
 			   					yvm.inot();
 			   					yvmAsm.inot();
 			   					break;
 			   				case MOINS :
-			   					yvm.ineg()
+			   					yvm.ineg();
 			   					yvmAsm.ineg();
 			   					break;
 			   				default :
@@ -409,7 +408,7 @@ void primaire (): {}
 void valeur () : {}
 
 { <entier> {exp.saveType(Expression.tip.ENTIER);} 		
- | <ident> 	{exp.saveType(TabIdent.chercheIdent(YakaTokenManager.identLu).getType());}	
+ | <ident> 	{exp.saveType(exp.stringTotip(TabIdent.chercheIdent(YakaTokenManager.identLu).getType()));}	
  | <VRAI> 	{exp.saveType(Expression.tip.BOOL);} 
  | <FAUX> 	{exp.saveType(Expression.tip.BOOL);} 
 

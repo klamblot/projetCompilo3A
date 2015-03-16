@@ -124,6 +124,29 @@ public class Expression{
 		return oper.peek();
 	}
 
+	public tip popType(){
+		return type.pop();
+	}
 	
+	public op popOpera(){
+		return oper.pop();
+	}
+	
+	public String tipToString(tip type){
+		switch (type){
+		case ENTIER : return "ENTIER" ;
+		case BOOL 	: return "BOOLEEN";
+		case ERREUR : return "ERREUR" ;
+		default : return "NULL";
+		}
+	}
+	
+	public tip stringTotip(String type){
+		switch (type){
+		case "ENTIER" : return tip.ENTIER ;
+		case "BOOLEEN" 	: return tip.BOOL;
+		default : return tip.ERREUR;
+		}
+	}
 
 }
