@@ -270,12 +270,12 @@ void ecriture() : {}
   								yvmAsm.ecrireEnt();
   							} 
   							
-  | <chaine>				{
+  | <chaine>")" ) 
+  							 {
   								yvm.ecrireChaine(YakaTokenManager.chaineLue);
   								yvmAsm.ecrireChaine(YakaTokenManager.chaineLue);
   							}
-  							
-   ")" ) | <ALALIGNE>		{
+  		| <ALALIGNE>		{
    								yvm.aLaLigne();
    								yvmAsm.aLaLigne();
    							}

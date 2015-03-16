@@ -173,9 +173,9 @@ public class YVMasm extends YVM{
 	
 	public void entete(String nomProgramme){
 		file = Ecriture.ouvrir(nomProgramme+".asm");
-		Ecriture.ecrireStringln(file,"\textrm lirent:proc, ecrent:proc");
-		Ecriture.ecrireStringln(file,"\textrm ecrbool:proc");
-		Ecriture.ecrireStringln(file,"\textrm ecrch:proc, ligsuiv:proc:");
+		Ecriture.ecrireStringln(file,"\textrn lirent:proc, ecrent:proc");
+		Ecriture.ecrireStringln(file,"\textrn ecrbool:proc");
+		Ecriture.ecrireStringln(file,"\textrn ecrch:proc, ligsuiv:proc");
 		Ecriture.ecrireStringln(file,".model SMALL");
 		Ecriture.ecrireStringln(file,".586");
 		Ecriture.ecrireStringln(file,".CODE");
