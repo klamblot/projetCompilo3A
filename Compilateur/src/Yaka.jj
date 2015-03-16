@@ -150,10 +150,12 @@ TOKEN  :
 void analyse() : {}
 {
 
-   <PROGRAMME> <ident>	{yvmAsm.entete(YakaTokenManager.identLu);}
+   <PROGRAMME> <ident>	{	yvm.entete(YakaTokenManager.identLu);
+   							yvmAsm.entete(YakaTokenManager.identLu);}
 
    bloc()
-   <FPROGRAMME> 
+   <FPROGRAMME> { yvm.queue();
+   				  yvmAsm.queue();}
 }
 
 void bloc() : {}{
@@ -172,7 +174,7 @@ void declConst() : {}
 
 void defConst() : {}
 {
-  <ident> {declaration.setSaveName(GramTokenManager.identLu);}
+  <ident> {declaration.setSaveName(YakaTokenManager.identLu);}
    "=" valConst()   
 
 }
@@ -194,19 +196,19 @@ void declVar() : {}
 {
   <VAR> type()	
   <ident>		{
-  					if(tabIdent.existeIdent(GramTokenManager.identLu)){
+  					if(tabIdent.existeIdent(YakaTokenManager.identLu)){
   						System.out.println("Erreur : Variable deja  declaree");
   					}else{
-  						tabIdent.rangeIdent(GramTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName());
+  						tabIdent.rangeIdent(YakaTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName());
   						taille +=2;
   					}
   				}	
   ("," 
       <ident> 	{
-					if(tabIdent.existeIdent(GramTokenManager.identLu)){
+					if(tabIdent.existeIdent(YakaTokenManager.identLu)){
   						System.out.println("Erreur : Variable deja  declaree");
   					}else{
-  						tabIdent.rangeIdent(GramTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName());
+  						tabIdent.rangeIdent(YakaTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName());
   						taille +=2;
   					}
 				}
@@ -242,10 +244,12 @@ void instruction() : {}
 void affectation() : {}
 {
 
-  <ident> { typeAffect = tabIdent.chercheIdent(YakaTokenManager.identLu).getType();}
+  <ident> { declaration.setSaveName(YakaTokenManager.identLu);
+  			typeAffect = tabIdent.chercheIdent(declaration.getSaveName()).getType();}
   "=" expression() {
   						if(typeAffect == exp.popType(){
-  							/*InstructionASM*/
+  							yvm.istore(tabIdent.chercheIdent(declaration.getSaveName()).getOffset());
+  							yvmAsm.istore(tabIdent.chercheIdent(declaration.getSaveName()).getOffset());
   						}
   						else{
   							system.out.println("erreur de type au niveau de l'affectation");
@@ -254,12 +258,29 @@ void affectation() : {}
 }
 void lecture() : {}
 {
-  <LIRE> "(" <ident> ")"
+  <LIRE> "(" <ident> {
+  						yvm.lireEnt(tabIdent.chercheIdent(declaration.getSaveName()).getOffset());
+  						yvmAsm.lireEnt(tabIdent.chercheIdent(declaration.getSaveName()).getOffset());
+  					}
+  ")" 
 }
 
 void ecriture() : {}
 {
-  (<ECRIRE> "(" expression() | <chaine> ")" ) | <ALALIGNE>
+  (<ECRIRE> "(" expression() {
+  								yvm.ecrireEnt();
+  								yvmAsm.ecrireEnt();
+  							} 
+  							
+  | <chaine>				{
+  								yvm.ecrireChaine(YakaTokenManager.chaineLue);
+  								yvmAsm.ecrireChaine(YakaTokenManager.chaineLue);
+  							}
+  							
+   ")" ) | <ALALIGNE>		{
+   								yvm.aLaLigne();
+   								yvmAsm.aLaLigne();
+   							}
 }
 
 

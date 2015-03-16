@@ -113,23 +113,23 @@ public class YVM {
 	/*Méthode de d'instruction */
 	
 	public void ecrireEnt(){
-		Ecriture.ecrireStringln(file,"\t;ecrireEnt");
+		Ecriture.ecrireStringln(file,"ecrireEnt");
 	}
 	
 	public void ecrireChaine(String chaine){
-		Ecriture.ecrireStringln(file,"\t;ecrireChaine \""+chaine+"\"");	
+		Ecriture.ecrireStringln(file,"ecrireChaine \""+chaine+"\"");	
 	}
 	
 	public void lireEnt(int offset){
-		Ecriture.ecrireStringln(file,"\t;lireEnt "+offset);
+		Ecriture.ecrireStringln(file,"lireEnt "+offset);
 	}
 	
 	public void aLaLigne() {
-		Ecriture.ecrireStringln(file,"\t;aLaLigne");
+		Ecriture.ecrireStringln(file,"aLaLigne");
 	}
 	
 	public void ecrireBool(){
-		Ecriture.ecrireStringln(file,"\t;ecrireBool");
+		Ecriture.ecrireStringln(file,"ecrireBool");
 	}
 	
 }
