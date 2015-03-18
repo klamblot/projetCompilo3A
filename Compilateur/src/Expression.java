@@ -3,16 +3,22 @@ import java.util.Stack;
 
 public class Expression{
 	
-	private Stack<tip> type;
-	private Stack<op> oper;
+	private Stack<Tip> type; 	//Pile des types des opérandes pour le controle de type
+	private Stack<Op> oper; 	//Pile des opérateurs
 
-	public enum tip {
+	/**
+	 * Enum qui gere les differents types
+	 */
+	public enum Tip {
 		ENTIER,
 		BOOL,
 		ERREUR;	
 	};
 
-	public enum op {
+	/**
+	 * Enum qui gere les differents operateurs
+	 */
+	public enum Op {
 		PLUS,
 		MOINS,
 		DIV,
@@ -28,62 +34,75 @@ public class Expression{
 		NON;	  
 	};
 
+	//Constructeur
 	public Expression(){
-		type = new Stack<tip>();
-		oper = new Stack<op>();
+		type = new Stack<Tip>();
+		oper = new Stack<Op>();
 	}
 
-	public void saveType(tip t){
+	/*
+	 * Méthode qui ajoute un type à la pile des types
+	 */
+	public void saveType(Tip t){
 		type.push(t);
 	}
 
-	public void saveOp(op p){
+	/*
+	 * Méthode qui ajoute un type à la pile des types
+	 */
+	public void saveOp(Op p){
 		oper.push(p);
 	}
-
+	
+	/*
+	 * Méthode de controle de type pour les opérations avec 2 opérandes
+	 * Récupère les 2 éléments en sommet de la pile type et l'élément
+	 * en sommet de la pile des opérateurs. 
+	 * Teste ensuite si les deux types sont corrects par rapport à l'opérateur 
+	 */
 	public void testType2Argv(){
 		
 		
 		if(!type.isEmpty() && !oper.isEmpty()){
-			tip type1=popType();
-			tip type2=popType();
-			op o= popOpera();  
+			Tip type1=popType();
+			Tip type2=popType();
+			Op o= popOpera();  
 			
 			switch(o){
 				case PLUS :
 				case MOINS :
 				case DIV :
 				case MUL :
-					if(type1==tip.ENTIER && type2==tip.ENTIER){
-						type.push(tip.ENTIER);
-					}else type.push(tip.ERREUR);
+					if(type1==Tip.ENTIER && type2==Tip.ENTIER){
+						type.push(Tip.ENTIER);
+					}else type.push(Tip.ERREUR);
 					break;
 				
 				case INF:
 				case SUP:
 				case SUPEGAL:
 				case INFEGAL:
-					if(type1==tip.ENTIER && type2==tip.ENTIER){
-						type.push(tip.BOOL);
-					}else type.push(tip.ERREUR);
+					if(type1==Tip.ENTIER && type2==Tip.ENTIER){
+						type.push(Tip.BOOL);
+					}else type.push(Tip.ERREUR);
 					break;
 					
 				case EGAL:
 				case DIFF :
-					if(type1==tip.ERREUR || type2==tip.ERREUR || type1!=type2){
-						type.push(tip.ERREUR);
-					}else type.push(tip.BOOL);
+					if(type1==Tip.ERREUR || type2==Tip.ERREUR || type1!=type2){
+						type.push(Tip.ERREUR);
+					}else type.push(Tip.BOOL);
 					break;
 					
 				case ET :
 				case OU :
-					if(type1==tip.BOOL && type2==tip.BOOL){
-						type.push(tip.BOOL);
-					}else type.push(tip.ERREUR);
+					if(type1==Tip.BOOL && type2==Tip.BOOL){
+						type.push(Tip.BOOL);
+					}else type.push(Tip.ERREUR);
 					break;
 				
 				default :
-					type.push(tip.ERREUR);
+					type.push(Tip.ERREUR);
 			
 			}
 			
@@ -91,48 +110,67 @@ public class Expression{
 			
 	}
 
+	/*
+	 * Méthode de controle de type pour les opérations avec 1 opérande
+	 * Récupère l'élément en sommet de la pile type et l'élément
+	 * en sommet de la pile des opérateurs. 
+	 * Teste ensuite si le type est correct par rapport à l'opérateur 
+	 */
 	public void testType1Argv(){
 
 		if(!type.isEmpty() && !oper.isEmpty()){
 
-			if(type.peek() == tip.ENTIER && oper.peek()==op.MOINS)
+			if(type.peek() == Tip.ENTIER && oper.peek()==Op.MOINS)
 			{
 				type.pop();
 				oper.pop();
-				type.push(tip.ENTIER);
+				type.push(Tip.ENTIER);
 			}
-			else if(type.peek() == tip.BOOL && oper.peek()==op.NON)
+			else if(type.peek() == Tip.BOOL && oper.peek()==Op.NON)
 			{	
 				type.pop();
 				oper.pop();
-				type.push(tip.BOOL);
+				type.push(Tip.BOOL);
 			}
 			else{
 
-				type.push(tip.ERREUR);
+				type.push(Tip.ERREUR);
 			}
 		}
 	}
 
-	
-	public tip peekType(){
+	/*
+	 * Méthode qui renvoie le sommet de la pile type sans l'enlever
+	 */
+	public Tip peekType(){
 		return type.peek();
 	}
 	
-	
-	public op peekOpera(){
+	/*
+	 * Méthode qui renvoie le sommet de la pile opera sans l'enlever
+	 */
+	public Op peekOpera(){
 		return oper.peek();
 	}
-
-	public tip popType(){
+	
+	/*
+	 * Méthode qui renvoie le sommet de la pile type
+	 */
+	public Tip popType(){
 		return type.pop();
 	}
 	
-	public op popOpera(){
+	/*
+	 * Méthode qui renvoie le sommet de la pile opera
+	 */
+	public Op popOpera(){
 		return oper.pop();
 	}
 	
-	public String tipToString(tip type){
+	/*
+	 * Méthode qui prend un Tip et renvoie son équivalent en String
+	 */
+	public String tipToString(Tip type){
 		switch (type){
 		case ENTIER : return "ENTIER" ;
 		case BOOL 	: return "BOOLEEN";
@@ -141,11 +179,14 @@ public class Expression{
 		}
 	}
 	
-	public tip stringTotip(String type){
+	/*
+	 * Méthode qui prend un type en String et renvoie son équivalent en Tip
+	 */
+	public Tip stringToTip(String type){
 		switch (type){
-		case "ENTIER" : return tip.ENTIER ;
-		case "BOOLEEN" 	: return tip.BOOL;
-		default : return tip.ERREUR;
+		case "ENTIER" : return Tip.ENTIER ;
+		case "BOOLEEN" 	: return Tip.BOOL;
+		default : return Tip.ERREUR;
 		}
 	}
 

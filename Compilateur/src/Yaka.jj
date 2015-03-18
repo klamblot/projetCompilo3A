@@ -285,7 +285,7 @@ void expression() : {}
   simpleExpr() 
   (opRel()
   simpleExpr() {
-  				Expression.op o = exp.peekOpera();
+  				Expression.Op o = exp.peekOpera();
 	   			switch(o){
 	   				case EGAL :
 	   					yvm.iegal();
@@ -326,7 +326,7 @@ void simpleExpr() : {}
    terme() 
    (opAdd()
    terme() {
-   			Expression.op o = exp.peekOpera();
+   			Expression.Op o = exp.peekOpera();
    			switch(o){
    				case PLUS :
    					yvm.iadd();
@@ -352,7 +352,7 @@ void terme() : {}
   facteur() 
   (opMul()
   facteur()	{
-  			Expression.op o = exp.peekOpera();
+  			Expression.Op o = exp.peekOpera();
    			switch(o){
    				case MUL :
    					yvm.imul();
@@ -376,7 +376,7 @@ void terme() : {}
 void facteur() : {}
 {   primaire() 
   |  opNeg() primaire() {
-  						Expression.op o = exp.peekOpera();
+  						Expression.Op o = exp.peekOpera();
 			   			switch(o){
 			   				case NON :
 			   					yvm.inot();
@@ -402,13 +402,13 @@ void primaire (): {}
 void valeur () : {}
 
 { <entier> 	{	
-				exp.saveType(Expression.tip.ENTIER);
+				exp.saveType(Expression.Tip.ENTIER);
 				yvm.iconst(YakaTokenManager.entierLu);
 				yvmAsm.iconst(YakaTokenManager.entierLu);
 			} 		
  | <ident> 	{
  				Ident ident = tabIdent.chercheIdent(YakaTokenManager.identLu);
- 				exp.saveType(exp.stringTotip(ident.getType()));
+ 				exp.saveType(exp.stringToTip(ident.getType()));
  				if(ident instanceof IdConst){
  					yvm.iconst(((IdConst)ident).getValeur());
  					yvmAsm.iconst(((IdConst)ident).getValeur());
@@ -418,12 +418,12 @@ void valeur () : {}
  				}
  			}	
  | <VRAI> 	{	
- 				exp.saveType(Expression.tip.BOOL);
+ 				exp.saveType(Expression.Tip.BOOL);
  				yvm.iconst(-1);
 				yvmAsm.iconst(-1);
  			} 
  | <FAUX> 	{	
- 				exp.saveType(Expression.tip.BOOL);
+ 				exp.saveType(Expression.Tip.BOOL);
  				yvm.iconst(0);
 				yvmAsm.iconst(0);
  			} 
@@ -434,37 +434,37 @@ void valeur () : {}
 void opRel() : {}
 {
 
-   "=" 		{exp.saveOp(Expression.op.EGAL);}
- | "<>" 	{exp.saveOp(Expression.op.DIFF);}
- | "<" 		{exp.saveOp(Expression.op.INF);}
- | "<=" 	{exp.saveOp(Expression.op.INFEGAL);}
- | ">" 		{exp.saveOp(Expression.op.SUP);}
- | ">=" 	{exp.saveOp(Expression.op.SUPEGAL);}
+   "=" 		{exp.saveOp(Expression.Op.EGAL);}
+ | "<>" 	{exp.saveOp(Expression.Op.DIFF);}
+ | "<" 		{exp.saveOp(Expression.Op.INF);}
+ | "<=" 	{exp.saveOp(Expression.Op.INFEGAL);}
+ | ">" 		{exp.saveOp(Expression.Op.SUP);}
+ | ">=" 	{exp.saveOp(Expression.Op.SUPEGAL);}
 
 } 
 
 void opAdd() : {}
 {
 
-    "+"	 {exp.saveOp(Expression.op.PLUS);}	
-  |  "-" {exp.saveOp(Expression.op.MOINS);}	
-  | <OU> {exp.saveOp(Expression.op.OU);}	
+    "+"	 {exp.saveOp(Expression.Op.PLUS);}	
+  |  "-" {exp.saveOp(Expression.Op.MOINS);}	
+  | <OU> {exp.saveOp(Expression.Op.OU);}	
 
 }
 
 void opMul() : {}
 {
 
-  "*"	{exp.saveOp(Expression.op.MUL);}	
-  | "/"	{exp.saveOp(Expression.op.DIV);}	
-  | <ET> {exp.saveOp(Expression.op.ET);}	
+  "*"	{exp.saveOp(Expression.Op.MUL);}	
+  | "/"	{exp.saveOp(Expression.Op.DIV);}	
+  | <ET> {exp.saveOp(Expression.Op.ET);}	
 
 } 
 
 void opNeg() : {}
 { 
- "-" 		{exp.saveOp(Expression.op.MOINS);}	
- | <NON>	{exp.saveOp(Expression.op.NON);}
+ "-" 		{exp.saveOp(Expression.Op.MOINS);}	
+ | <NON>	{exp.saveOp(Expression.Op.NON);}
 }
 
 

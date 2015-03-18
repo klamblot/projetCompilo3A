@@ -1,10 +1,9 @@
 
 
-
 public class Declaration {
 
-	private int offSet = 0;
-	private String saveName;
+	private int offSet = 0; 	//Offset courant : Position de l'élément en sommet de pile
+	private String saveName;	//Variable pour sauvegarder un nom pour créer un Ident ensuite
 	
 
 	public int getOffSet() {
@@ -23,11 +22,25 @@ public class Declaration {
 		this.saveName = saveName;
 	}
 	
+	
+	/**
+	 * @param type
+	 * @return IdVar
+	 * Créer un nouvel IdVar à partir du type et met son offset en sommet de pile
+	 * Décale l'offset
+	 */
 	public Ident createIdentVar(String type){
 		offSet-=2;
 		return new IdVar(type,offSet);
 	}
 	
+	
+	/**
+	 * @param type
+	 * @param valeur
+	 * @return IdConst
+	 * Créer un IdConst à partir de son type et de sa valeur
+	 */
 	public Ident createIdentConst(String type, int valeur){
 		return new IdConst(type, valeur);
 	}
