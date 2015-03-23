@@ -117,7 +117,7 @@ public class YVM {
 	}
 	
 	public void ecrireChaine(String chaine){
-		Ecriture.ecrireStringln(file,"ecrireChaine \""+chaine+"\"");	
+		Ecriture.ecrireStringln(file,"ecrireChaine "+chaine);	
 	}
 	
 	public void lireEnt(int offset){

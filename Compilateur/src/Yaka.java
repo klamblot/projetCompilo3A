@@ -486,14 +486,13 @@ public class Yaka implements YakaConstants {
       break;
     case ident:
       jj_consume_token(ident);
-                                Ident ident = tabIdent.chercheIdent(YakaTokenManager.identLu);
-                                exp.saveType(exp.stringToTip(ident.getType()));
-                                if(ident instanceof IdConst){
-                                        yvm.iconst(((IdConst)ident).getValeur());
-                                        yvmAsm.iconst(((IdConst)ident).getValeur());
+                                exp.saveType(exp.stringToTip(tabIdent.chercheIdent(YakaTokenManager.identLu).getType()));
+                                if(tabIdent.chercheIdent(YakaTokenManager.identLu) instanceof IdConst){
+                                        yvm.iconst(((IdConst) tabIdent.chercheIdent(YakaTokenManager.identLu)).getValeur());
+                                        yvmAsm.iconst(((IdConst) tabIdent.chercheIdent(YakaTokenManager.identLu)).getValeur());
                                 }else{
-                                        yvm.iload(((IdVar)ident).getOffset());
-                                        yvmAsm.iload(((IdVar)ident).getOffset());
+                                        yvm.iload(((IdVar) tabIdent.chercheIdent(YakaTokenManager.identLu)).getOffset());
+                                        yvmAsm.iload(((IdVar) tabIdent.chercheIdent(YakaTokenManager.identLu)).getOffset());
                                 }
       break;
     case VRAI:

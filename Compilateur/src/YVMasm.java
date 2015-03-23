@@ -8,6 +8,12 @@ public class YVMasm extends YVM{
 	
 	OutputStream file;
 	
+	private int messCount;
+	
+	public YVMasm(){
+		messCount = 0;
+	}
+	
 	@Override
 	public void iadd() {
 		Ecriture.ecrireStringln(file,"\tpop bx");
@@ -78,7 +84,7 @@ public class YVMasm extends YVM{
 		Ecriture.ecrireStringln(file,"\tcmp ax,bx");
 		Ecriture.ecrireStringln(file,"\tjge $+6");
 		Ecriture.ecrireStringln(file,"\tpush -1");
-		Ecriture.ecrireStringln(file,"\tjump $+4");
+		Ecriture.ecrireStringln(file,"\tjmp $+4");
 		Ecriture.ecrireStringln(file,"\tpush 0");
 	}
 
@@ -89,7 +95,7 @@ public class YVMasm extends YVM{
 		Ecriture.ecrireStringln(file,"\tcmp ax,bx");
 		Ecriture.ecrireStringln(file,"\tjle $+6");
 		Ecriture.ecrireStringln(file,"\tpush -1");
-		Ecriture.ecrireStringln(file,"\tjump $+4");
+		Ecriture.ecrireStringln(file,"\tjmp $+4");
 		Ecriture.ecrireStringln(file,"\tpush 0");
 	}
 
@@ -100,7 +106,7 @@ public class YVMasm extends YVM{
 		Ecriture.ecrireStringln(file,"\tcmp ax,bx");
 		Ecriture.ecrireStringln(file,"\tjg $+6");
 		Ecriture.ecrireStringln(file,"\tpush -1");
-		Ecriture.ecrireStringln(file,"\tjump $+4");
+		Ecriture.ecrireStringln(file,"\tjmp $+4");
 		Ecriture.ecrireStringln(file,"\tpush 0");
 	}
 
@@ -111,7 +117,7 @@ public class YVMasm extends YVM{
 		Ecriture.ecrireStringln(file,"\tcmp ax,bx");
 		Ecriture.ecrireStringln(file,"\tjl $+6");
 		Ecriture.ecrireStringln(file,"\tpush -1");
-		Ecriture.ecrireStringln(file,"\tjump $+4");
+		Ecriture.ecrireStringln(file,"\tjmp $+4");
 		Ecriture.ecrireStringln(file,"\tpush 0");
 	}
 
@@ -122,7 +128,7 @@ public class YVMasm extends YVM{
 		Ecriture.ecrireStringln(file,"\tcmp ax,bx");
 		Ecriture.ecrireStringln(file,"\tjne $+6");
 		Ecriture.ecrireStringln(file,"\tpush -1");
-		Ecriture.ecrireStringln(file,"\tjump $+4");
+		Ecriture.ecrireStringln(file,"\tjmp $+4");
 		Ecriture.ecrireStringln(file,"\tpush 0");
 	}
 
@@ -180,7 +186,7 @@ public class YVMasm extends YVM{
 		Ecriture.ecrireStringln(file,".586");
 		Ecriture.ecrireStringln(file,".CODE");
 		Ecriture.ecrireStringln(file,"debut :");
-		Ecriture.ecrireStringln(file,"\tSTARUPCODE");
+		Ecriture.ecrireStringln(file,"\tSTARTUPCODE");
 	}
 
 	@Override
@@ -200,9 +206,11 @@ public class YVMasm extends YVM{
 	@Override
 	public void ecrireChaine(String chaine){
 		Ecriture.ecrireStringln(file,".DATA");
-		Ecriture.ecrireStringln(file,"\tmess0 DB \"x=$\"");
+		chaine = chaine.substring(0, chaine.length()-1);
+		Ecriture.ecrireStringln(file,"\tmess"+messCount+" DB "+chaine+"$\"");
 		Ecriture.ecrireStringln(file,".CODE");
-		Ecriture.ecrireStringln(file,"\tlea dx,mess0");
+		Ecriture.ecrireStringln(file,"\tlea dx,mess"+messCount);
+		messCount++;
 		Ecriture.ecrireStringln(file,"\tpush dx");
 		Ecriture.ecrireStringln(file,"\tcall ecrch");
 	}
