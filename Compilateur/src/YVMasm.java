@@ -200,7 +200,7 @@ public class YVMasm extends YVM{
 	@Override
 	public void ecrireChaine(String chaine){
 		Ecriture.ecrireStringln(file,".DATA");
-		Ecriture.ecrireStringln(file,"\tmees0 DB \"x=$\"");
+		Ecriture.ecrireStringln(file,"\tmess0 DB \"x=$\"");
 		Ecriture.ecrireStringln(file,".CODE");
 		Ecriture.ecrireStringln(file,"\tlea dx,mess0");
 		Ecriture.ecrireStringln(file,"\tpush dx");

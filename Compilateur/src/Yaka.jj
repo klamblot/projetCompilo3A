@@ -251,24 +251,25 @@ void affectation() : {}
 void lecture() : {}
 {
   <LIRE> "(" <ident> {
-  						yvm.lireEnt(((IdVar)tabIdent.chercheIdent(declaration.getSaveName())).getOffset());
-  						yvmAsm.lireEnt(((IdVar)tabIdent.chercheIdent(declaration.getSaveName())).getOffset());
+  						yvm.lireEnt(((IdVar)tabIdent.chercheIdent(YakaTokenManager.identLu)).getOffset());
+  						yvmAsm.lireEnt(((IdVar)tabIdent.chercheIdent(YakaTokenManager.identLu)).getOffset());
   					  }
   ")" 
 }
 
 void ecriture() : {}
 {
-  (<ECRIRE> "(" expression() {
+  <ECRIRE> "(" (expression() {
   								yvm.ecrireEnt();
   								yvmAsm.ecrireEnt();
-  							} 
+  							 } 
   							
-  | <chaine>")" ) 
-  							 {
+  | <chaine>				{
   								yvm.ecrireChaine(YakaTokenManager.chaineLue);
   								yvmAsm.ecrireChaine(YakaTokenManager.chaineLue);
   							}
+  
+  ) ")"  
   		| <ALALIGNE>		{
    								yvm.aLaLigne();
    								yvmAsm.aLaLigne();
