@@ -171,14 +171,36 @@ void defConst() : {}
 
 void valConst() : {}{
 
-  <entier> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("ENTIER", YakaTokenManager.entierLu));}
- | <ident>	{	if(tabIdent.existeIdent(YakaTokenManager.identLu)){
- 					tabIdent.rangeIdent(declaration.getSaveName(), tabIdent.chercheIdent(YakaTokenManager.identLu));
- 				}else System.out.println("Erreur : Variable non déclarée");
+  <entier> 	{	
+  				if(tabIdent.existeIdent(declaration.getSaveName())){
+  					System.out.println("Erreur : Constante deja  declaree");
+  				}else{
+  					tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("ENTIER", YakaTokenManager.entierLu));
+  				}
+  			}
+ | <ident>	{	
+ 				if(tabIdent.existeIdent(declaration.getSaveName())){
+  						System.out.println("Erreur : Variable deja  declaree");
+  				}else{
+ 					if(tabIdent.existeIdent(YakaTokenManager.identLu)){
+ 						tabIdent.rangeIdent(declaration.getSaveName(), tabIdent.chercheIdent(YakaTokenManager.identLu));
+ 					}else System.out.println("Erreur : Variable non déclarée");
+ 				}
  			}	
- | <VRAI> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", -1));}	
- | <FAUX> 	{tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", 0));}	
-
+ | <VRAI> 	{
+ 				if(tabIdent.existeIdent(declaration.getSaveName())){
+  					System.out.println("Erreur : Variable deja  declaree");
+  				}else{
+ 					tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", -1));
+ 				}
+ 			}	
+ | <FAUX> 	{
+ 				if(tabIdent.existeIdent(declaration.getSaveName())){
+  					System.out.println("Erreur : Variable deja  declaree");
+  				}else{
+ 					tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", 0));
+ 				}	
+			}
 }
 
 
@@ -238,15 +260,17 @@ void affectation() : {}
   				typeAffect = tabIdent.chercheIdent(declaration.getSaveName()).getType();
   			}
   "=" expression() {
-  						if(typeAffect.equals(exp.tipToString(exp.popType()))){
-  							yvm.istore(((IdVar)tabIdent.chercheIdent(declaration.getSaveName())).getOffset());
-  							yvmAsm.istore(((IdVar)tabIdent.chercheIdent(declaration.getSaveName())).getOffset());
-  						}
-  						else{
-  							System.out.println("erreur de type au niveau de l'affectation");
+  						if(tabIdent.chercheIdent(declaration.getSaveName()) instanceof IdVar){
+	  						if(typeAffect.equals(exp.tipToString(exp.popType()))){
+	  							yvm.istore(((IdVar)tabIdent.chercheIdent(declaration.getSaveName())).getOffset());
+	  							yvmAsm.istore(((IdVar)tabIdent.chercheIdent(declaration.getSaveName())).getOffset());
+	  						}else{
+	  							System.out.println("erreur de type au niveau de l'affectation");
+							}
+						}else{
+								System.out.println("Erreur : Affectation impossible pour une constante");
 						}
 					}
-
 }
 void lecture() : {}
 {
