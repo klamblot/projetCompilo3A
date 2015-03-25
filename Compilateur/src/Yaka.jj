@@ -256,8 +256,13 @@ void instruction() : {}
 void affectation() : {}
 {
 
-  <ident> 	{	declaration.setSaveName(YakaTokenManager.identLu);
-  				typeAffect = tabIdent.chercheIdent(declaration.getSaveName()).getType();
+  <ident> 	{	
+  				declaration.setSaveName(YakaTokenManager.identLu);
+  				if(tabIdent.existeIdent(declaration.getSaveName())){
+  					typeAffect = tabIdent.chercheIdent(declaration.getSaveName()).getType();
+  				}else{ 
+  					System.out.println("Erreur : Variable non déclarée");
+  				}
   			}
   "=" expression() {
   						if(tabIdent.existeIdent(declaration.getSaveName())){
@@ -271,7 +276,7 @@ void affectation() : {}
 							}else{
 									System.out.println("Erreur : Affectation impossible pour une constante");
 							}
-						}else System.out.println("Erreur : Variable non déclarée");
+						}
 					}
 }
 void lecture() : {}
@@ -280,7 +285,9 @@ void lecture() : {}
   						if(tabIdent.existeIdent(YakaTokenManager.identLu)){
 	  						yvm.lireEnt(((IdVar)tabIdent.chercheIdent(YakaTokenManager.identLu)).getOffset());
 	  						yvmAsm.lireEnt(((IdVar)tabIdent.chercheIdent(YakaTokenManager.identLu)).getOffset());
-	  					}else System.out.println("Erreur : Variable non déclarée");
+	  					}else{
+	  						System.out.println("Erreur : Variable non déclarée");
+	  					}
   					  }
   ")" 
 }
