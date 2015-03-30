@@ -169,7 +169,7 @@ public class YVMasm extends YVM{
 	public void iffaux(String etiquette){
 		Ecriture.ecrireStringln(file,"\tpop ax");
 		Ecriture.ecrireStringln(file,"\tcmp ax,0");
-		Ecriture.ecrireStringln(file,"\tjne "+etiquette);
+		Ecriture.ecrireStringln(file,"\tje "+etiquette);
 	}
 
 	@Override
@@ -257,4 +257,5 @@ public class YVMasm extends YVM{
 	public void fsi(int numEtiq){
 		Ecriture.ecrireStringln(file,"\tFSI"+numEtiq+":");
 	}
+	
 }

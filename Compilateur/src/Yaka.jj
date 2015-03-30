@@ -325,16 +325,24 @@ void iteration() : {}
 {
 	<TANTQUE> {	ite.push();
 				yvm.faire(ite.peek());
+				yvmAsm.faire(ite.peek());
 			  }
-		expression() {
-						if (!(exp.tipToString(exp.popType()).equals("BOOLEEN"))){
-							System.out.println("Une expression booléenne est attendu");
-						}
-					 }
+	expression() {
+					if (!(exp.tipToString(exp.popType()).equals("BOOLEEN"))){
+						System.out.println("Une expression booléenne est attendu");
+					}else{
+						yvm.iffaux("FAIT"+ite.peek());
+						yvmAsm.iffaux("FAUT"+ite.peek());
+					}
+					
+				 }
 	<FAIRE>
-		instruction() {}
+		suiteInstr()
 	<FAIT> {
-			yvm.fait(ite.pop());
+			yvm.jump("FAIRE"+ite.peek());
+			yvmAsm.jump("FAIRE"+ite.peek());
+			yvm.fait(ite.peek());
+			yvmAsm.fait(ite.pop());
 		   }
 }
 
