@@ -344,6 +344,10 @@ void conditionnelle() : {}
 {
 	 
 	<SI> expression() { 
+							if (!(exp.tipToString(exp.popType()).equals("BOOLEEN"))){
+							System.out.println("Une expression booléenne est attendu");
+							}
+							
 							cond.push();
 							yvm.iffaux("SINON"+cond.peek());
 							yvmAsm.iffaux("SINON"+cond.peek());
@@ -360,6 +364,7 @@ void conditionnelle() : {}
 			yvm.fsi(cond.peek());
 			yvmAsm.fsi(cond.pop());	
 		  }
+		  ";"
 }
 
 
