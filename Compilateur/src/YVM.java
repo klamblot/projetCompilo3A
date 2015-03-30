@@ -7,7 +7,7 @@ public class YVM {
 	public YVM(){
 	}
 	
-	/* MÈthode arithmÈtique*/
+	/* M√©thode arithm√©tique*/
 	public void iadd(){
 		Ecriture.ecrireStringln(file,"iadd");
 	}
@@ -41,7 +41,7 @@ public class YVM {
 	}
 	/*----------------------*/
 	
-	/*MÈthode comparaison*/
+	/*M√©thode comparaison*/
 	public void iinf(){
 		Ecriture.ecrireStringln(file,"iinf");
 	}
@@ -67,7 +67,7 @@ public class YVM {
 	}
 	/*---------------------*/
 	
-	/*MÈthode stockage et de chargement*/
+	/*M√©thode stockage et de chargement*/
 	public void iload(int offset){
 		Ecriture.ecrireStringln(file,"iload "+offset);
 	}
@@ -80,7 +80,7 @@ public class YVM {
 		Ecriture.ecrireStringln(file,"iconst "+constante);
 	}
 	
-	/*MÈthode contrÙle de flot*/
+	/*M√©thode contr√¥le de flot*/
 	public void ifeq(String etiquette){
 		Ecriture.ecrireStringln(file,"ifeq "+etiquette);
 	}
@@ -94,7 +94,7 @@ public class YVM {
 	}
 	/*----------------------*/
 	
-	/*MÈthode de pile*/
+	/*M√©thode de pile*/
 	public void entete(String nomProgramme){
 		file = Ecriture.ouvrir(nomProgramme+".yvm");
 		Ecriture.ecrireStringln(file,"entete");
@@ -110,7 +110,7 @@ public class YVM {
 	}
 	/*--------------------*/
 	
-	/*MÈthode de d'instruction */
+	/*M√©thode de d'instruction */
 	
 	public void ecrireEnt(){
 		Ecriture.ecrireStringln(file,"ecrireEnt");
@@ -130,6 +130,26 @@ public class YVM {
 	
 	public void ecrireBool(){
 		Ecriture.ecrireStringln(file,"ecrireBool");
+	}
+	
+	/*M√©thodes de l'it√©ration */
+	
+	public void faire(){
+		Ecriture.ecrireStringln(file,"FAIRE" +imbr+ ":");
+	}
+	
+	public void fait(){
+		Ecriture.ecrireStringln(file,"FAIT" +imbr+ ":");
+	}
+	
+	/*M√©thodes de la conditionnelle */
+	
+	public void si(){
+		Ecriture.ecrireStringln(file,"SINON" +imbr+ ":");	
+	}
+	
+	public void si(){
+		Ecriture.ecrireStringln(file,"FSI" +imbr+ ":");	
 	}
 	
 }
