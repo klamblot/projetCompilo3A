@@ -134,21 +134,21 @@ public class YVM {
 	
 	/*Méthodes de l'itération */
 	
-	public void faire(){
+	public void faire(int imbr){
 		Ecriture.ecrireStringln(file,"FAIRE" +imbr+ ":");
 	}
 	
-	public void fait(){
+	public void fait(int imbr){
 		Ecriture.ecrireStringln(file,"FAIT" +imbr+ ":");
 	}
 	
 	/*Méthodes de la conditionnelle */
 	
-	public void si(){
+	public void sinon(int imbr){
 		Ecriture.ecrireStringln(file,"SINON" +imbr+ ":");	
 	}
 	
-	public void si(){
+	public void fsi(int imbr){
 		Ecriture.ecrireStringln(file,"FSI" +imbr+ ":");	
 	}
 	
