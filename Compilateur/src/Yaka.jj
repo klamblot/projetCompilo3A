@@ -116,9 +116,7 @@ TOKEN :
 | <ECRIRE : "ECRIRE">
 | <LIRE : "LIRE">
 | <ALALIGNE : "ALALIGNE">
-| <TANTQUE : "TANTQUE">
-| <FAIRE : "FAIRE">
-| <FAIT : "FAIT">
+
 
 }
 
@@ -329,7 +327,7 @@ void iteration() : {}
 				yvm.faire(ite.peek());
 			  }
 		expression() {
-						if (!"BOOLEEN".equals(exp.tipToString(exp.popType())){
+						if (!(exp.tipToString(exp.popType()).equals("BOOLEEN"))){
 							System.out.println("Une expression booléenne est attendu");
 						}
 					 }
