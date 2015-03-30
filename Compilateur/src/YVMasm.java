@@ -237,4 +237,24 @@ public class YVMasm extends YVM{
 	public void ecrireBool(){
 		Ecriture.ecrireStringln(file,"\tcall ecrbool");
 	}
+	
+	@Override
+	public void ecrireFaire(){
+		Ecriture.ecrireStringln(file,"\tFAIRE"+imbr+":");
+	}
+	
+	@Override
+	public void ecrireFait(){
+		Ecriture.ecrireStringln(file,"\tFAIT"+imbr+":");
+	}
+	
+	@Override
+	public void ecrireSinon(){
+		Ecriture.ecrireStringln(file,"\tSINON"+imbr+":");
+	}
+	
+	@Override
+	public void ecrireFsi(){
+		Ecriture.ecrireStringln(file,"\tFSI"+imbr+":");
+	}
 }
