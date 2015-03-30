@@ -239,22 +239,22 @@ public class YVMasm extends YVM{
 	}
 	
 	@Override
-	public void ecrireFaire(){
-		Ecriture.ecrireStringln(file,"\tFAIRE"+imbr+":");
+	public void faire(int numEtiq){
+		Ecriture.ecrireStringln(file,"\tFAIRE"+numEtiq+":");
 	}
 	
 	@Override
-	public void ecrireFait(){
-		Ecriture.ecrireStringln(file,"\tFAIT"+imbr+":");
+	public void fait(int numEtiq){
+		Ecriture.ecrireStringln(file,"\tFAIT"+numEtiq+":");
 	}
 	
 	@Override
-	public void ecrireSinon(){
-		Ecriture.ecrireStringln(file,"\tSINON"+imbr+":");
+	public void sinon(int numEtiq){
+		Ecriture.ecrireStringln(file,"\tSINON"+numEtiq+":");
 	}
 	
 	@Override
-	public void ecrireFsi(){
-		Ecriture.ecrireStringln(file,"\tFSI"+imbr+":");
+	public void fsi(int numEtiq){
+		Ecriture.ecrireStringln(file,"\tFSI"+numEtiq+":");
 	}
 }

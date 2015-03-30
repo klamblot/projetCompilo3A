@@ -1,4 +1,5 @@
 import java.io.OutputStream;
+import java.util.Stack;
 
 public class YVM {
 	
@@ -110,8 +111,8 @@ public class YVM {
 	}
 	/*--------------------*/
 	
-	/*MÃ©thode de d'instruction */
-	
+
+	/*Méthode de d'instruction */
 	public void ecrireEnt(){
 		Ecriture.ecrireStringln(file,"ecrireEnt");
 	}
@@ -131,15 +132,15 @@ public class YVM {
 	public void ecrireBool(){
 		Ecriture.ecrireStringln(file,"ecrireBool");
 	}
+	/*--------------------*/
 	
-	/*MÃ©thodes de l'itÃ©ration */
-	
-	public void faire(int imbr){
-		Ecriture.ecrireStringln(file,"FAIRE" +imbr+ ":");
+	/*Méthodes pour itérations*/
+	public void faire(int numEtiq){
+		Ecriture.ecrireStringln(file,"FAIRE"+numEtiq+":");
 	}
 	
-	public void fait(int imbr){
-		Ecriture.ecrireStringln(file,"FAIT" +imbr+ ":");
+	public void fait(int numEtiq){
+		Ecriture.ecrireStringln(file, "FAIT"+numEtiq+":");
 	}
 	
 	/*MÃ©thodes de la conditionnelle */
