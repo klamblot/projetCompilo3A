@@ -391,7 +391,6 @@ public class Yaka implements YakaConstants {
     jj_consume_token(FSI);
                         yvm.fsi(cond.peek());
                         yvmAsm.fsi(cond.pop());
-    jj_consume_token(41);
   }
 
 /*

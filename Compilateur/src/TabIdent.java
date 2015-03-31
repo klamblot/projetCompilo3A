@@ -21,4 +21,8 @@ public class TabIdent {
 	public void rangeIdent(String cle, Ident id){
 		table.put(cle, id);
 	}
+	
+	public void clear(){
+		table.clear();
+	}
 }
