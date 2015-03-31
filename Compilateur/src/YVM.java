@@ -1,5 +1,4 @@
 import java.io.OutputStream;
-import java.util.Stack;
 
 public class YVM {
 	
@@ -154,4 +153,24 @@ public class YVM {
 	}
 	/*----------------------------*/
 	
+	/*Méthode pour les fonctions*/
+	public void ouvreBloc(int offset){
+		Ecriture.ecrireStringln(file,"ouvreBloc "+offset);	
+	}
+	
+	public void fermeBloc(int offset){
+		Ecriture.ecrireStringln(file,"fermeBloc "+offset);	
+	}
+	
+	public void ireturn(int offset){
+		Ecriture.ecrireStringln(file,"ireturn "+offset);	
+	}
+	
+	public void reserveRetour(){
+		Ecriture.ecrireStringln(file,"reserveRetour");	
+	}
+	
+	public void call(String nom){
+		Ecriture.ecrireStringln(file,"call "+nom);	
+	}
 }

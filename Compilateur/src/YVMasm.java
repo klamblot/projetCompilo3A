@@ -258,4 +258,30 @@ public class YVMasm extends YVM{
 		Ecriture.ecrireStringln(file,"\tFSI"+numEtiq+":");
 	}
 	
+	@Override
+	public void ouvreBloc(int offset) {
+		Ecriture.ecrireStringln(file,"\tenter "+offset+",0");
+	}
+
+	@Override
+	public void fermeBloc(int offset) {
+		Ecriture.ecrireStringln(file,"\tleave");
+		Ecriture.ecrireStringln(file,"\tret "+offset);
+	}
+
+	@Override
+	public void ireturn(int offset) {
+		Ecriture.ecrireStringln(file,"\tpop ax");
+		Ecriture.ecrireStringln(file,"\tmov [bp+"+offset+"],ax");
+	}
+
+	@Override
+	public void reserveRetour() {
+		Ecriture.ecrireStringln(file,"\tsub sp,2");
+	}
+
+	@Override
+	public void call(String nom) {
+		Ecriture.ecrireStringln(file,"\tcall "+nom);
+	}
 }
