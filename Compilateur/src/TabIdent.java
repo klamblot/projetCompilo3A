@@ -12,11 +12,11 @@ public class TabIdent {
 		locaux = new HashMap<String,Ident>();
 	}
 	
-	public static Ident chercheIdentLoc(String clef){
+	public Ident chercheIdentLoc(String clef){
 		return locaux.get(clef);
 	}
 	
-	public static Ident chercheIdentGlob(String clef){
+	public Ident chercheIdentGlob(String clef){
 		return globaux.get(clef);
 	}
 	
