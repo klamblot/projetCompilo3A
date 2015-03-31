@@ -12,16 +12,28 @@ public class TabIdent {
 		locaux = new HashMap<String,Ident>();
 	}
 	
-	public static Ident chercheIdent(String clef){
-		return table.get(clef);
+	public static Ident chercheIdentLoc(String clef){
+		return locaux.get(clef);
 	}
 	
-	public boolean existeIdent(String clef){
-		return table.containsKey(clef);
+	public static Ident chercheIdentGlob(String clef){
+		return globaux.get(clef);
 	}
 	
-	public void rangeIdent(String cle, Ident id){
-		table.put(cle, id);
+	public boolean existeIdentGlob(String clef){
+		return globaux.containsKey(clef);
+	}
+	
+	public boolean existeIdentLoc(String clef){
+		return locaux.containsKey(clef);
+	}
+	
+	public void rangeIdentGlob(String cle, Ident id){
+		globaux.put(cle, id);
+	}
+	
+	public void rangeIdentLoc(String cle, Ident id){
+		locaux.put(cle, id);
 	}
 	
 	public void clear(){
