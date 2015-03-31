@@ -152,5 +152,6 @@ public class YVM {
 	public void fsi(int imbr){
 		Ecriture.ecrireStringln(file,"FSI" +imbr+ ":");	
 	}
+	/*----------------------------*/
 	
 }

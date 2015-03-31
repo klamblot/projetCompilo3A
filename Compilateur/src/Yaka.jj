@@ -147,8 +147,10 @@ void analyse() : {}
 
    <PROGRAMME> <ident>	{	yvm.entete(YakaTokenManager.identLu);
    							yvmAsm.entete(YakaTokenManager.identLu);}
-
+   (declFonction())*
+   <PRINCIPAL>
    bloc()
+   <FPRINCIPAL>
    <FPROGRAMME> { yvm.queue();
    				  yvmAsm.queue();}
 }
@@ -258,6 +260,7 @@ void instruction() : {}
  |ecriture()
  |iteration()	
  |conditionnelle()
+ |retourne()
 
 }
 
@@ -505,7 +508,8 @@ void valeur () : {}
 				yvm.iconst(YakaTokenManager.entierLu);
 				yvmAsm.iconst(YakaTokenManager.entierLu);
 			} 		
- | <ident> 	{
+ | <ident> (argumentsFonction())?	{
+ 				// TODO : Partie a modifié pour coller aux fonctions
  				if(tabIdent.existeIdent(YakaTokenManager.identLu)){
 	 				exp.saveType(exp.stringToTip(tabIdent.chercheIdent(YakaTokenManager.identLu).getType()));
 	 				if(tabIdent.chercheIdent(YakaTokenManager.identLu) instanceof IdConst){
@@ -567,32 +571,20 @@ void opNeg() : {}
  | <NON>	{exp.saveOp(Expression.Op.NON);}
 }
 
-void prog() : {}
-{
-
-   <PROGRAMME> 
-   		<ident> 
-   		(declFonction())*
-   		<PRINCIPALE>
-   			bloc()
-   		<FPRINCIPALE>
-   <FPROGRAMME>
-}
-
 
 void declFonction() : {}
 {
 	type()
 	<FONCTION>
 	<ident>
-	paramForms
+	paramForms()
 	bloc()
 	<FFONCTION>
 }
 
 void paramForms() : {}
 {
-	(paraForm() ( ,paraForm() )* )?
+	"(" (paramForm() ( ","paramForm() )* )? ")"
 	
 }
 
@@ -609,5 +601,5 @@ void retourne() : {}
 
 void argumentsFonction() : {}
 {
-	expression() (, expression())?
+"("	(expression() ("," expression())*)? ")"
 }
