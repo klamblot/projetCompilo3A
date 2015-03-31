@@ -1,23 +1,30 @@
+import java.util.ArrayList;
+
 
 public class IdFonc extends Ident {
 
-	int offset;
+	private ArrayList<String> param;
 	
 	//Constructeur
-	public IdFonc(String type, int offset) {
+	public IdFonc(String type) {
 			super(type);
-			this.offset=offset;
+			param = new ArrayList<String>();
 	}
 
-
+	public void addParam(String type){
+		param.add(type);
+	}
+	
+	
 	@Override
 	public String getType() {
 			return super.getType();
 	}
 		
-	public int getOffset(){
-			return offset;
+	public String getParam(int i){
+		return param.get(i);
 	}
+
 		
 	
 
