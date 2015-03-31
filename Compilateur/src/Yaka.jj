@@ -372,7 +372,7 @@ void conditionnelle() : {}
 			yvm.fsi(cond.peek());
 			yvmAsm.fsi(cond.pop());	
 		  }
-		  ";"
+		  
 }
 
 
