@@ -4,10 +4,12 @@ import java.util.HashMap;
 
 
 public class TabIdent {
-	static HashMap<String,Ident> table;
+	private HashMap<String,Ident> globaux;
+	private HashMap<String,Ident> locaux;
 	
 	public TabIdent(){
-		table = new HashMap<String,Ident>();
+		globaux = new HashMap<String,Ident>();
+		locaux = new HashMap<String,Ident>();
 	}
 	
 	public static Ident chercheIdent(String clef){
@@ -23,6 +25,6 @@ public class TabIdent {
 	}
 	
 	public void clear(){
-		table.clear();
+		locaux.clear();
 	}
 }
