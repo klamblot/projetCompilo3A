@@ -4,8 +4,8 @@ import java.util.HashMap;
 
 
 public class TabIdent {
-	private HashMap<String,Ident> globaux;
-	private HashMap<String,Ident> locaux;
+	private static HashMap<String,Ident> globaux;
+	private static HashMap<String,Ident> locaux;
 	
 	public TabIdent(){
 		globaux = new HashMap<String,Ident>();
@@ -20,23 +20,23 @@ public class TabIdent {
 		return globaux.get(clef);
 	}
 	
-	public boolean existeIdentGlob(String clef){
+	public static boolean existeIdentGlob(String clef){
 		return globaux.containsKey(clef);
 	}
 	
-	public boolean existeIdentLoc(String clef){
+	public static boolean existeIdentLoc(String clef){
 		return locaux.containsKey(clef);
 	}
 	
-	public void rangeIdentGlob(String cle, Ident id){
+	public static void rangeIdentGlob(String cle, Ident id){
 		globaux.put(cle, id);
 	}
 	
-	public void rangeIdentLoc(String cle, Ident id){
+	public static void rangeIdentLoc(String cle, Ident id){
 		locaux.put(cle, id);
 	}
 	
-	public void clear(){
+	public static void clear(){
 		locaux.clear();
 	}
 }
