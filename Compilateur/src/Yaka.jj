@@ -332,7 +332,7 @@ void iteration() : {}
 						System.out.println("Une expression booléenne est attendu");
 					}else{
 						yvm.iffaux("FAIT"+ite.peek());
-						yvmAsm.iffaux("FAUT"+ite.peek());
+						yvmAsm.iffaux("FAIT"+ite.peek());
 					}
 					
 				 }

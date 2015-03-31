@@ -351,7 +351,7 @@ public class Yaka implements YakaConstants {
                                                 System.out.println("Une expression bool\u00e9enne est attendu");
                                         }else{
                                                 yvm.iffaux("FAIT"+ite.peek());
-                                                yvmAsm.iffaux("FAUT"+ite.peek());
+                                                yvmAsm.iffaux("FAIT"+ite.peek());
                                         }
     jj_consume_token(FAIRE);
     suiteInstr();
@@ -365,6 +365,10 @@ public class Yaka implements YakaConstants {
   static final public void conditionnelle() throws ParseException {
     jj_consume_token(SI);
     expression();
+                                                        if (!(exp.tipToString(exp.popType()).equals("BOOLEEN"))){
+                                                        System.out.println("Une expression bool\u00e9enne est attendu");
+                                                        }
+
                                                         cond.push();
                                                         yvm.iffaux("SINON"+cond.peek());
                                                         yvmAsm.iffaux("SINON"+cond.peek());
@@ -387,6 +391,7 @@ public class Yaka implements YakaConstants {
     jj_consume_token(FSI);
                         yvm.fsi(cond.peek());
                         yvmAsm.fsi(cond.pop());
+    jj_consume_token(41);
   }
 
 /*
