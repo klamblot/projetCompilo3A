@@ -509,7 +509,8 @@ void valeur () : {}
 				yvm.iconst(YakaTokenManager.entierLu);
 				yvmAsm.iconst(YakaTokenManager.entierLu);
 			} 		
- | <ident> (argumentsFonction())?	{
+ | <ident>  {declaration.setSaveName(YakaTokenManager.identLu);}
+  (argumentsFonction())?	{
  				// TODO : Partie a modifié pour coller aux fonctions
  				if(tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
 	 				exp.saveType(exp.stringToTip(tabIdent.chercheIdentGlob(YakaTokenManager.identLu).getType()));
@@ -607,5 +608,19 @@ void retourne() : {}
 
 void argumentsFonction() : {}
 {
-"("	(expression() ("," expression())*)? ")"
+	"("	{int nbArg = ((IdFonc)tabIdent.chercheIdentGlob(declaration.getSaveName())).getNbParam();}
+		(expression() {nbArg--;}
+			(
+				"," 
+				expression(){nbArg--;}
+			)*
+		)? 
+	")" {	if(nbArg > 0){
+				System.out.println("Erreur dans le nombre de parametre entrer a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
+								   "."+nbArg+" arguments attendus en plus.");
+			}else if(nbArg<0){
+				System.out.println("Erreur dans le nombre de parametre entrer a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
+								   "."+(-nbArg)+" arguments attendus en moins.");
+			}
+		}
 }

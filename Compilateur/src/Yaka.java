@@ -9,6 +9,7 @@ public class Yaka implements YakaConstants {
 
         static int taille = 0;
         static String typeAffect;
+        static boolean main = false;
 
 
         static EtiqUtil ite = new EtiqUtil();
@@ -66,6 +67,7 @@ public class Yaka implements YakaConstants {
       declFonction();
     }
     jj_consume_token(PRINCIPAL);
+                main = true;
     bloc();
     jj_consume_token(FPRINCIPAL);
     jj_consume_token(FPROGRAMME);
@@ -598,6 +600,7 @@ public class Yaka implements YakaConstants {
       break;
     case ident:
       jj_consume_token(ident);
+             declaration.setSaveName(YakaTokenManager.identLu);
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case 43:
         argumentsFonction();
@@ -772,11 +775,15 @@ public class Yaka implements YakaConstants {
 
   static final public void retourne() throws ParseException {
     jj_consume_token(RETOURNE);
+                                        if (main == true){
+                                                System.out.println("Erreur, impossible de retourner une valeur dans le programme principal");
+                                        }
     expression();
   }
 
   static final public void argumentsFonction() throws ParseException {
     jj_consume_token(43);
+                 int nbArg = ((IdFonc)tabIdent.chercheIdentGlob(declaration.getSaveName())).getNbParam();
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case VRAI:
     case FAUX:
@@ -786,6 +793,7 @@ public class Yaka implements YakaConstants {
     case 43:
     case 51:
       expression();
+                               nbArg--;
       label_10:
       while (true) {
         switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
@@ -798,6 +806,7 @@ public class Yaka implements YakaConstants {
         }
         jj_consume_token(40);
         expression();
+                                             nbArg--;
       }
       break;
     default:
@@ -805,6 +814,13 @@ public class Yaka implements YakaConstants {
       ;
     }
     jj_consume_token(44);
+                if(nbArg > 0){
+                                System.out.println("Erreur dans le nombre de parametre entrer a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
+                                                                   "."+nbArg+" arguments attendus en plus.");
+                        }else if(nbArg<0){
+                                System.out.println("Erreur dans le nombre de parametre entrer a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
+                                                                   "."+(-nbArg)+" arguments attendus en moins.");
+                        }
   }
 
   static private boolean jj_initialized_once = false;

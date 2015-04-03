@@ -25,7 +25,9 @@ public class IdFonc extends Ident {
 		return param.get(i);
 	}
 
-		
+	public int getNbParam(){
+		return param.size();
+	}
 	
 
 }
