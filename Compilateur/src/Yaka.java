@@ -133,36 +133,36 @@ public class Yaka implements YakaConstants {
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case entier:
       jj_consume_token(entier);
-                                if(tabIdent.existeIdent(declaration.getSaveName())){
+                                if(tabIdent.existeIdentGlob(declaration.getSaveName())){
                                         System.out.println("Erreur : Constante deja\u00c3\u201a\u00c2\u00a0 declaree");
                                 }else{
-                                        tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("ENTIER", YakaTokenManager.entierLu));
+                                        tabIdent.rangeIdentGlob(declaration.getSaveName(), declaration.createIdentConst("ENTIER", YakaTokenManager.entierLu));
                                 }
       break;
     case ident:
       jj_consume_token(ident);
-                                if(tabIdent.existeIdent(declaration.getSaveName())){
+                                if(tabIdent.existeIdentGlob(declaration.getSaveName())){
                                                 System.out.println("Erreur : Variable deja\u00c3\u201a\u00c2\u00a0 declaree");
                                 }else{
-                                        if(tabIdent.existeIdent(YakaTokenManager.identLu)){
-                                                tabIdent.rangeIdent(declaration.getSaveName(), tabIdent.chercheIdent(YakaTokenManager.identLu));
+                                        if(tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
+                                                tabIdent.rangeIdentGlob(declaration.getSaveName(), tabIdent.chercheIdentGlob(YakaTokenManager.identLu));
                                         }else System.out.println("Erreur : Variable non d\u00c3\u0192\u00c2\u00a9clar\u00c3\u0192\u00c2\u00a9e");
                                 }
       break;
     case VRAI:
       jj_consume_token(VRAI);
-                                if(tabIdent.existeIdent(declaration.getSaveName())){
+                                if(tabIdent.existeIdentGlob(declaration.getSaveName())){
                                         System.out.println("Erreur : Variable deja\u00c3\u201a\u00c2\u00a0 declaree");
                                 }else{
-                                        tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", -1));
+                                        tabIdent.rangeIdentGlob(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", -1));
                                 }
       break;
     case FAUX:
       jj_consume_token(FAUX);
-                                if(tabIdent.existeIdent(declaration.getSaveName())){
+                                if(tabIdent.existeIdentGlob(declaration.getSaveName())){
                                         System.out.println("Erreur : Variable deja\u00c3\u201a\u00c2\u00a0 declaree");
                                 }else{
-                                        tabIdent.rangeIdent(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", 0));
+                                        tabIdent.rangeIdentGlob(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", 0));
                                 }
       break;
     default:
@@ -176,10 +176,10 @@ public class Yaka implements YakaConstants {
     jj_consume_token(VAR);
     type();
     jj_consume_token(ident);
-                                        if(tabIdent.existeIdent(YakaTokenManager.identLu)){
+                                        if(tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
                                                 System.out.println("Erreur : Variable deja\u00c3\u201a\u00c2\u00a0 declaree");
                                         }else{
-                                                tabIdent.rangeIdent(YakaTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName()));
+                                                tabIdent.rangeIdentGlob(YakaTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName()));
                                                 taille += 2;
                                         }
     label_5:
@@ -194,10 +194,10 @@ public class Yaka implements YakaConstants {
       }
       jj_consume_token(40);
       jj_consume_token(ident);
-                                        if(tabIdent.existeIdent(YakaTokenManager.identLu)){
+                                        if(tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
                                                 System.out.println("Erreur : Variable deja\u00c3\u201a\u00c2\u00a0 declaree");
                                         }else{
-                                                tabIdent.rangeIdent(YakaTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName()));
+                                                tabIdent.rangeIdentGlob(YakaTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName()));
                                                 taille +=2;
                                         }
     }
@@ -285,18 +285,18 @@ public class Yaka implements YakaConstants {
   static final public void affectation() throws ParseException {
     jj_consume_token(ident);
                                 declaration.setSaveName(YakaTokenManager.identLu);
-                                if(tabIdent.existeIdent(declaration.getSaveName())){
-                                        typeAffect = tabIdent.chercheIdent(declaration.getSaveName()).getType();
+                                if(tabIdent.existeIdentGlob(declaration.getSaveName())){
+                                        typeAffect = tabIdent.chercheIdentGlob(declaration.getSaveName()).getType();
                                 }else{
                                         System.out.println("Erreur : Variable non d\u00c3\u00a9clar\u00c3\u00a9e");
                                 }
     jj_consume_token(42);
     expression();
-                                                if(tabIdent.existeIdent(declaration.getSaveName())){
-                                                        if(tabIdent.chercheIdent(declaration.getSaveName()) instanceof IdVar){
+                                                if(tabIdent.existeIdentGlob(declaration.getSaveName())){
+                                                        if(tabIdent.chercheIdentGlob(declaration.getSaveName()) instanceof IdVar){
                                                                 if(typeAffect.equals(exp.tipToString(exp.popType()))){
-                                                                        yvm.istore(((IdVar)tabIdent.chercheIdent(declaration.getSaveName())).getOffset());
-                                                                        yvmAsm.istore(((IdVar)tabIdent.chercheIdent(declaration.getSaveName())).getOffset());
+                                                                        yvm.istore(((IdVar)tabIdent.chercheIdentGlob(declaration.getSaveName())).getOffset());
+                                                                        yvmAsm.istore(((IdVar)tabIdent.chercheIdentGlob(declaration.getSaveName())).getOffset());
                                                                 }else{
                                                                         System.out.println("erreur de type au niveau de l'affectation");
                                                                 }
@@ -310,9 +310,9 @@ public class Yaka implements YakaConstants {
     jj_consume_token(LIRE);
     jj_consume_token(43);
     jj_consume_token(ident);
-                                                if(tabIdent.existeIdent(YakaTokenManager.identLu)){
-                                                        yvm.lireEnt(((IdVar)tabIdent.chercheIdent(YakaTokenManager.identLu)).getOffset());
-                                                        yvmAsm.lireEnt(((IdVar)tabIdent.chercheIdent(YakaTokenManager.identLu)).getOffset());
+                                                if(tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
+                                                        yvm.lireEnt(((IdVar)tabIdent.chercheIdentGlob(YakaTokenManager.identLu)).getOffset());
+                                                        yvmAsm.lireEnt(((IdVar)tabIdent.chercheIdentGlob(YakaTokenManager.identLu)).getOffset());
                                                 }else{
                                                         System.out.println("Erreur : Variable non d\u00c3\u00a9clar\u00c3\u00a9e");
                                                 }
@@ -607,14 +607,14 @@ public class Yaka implements YakaConstants {
         ;
       }
                                 // TODO : Partie a modifié pour coller aux fonctions
-                                if(tabIdent.existeIdent(YakaTokenManager.identLu)){
-                                        exp.saveType(exp.stringToTip(tabIdent.chercheIdent(YakaTokenManager.identLu).getType()));
-                                        if(tabIdent.chercheIdent(YakaTokenManager.identLu) instanceof IdConst){
-                                                yvm.iconst(((IdConst) tabIdent.chercheIdent(YakaTokenManager.identLu)).getValeur());
-                                                yvmAsm.iconst(((IdConst) tabIdent.chercheIdent(YakaTokenManager.identLu)).getValeur());
+                                if(tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
+                                        exp.saveType(exp.stringToTip(tabIdent.chercheIdentGlob(YakaTokenManager.identLu).getType()));
+                                        if(tabIdent.chercheIdentGlob(YakaTokenManager.identLu) instanceof IdConst){
+                                                yvm.iconst(((IdConst) tabIdent.chercheIdentGlob(YakaTokenManager.identLu)).getValeur());
+                                                yvmAsm.iconst(((IdConst) tabIdent.chercheIdentGlob(YakaTokenManager.identLu)).getValeur());
                                         }else{
-                                                yvm.iload(((IdVar) tabIdent.chercheIdent(YakaTokenManager.identLu)).getOffset());
-                                                yvmAsm.iload(((IdVar) tabIdent.chercheIdent(YakaTokenManager.identLu)).getOffset());
+                                                yvm.iload(((IdVar) tabIdent.chercheIdentGlob(YakaTokenManager.identLu)).getOffset());
+                                                yvmAsm.iload(((IdVar) tabIdent.chercheIdentGlob(YakaTokenManager.identLu)).getOffset());
                                         }
                                 }else System.out.println("Erreur : Variable non d\u00c3\u00a9clar\u00c3\u00a9e");
       break;

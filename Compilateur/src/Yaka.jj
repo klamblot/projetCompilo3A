@@ -21,6 +21,7 @@ public class Yaka {
 	
 	static int taille = 0;
 	static String typeAffect;
+	static boolean main = false;
 
 
 	static EtiqUtil ite = new EtiqUtil();
@@ -148,7 +149,7 @@ void analyse() : {}
    <PROGRAMME> <ident>	{	yvm.entete(YakaTokenManager.identLu);
    							yvmAsm.entete(YakaTokenManager.identLu);}
    (declFonction())*
-   <PRINCIPAL>
+   <PRINCIPAL> {main = true;}
    bloc()
    <FPRINCIPAL>
    <FPROGRAMME> { yvm.queue();
@@ -596,7 +597,12 @@ void paramForm() : {}
 
 void retourne() : {}
 {
-	<RETOURNE> expression()
+	<RETOURNE> {	
+					if (main == true){
+						System.out.println("Erreur, impossible de retourner une valeur dans le programme principal");
+					}
+			   }
+	expression()
 }
 
 void argumentsFonction() : {}

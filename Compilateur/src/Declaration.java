@@ -45,5 +45,9 @@ public class Declaration {
 		return new IdConst(type, valeur);
 	}
 	
+	public Ident createIdentFonc(String type){
+		return new IdFonc(type);
+	}
+	
 	
 }
