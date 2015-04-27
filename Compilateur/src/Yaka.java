@@ -100,8 +100,8 @@ public class Yaka implements YakaConstants {
       }
       declVar();
     }
-                                        yvmAsm.ouvrePrinc(taille);
-                                        yvm.ouvrePrinc(taille);
+                                        yvmAsm.ouvreBloc(taille);
+                                        yvm.ouvreBloc(taille);
     suiteInstr();
   }
 
@@ -609,7 +609,7 @@ public class Yaka implements YakaConstants {
         jj_la1[18] = jj_gen;
         ;
       }
-                                // TODO : Partie a modifié pour coller aux fonctions
+                                // TODO : Partie a modifiÃ© pour coller aux fonctions
                                 if(tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
                                         exp.saveType(exp.stringToTip(tabIdent.chercheIdentGlob(YakaTokenManager.identLu).getType()));
                                         if(tabIdent.chercheIdentGlob(YakaTokenManager.identLu) instanceof IdConst){
