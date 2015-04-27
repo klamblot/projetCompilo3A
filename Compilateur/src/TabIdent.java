@@ -1,6 +1,7 @@
 
 
 import java.util.HashMap;
+import java.util.Map.Entry;
 
 
 public class TabIdent {
@@ -38,5 +39,12 @@ public class TabIdent {
 	
 	public static void clear(){
 		locaux.clear();
+	}
+	
+	public static void update(int nb){
+		for(Entry<String, Ident> entry : locaux.entrySet()) {
+			int offsetCour = ((IdVar)entry.getValue()).getOffset();
+			((IdVar)entry.getValue()).setOffset( nb + 4 - (2*offsetCour));
+		}
 	}
 }

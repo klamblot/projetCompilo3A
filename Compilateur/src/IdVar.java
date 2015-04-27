@@ -22,5 +22,9 @@ public class IdVar extends Ident {
 	public int getOffset(){
 		return offset;
 	}
+	
+	public void setOffset(int i){
+		offset=i;;
+	}
 
 }

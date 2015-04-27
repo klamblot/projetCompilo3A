@@ -34,6 +34,16 @@ public class Declaration {
 		return new IdVar(type,offSet);
 	}
 	
+	/**
+	 * @param type
+	 * @param offset
+	 * @return IdVar
+	 * Créer un nouvel IdVar à partir du type et son offset
+	 */
+	public Ident createIdentVar(String type, int offset){
+		return new IdVar(type,offSet);
+	}
+	
 	
 	/**
 	 * @param type
@@ -45,6 +55,11 @@ public class Declaration {
 		return new IdConst(type, valeur);
 	}
 	
+	/**
+	 * @param type
+	 * @return IdFonctt
+	 * Créer un IdFonct à partir de son type
+	 */
 	public Ident createIdentFonc(String type){
 		return new IdFonc(type);
 	}
