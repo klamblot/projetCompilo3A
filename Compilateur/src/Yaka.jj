@@ -26,6 +26,7 @@ public class Yaka {
 
 	static EtiqUtil ite = new EtiqUtil();
 	static EtiqUtil cond = new EtiqUtil();
+	static FoncUtil fonc = new FoncUtil();
 
   public static void main(String args[]) { 
     Yaka analyseur;
@@ -159,7 +160,7 @@ void analyse() : {}
 void bloc() : {}{
  (declConst())*
  (declVar())*	{
- 					yvmAsm.ouvrePrinc(taille);
+ 					yvmAsm.ouvreBloc(taille);
  					yvm.ouvrePrinc(taille);
  				}	
    suiteInstr() 
@@ -181,7 +182,7 @@ void valConst() : {}{
 
   <entier> 	{	
 
-  				if(tabIdent.existeIdentGlob(declaration.getSaveName())){
+  				if(tabIdent.existeIdentLoc(declaration.getSaveName())){
   					System.out.println("Erreur : Constante deja  declaree");
 
   				}else{
@@ -190,16 +191,16 @@ void valConst() : {}{
   			}
  | <ident>	{	
 
- 				if(tabIdent.existeIdentGlob(declaration.getSaveName())){
+ 				if(tabIdent.existeIdentLoc(declaration.getSaveName())){
   						System.out.println("Erreur : Variable deja  declaree");
   				}else{
- 					if(tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
- 						tabIdent.rangeIdentGlob(declaration.getSaveName(), tabIdent.chercheIdentGlob(YakaTokenManager.identLu));
+ 					if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
+ 						tabIdent.rangeIdentLoc(declaration.getSaveName(), tabIdent.chercheIdentGlob(YakaTokenManager.identLu));
  					}else System.out.println("Erreur : Variable non declaree");
  				}
  			}	
  | <VRAI> 	{
- 				if(tabIdent.existeIdentGlob(declaration.getSaveName())){
+ 				if(tabIdent.existeIdentLoc(declaration.getSaveName())){
   					System.out.println("Erreur : Variable deja  declaree");
 
   				}else{
@@ -208,7 +209,7 @@ void valConst() : {}{
  			}	
  | <FAUX> 	{
 
- 				if(tabIdent.existeIdentGlob(declaration.getSaveName())){
+ 				if(tabIdent.existeIdentLoc(declaration.getSaveName())){
   					System.out.println("Erreur : Variable deja  declaree");
 
   				}else{
@@ -223,7 +224,7 @@ void declVar() : {}
   <VAR> type()	
   <ident>		{
 
-  					if(tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
+  					if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
   						System.out.println("Erreur : Variable deja  declaree");
 
   					}else{
@@ -234,7 +235,7 @@ void declVar() : {}
   ("," 
       <ident> 	{
 
-					if(tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
+					if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
   						System.out.println("Erreur : Variable deja declaree");
 
   					}else{
@@ -520,21 +521,31 @@ void valeur () : {}
 				yvmAsm.iconst(YakaTokenManager.entierLu);
 			} 		
 
- | <ident>  {declaration.setSaveName(YakaTokenManager.identLu);} 
+ | <ident> 	{	if (tabIdent.existeIdentGlob(YakaTokenManager.identLu){
+ 					fonc.push(YakaTokenManager.identLu);
+ 					yvm.reserveRetour();
+ 					yvmAsm.reserveRetour();
+		 		}else if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
+		 			exp.saveType(exp.stringToTip(tabIdent.chercheIdentLoc(YakaTokenManager.identLu).getType()));
+		 			if(tabIdent.chercheIdentLoc(YakaTokenManager.identLu) instanceof IdConst){
+		 				yvm.iconst(((IdConst) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getValeur());
+		 				yvmAsm.iconst(((IdConst) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getValeur());
+		 			}else{
+		 				yvm.iload(((IdVar) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getOffset());
+		 				yvmAsm.iload(((IdVar) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getOffset());
+		 			}
+ 				}else System.out.println("Variable ou fonction non déclaré");
+ 				
+	 		} 
  (argumentsFonction())?	{
- 				// TODO : Partie a modifié pour coller aux fonctions
- 				if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
-	 				exp.saveType(exp.stringToTip(tabIdent.chercheIdentLoc(YakaTokenManager.identLu).getType()));
-	 				if(tabIdent.chercheIdentLoc(YakaTokenManager.identLu) instanceof IdConst){
-	 					yvm.iconst(((IdConst) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getValeur());
-	 					yvmAsm.iconst(((IdConst) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getValeur());
-
-	 				}else{
-	 					yvm.iload(((IdVar) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getOffset());
-	 					yvmAsm.iload(((IdVar) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getOffset());
-	 				}
-	 			}else System.out.println("Erreur : Variable non declaree");
- 			}	
+ 							if(!fonc.isEmpty()){
+ 								yvm.call(fonc.peek());
+ 								yvmAsm.call(fonc.pop());
+ 							}else{
+ 								System.out.println("A pus fonction a pop");
+ 							 }
+ 						}
+ 						
  | <VRAI> 	{	
  				exp.saveType(Expression.Tip.BOOL);
  				yvm.iconst(-1);
@@ -646,7 +657,7 @@ void argumentsFonction() : {}
 	")" {	if(nbArg > 0){
 				System.out.println("Erreur dans le nombre de parametre entrer a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
 								   "."+nbArg+" arguments attendus en plus.");
-			}else if(nbArg<0){
+			}else if(nbArg < 0){
 				System.out.println("Erreur dans le nombre de parametre entrer a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
 								   "."+(-nbArg)+" arguments attendus en moins.");
 			}

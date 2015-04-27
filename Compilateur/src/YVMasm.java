@@ -188,12 +188,6 @@ public class YVMasm extends YVM{
 		Ecriture.ecrireStringln(file,"debut :");
 		Ecriture.ecrireStringln(file,"\tSTARTUPCODE");
 	}
-
-	@Override
-	public void ouvrePrinc(int taille) {
-		Ecriture.ecrireStringln(file,"\tmov bp,sp");
-		Ecriture.ecrireStringln(file,"\tsub sp,"+taille);
-	}
 	
 	@Override
 	public void queue(){

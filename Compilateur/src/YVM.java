@@ -100,10 +100,6 @@ public class YVM {
 		Ecriture.ecrireStringln(file,"entete");
 	}
 	
-	public void ouvrePrinc(int taille){
-		Ecriture.ecrireStringln(file,"ouvrePrinc "+taille);
-	}
-	
 	public void queue(){
 		Ecriture.ecrireStringln(file,"queue");
 		Ecriture.fermer(file);
