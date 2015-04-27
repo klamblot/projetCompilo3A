@@ -2,7 +2,7 @@
  *
  *       Auteur: Pedrono Marie-Jo
  *
- * 	crÃƒÆ’Ã‚Â©ation : 13 fÃƒÆ’Ã‚Â©vrier 2002
+ * 	crÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©ation : 13 fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©vrier 2002
  *
  *     nature : projet etudiant
  *
@@ -86,7 +86,7 @@ SKIP :
 }
 
 
-/* Mots rÃƒÆ’Ã‚Â©servÃƒÆ’Ã‚Â©s*/
+/* Mots rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©servÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©s*/
 
 TOKEN :
 {
@@ -182,7 +182,7 @@ void valConst() : {}{
   <entier> 	{	
 
   				if(tabIdent.existeIdentGlob(declaration.getSaveName())){
-  					System.out.println("Erreur : Constante deja� declaree");
+  					System.out.println("Erreur : Constante deja  declaree");
 
   				}else{
   					tabIdent.rangeIdentLoc(declaration.getSaveName(), declaration.createIdentConst("ENTIER", YakaTokenManager.entierLu));
@@ -191,7 +191,7 @@ void valConst() : {}{
  | <ident>	{	
 
  				if(tabIdent.existeIdentGlob(declaration.getSaveName())){
-  						System.out.println("Erreur : Variable deja� declaree");
+  						System.out.println("Erreur : Variable deja  declaree");
   				}else{
  					if(tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
  						tabIdent.rangeIdentGlob(declaration.getSaveName(), tabIdent.chercheIdentGlob(YakaTokenManager.identLu));
@@ -200,7 +200,7 @@ void valConst() : {}{
  			}	
  | <VRAI> 	{
  				if(tabIdent.existeIdentGlob(declaration.getSaveName())){
-  					System.out.println("Erreur : Variable deja� declaree");
+  					System.out.println("Erreur : Variable deja  declaree");
 
   				}else{
  					tabIdent.rangeIdentLoc(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", -1));
@@ -209,7 +209,7 @@ void valConst() : {}{
  | <FAUX> 	{
 
  				if(tabIdent.existeIdentGlob(declaration.getSaveName())){
-  					System.out.println("Erreur : Variable deja� declaree");
+  					System.out.println("Erreur : Variable deja  declaree");
 
   				}else{
  					tabIdent.rangeIdentLoc(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", 0));
@@ -224,7 +224,7 @@ void declVar() : {}
   <ident>		{
 
   					if(tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
-  						System.out.println("Erreur : Variable deja� declaree");
+  						System.out.println("Erreur : Variable deja  declaree");
 
   					}else{
   						tabIdent.rangeIdentLoc(YakaTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName()));
@@ -522,7 +522,7 @@ void valeur () : {}
 
  | <ident>  {declaration.setSaveName(YakaTokenManager.identLu);} 
  (argumentsFonction())?	{
- 				// TODO : Partie a modifi� pour coller aux fonctions
+ 				// TODO : Partie a modifié pour coller aux fonctions
  				if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
 	 				exp.saveType(exp.stringToTip(tabIdent.chercheIdentLoc(YakaTokenManager.identLu).getType()));
 	 				if(tabIdent.chercheIdentLoc(YakaTokenManager.identLu) instanceof IdConst){
@@ -594,6 +594,10 @@ void declFonction() : {}
 	paramForms()
 	bloc()
 	<FFONCTION>
+	{
+		YVM.fermeBloc(((IdFonc)tabIdent.chercheIdentGlob(declaration.getSaveName())).getNbParam());
+		yvmAsm.fermeBloc(((IdFonc)tabIdent.chercheIdentGlob(declaration.getSaveName())).getNbParam());
+	}
 }
 
 void paramForms() : {}
