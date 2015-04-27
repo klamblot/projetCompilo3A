@@ -2,7 +2,7 @@
  *
  *       Auteur: Pedrono Marie-Jo
  *
- * 	crÃƒÆ’Ã‚Â©ation : 13 fÃƒÆ’Ã‚Â©vrier 2002
+ * 	creation : 13 fevrier 2002
  *
  *     nature : projet etudiant
  *
@@ -87,7 +87,7 @@ SKIP :
 }
 
 
-/* Mots rÃƒÆ’Ã‚Â©servÃƒÆ’Ã‚Â©s*/
+/* Mots reserves*/
 
 TOKEN :
 {
@@ -160,6 +160,7 @@ void analyse() : {}
 void bloc() : {}{
  (declConst())*
  (declVar())*	{
+					yvm.ouvreBloc(taille);
  					yvmAsm.ouvreBloc(taille);
 
  				}	
