@@ -159,8 +159,8 @@ void analyse() : {}
 void bloc() : {}{
  (declConst())*
  (declVar())*	{
- 					yvmAsm.ouvrePrinc(taille);
- 					yvm.ouvrePrinc(taille);
+ 					yvmAsm.ouvreBloc(taille);
+ 					yvm.ouvreBloc(taille);
  				}	
    suiteInstr() 
 }
