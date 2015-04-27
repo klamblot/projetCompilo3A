@@ -2,7 +2,7 @@
  *
  *       Auteur: Pedrono Marie-Jo
  *
- * 	crÃƒÆ’Ã‚Â©ation : 13 fÃƒÆ’Ã‚Â©vrier 2002
+ * 	crÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©ation : 13 fÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©vrier 2002
  *
  *     nature : projet etudiant
  *
@@ -87,7 +87,7 @@ SKIP :
 }
 
 
-/* Mots rÃƒÆ’Ã‚Â©servÃƒÆ’Ã‚Â©s*/
+/* Mots rÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©servÃƒÆ’Ã†â€™Ãƒâ€šÃ‚Â©s*/
 
 TOKEN :
 {
@@ -161,7 +161,7 @@ void bloc() : {}{
  (declConst())*
  (declVar())*	{
  					yvmAsm.ouvreBloc(taille);
- 					yvm.ouvrePrinc(taille);
+
  				}	
    suiteInstr() 
 }
@@ -184,7 +184,6 @@ void valConst() : {}{
 
   				if(tabIdent.existeIdentLoc(declaration.getSaveName())){
   					System.out.println("Erreur : Constante deja� declaree");
-
   				}else{
   					tabIdent.rangeIdentLoc(declaration.getSaveName(), declaration.createIdentConst("ENTIER", YakaTokenManager.entierLu));
   				}
@@ -200,18 +199,18 @@ void valConst() : {}{
  				}
  			}	
  | <VRAI> 	{
- 				if(tabIdent.existeIdentLoc(declaration.getSaveName())){
-  					System.out.println("Erreur : Variable deja� declaree");
 
+ 				if(tabIdent.existeIdentLoc(declaration.getSaveName())){
+  					System.out.println("Erreur : Variable deja� declaree");6
   				}else{
  					tabIdent.rangeIdentLoc(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", -1));
  				}
  			}	
  | <FAUX> 	{
 
+
  				if(tabIdent.existeIdentLoc(declaration.getSaveName())){
   					System.out.println("Erreur : Variable deja� declaree");
-
   				}else{
  					tabIdent.rangeIdentLoc(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", 0));
  				}	
@@ -223,10 +222,8 @@ void declVar() : {}
 {
   <VAR> type()	
   <ident>		{
-
   					if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
   						System.out.println("Erreur : Variable deja� declaree");
-
   					}else{
   						tabIdent.rangeIdentLoc(YakaTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName()));
   						taille += 2;
@@ -605,6 +602,10 @@ void declFonction() : {}
 	paramForms()
 	bloc()
 	<FFONCTION>
+	{
+		YVM.fermeBloc(((IdFonc)tabIdent.chercheIdentGlob(declaration.getSaveName())).getNbParam());
+		yvmAsm.fermeBloc(((IdFonc)tabIdent.chercheIdentGlob(declaration.getSaveName())).getNbParam());
+	}
 }
 
 void paramForms() : {}
