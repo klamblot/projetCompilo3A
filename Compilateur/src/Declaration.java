@@ -40,8 +40,8 @@ public class Declaration {
 	 * @return IdVar
 	 * Créer un nouvel IdVar à partir du type et son offset
 	 */
-	public Ident createIdentVar(String type, int offset){
-		return new IdVar(type,offSet);
+	public Ident createIdentVar(String type, int off){
+		return new IdVar(type,off);
 	}
 	
 	

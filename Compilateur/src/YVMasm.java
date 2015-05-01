@@ -278,4 +278,9 @@ public class YVMasm extends YVM{
 	public void call(String nom) {
 		Ecriture.ecrireStringln(file,"\tcall "+nom);
 	}
+	
+	@Override
+	public void etiquetteFonc(String etiq){
+		Ecriture.ecrireStringln(file,etiq+":");
+	}
 }

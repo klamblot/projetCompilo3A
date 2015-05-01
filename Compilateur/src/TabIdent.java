@@ -45,7 +45,7 @@ public class TabIdent {
 	public static void update(int nb){
 		for(Entry<String, Ident> entry : locaux.entrySet()) {
 			int offsetCour = ((IdVar)entry.getValue()).getOffset();
-			((IdVar)entry.getValue()).setOffset( nb + 4 - (2*offsetCour));
+			((IdVar)entry.getValue()).setOffset( 2*nb + 4 - (2*offsetCour));
 		}
 	}
 }

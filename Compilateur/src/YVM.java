@@ -90,7 +90,7 @@ public class YVM {
 	}
 	
 	public void jump(String etiquette){
-		Ecriture.ecrireStringln(file,"jump "+etiquette);
+		Ecriture.ecrireStringln(file,"goto "+etiquette);
 	}
 	/*----------------------*/
 	
@@ -151,11 +151,11 @@ public class YVM {
 	
 	/*Méthode pour les fonctions*/
 	public void ouvreBloc(int offset){
-		Ecriture.ecrireStringln(file,"ouvreBloc "+offset);	
+		Ecriture.ecrireStringln(file,"ouvbloc "+offset);	
 	}
 	
 	public void fermeBloc(int offset){
-		Ecriture.ecrireStringln(file,"fermeBloc "+offset);	
+		Ecriture.ecrireStringln(file,"fermebloc "+offset);	
 	}
 	
 	public void ireturn(int offset){
@@ -168,5 +168,10 @@ public class YVM {
 	
 	public void call(String nom){
 		Ecriture.ecrireStringln(file,"call "+nom);	
+	}
+	
+	/*Méthode pour etiquette de fonction*/
+	public void etiquetteFonc(String etiq){
+		Ecriture.ecrireStringln(file,etiq+":");
 	}
 }

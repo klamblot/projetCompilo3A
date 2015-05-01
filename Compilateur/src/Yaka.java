@@ -69,6 +69,8 @@ public class Yaka implements YakaConstants {
     }
     jj_consume_token(PRINCIPAL);
                 inMain = true;
+                                        yvm.etiquetteFonc("main");
+                                        yvmAsm.etiquetteFonc("main");
     bloc();
     jj_consume_token(FPRINCIPAL);
     jj_consume_token(FPROGRAMME);
@@ -755,6 +757,8 @@ public class Yaka implements YakaConstants {
                                 }else{
                                         nomFct=YakaTokenManager.identLu;
                                         tabIdent.rangeIdentGlob(nomFct, declaration.createIdentFonc(typeRetourFct));
+                                        yvm.etiquetteFonc(nomFct);
+                                        yvmAsm.etiquetteFonc(nomFct);
                                 }
     paramForms();
     bloc();
@@ -790,6 +794,7 @@ public class Yaka implements YakaConstants {
       ;
     }
     jj_consume_token(44);
+          System.out.println(((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam());
           tabIdent.update(((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam());
   }
 
@@ -800,19 +805,30 @@ public class Yaka implements YakaConstants {
                                         System.out.println("Erreur : Variable deja declaree");
                                 }else{
                                         ((IdFonc)tabIdent.chercheIdentGlob(nomFct)).addParam(declaration.getSaveName());
-                                        tabIdent.rangeIdentLoc(YakaTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName(), ((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam()));
+                                        System.out.println(((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam());
+                                        tabIdent.rangeIdentLoc(YakaTokenManager.identLu,
+                                                                                   declaration.createIdentVar(declaration.getSaveName(),
+                                                                                                                              ((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam()
+                                                                                                                             )
+                                                                                  );
                                 }
   }
 
   static final public void retourne() throws ParseException {
     jj_consume_token(RETOURNE);
-                                        if (inMain == true){
+                                        if (inMain){
                                                 System.out.println("Erreur, impossible de retourner une valeur dans le programme principal");
                                         }
     expression();
-                        if(!typeRetourFct.equals(exp.tipToString(exp.popType()))){
-                                 System.out.println("erreur de type au niveau du retour de la fonction");
-                        }
+                                        if(!typeRetourFct.equals(exp.tipToString(exp.popType()))){
+                                                System.out.println("erreur de type au niveau du retour de la fonction");
+                                        }else{
+                                                if(!inMain){
+                                                        yvm.ireturn(0);
+                                                        yvmAsm.ireturn(0);
+                                                }
+                                        }
+                                        taille = 0;
   }
 
   static final public void argumentsFonction() throws ParseException {
