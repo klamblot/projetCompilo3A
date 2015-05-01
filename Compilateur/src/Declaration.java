@@ -64,5 +64,9 @@ public class Declaration {
 		return new IdFonc(type);
 	}
 	
+	public void clearOffset(){
+		offSet = 0;
+	}
+	
 	
 }

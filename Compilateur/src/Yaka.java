@@ -766,6 +766,7 @@ public class Yaka implements YakaConstants {
                 yvm.fermeBloc(nbParam * 2);
                 yvmAsm.fermeBloc(nbParam * 2);
                 tabIdent.clear();
+                declaration.clearOffset();
                 taille = 0;
   }
 
