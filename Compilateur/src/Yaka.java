@@ -341,8 +341,14 @@ public class Yaka implements YakaConstants {
       case 43:
       case 51:
         expression();
-                                                                yvm.ecrireEnt();
-                                                                yvmAsm.ecrireEnt();
+                                                                if("ENTIER".equals(exp.tipToString(exp.peekType()))){
+                                                                        yvm.ecrireEnt();
+                                                                        yvmAsm.ecrireEnt();
+                                                                }else if("BOOLEEN".equals(exp.tipToString(exp.peekType()))){
+                                                                        yvm.ecrireBool();
+                                                                        yvmAsm.ecrireBool();
+                                                                }
+                                                                exp.popType();
         break;
       case chaine:
         jj_consume_token(chaine);
@@ -393,7 +399,7 @@ public class Yaka implements YakaConstants {
     jj_consume_token(SI);
     expression();
                                                         if (!(exp.tipToString(exp.popType()).equals("BOOLEEN"))){
-                                                        System.out.println("Une expression booleenne est attendu");
+                                                                System.out.println("Une expression booleenne est attendu");
                                                         }
 
                                                         cond.push();
@@ -608,7 +614,6 @@ public class Yaka implements YakaConstants {
       jj_consume_token(ident);
                         if (tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
                                         fonc.push(YakaTokenManager.identLu);
-                                        System.out.println(YakaTokenManager.identLu);
                                         yvm.reserveRetour();
                                         yvmAsm.reserveRetour();
                                 }else if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
@@ -629,12 +634,6 @@ public class Yaka implements YakaConstants {
         jj_la1[18] = jj_gen;
         ;
       }
-                                                        if(!fonc.isEmpty()){
-                                                                yvm.call(fonc.peek());
-                                                                yvmAsm.call(fonc.pop());
-                                                        }else{
-                                                                System.out.println("A pus fonction a pop");
-                                                        }
       break;
     case VRAI:
       jj_consume_token(VRAI);
@@ -767,6 +766,7 @@ public class Yaka implements YakaConstants {
                 yvm.fermeBloc(nbParam * 2);
                 yvmAsm.fermeBloc(nbParam * 2);
                 tabIdent.clear();
+                taille = 0;
   }
 
   static final public void paramForms() throws ParseException {
@@ -794,7 +794,6 @@ public class Yaka implements YakaConstants {
       ;
     }
     jj_consume_token(44);
-          System.out.println(((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam());
           tabIdent.update(((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam());
   }
 
@@ -805,7 +804,6 @@ public class Yaka implements YakaConstants {
                                         System.out.println("Erreur : Variable deja declaree");
                                 }else{
                                         ((IdFonc)tabIdent.chercheIdentGlob(nomFct)).addParam(declaration.getSaveName());
-                                        System.out.println(((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam());
                                         tabIdent.rangeIdentLoc(YakaTokenManager.identLu,
                                                                                    declaration.createIdentVar(declaration.getSaveName(),
                                                                                                                               ((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam()
@@ -829,7 +827,6 @@ public class Yaka implements YakaConstants {
                                                         yvmAsm.ireturn((2*(nbParam+2)));
                                                 }
                                         }
-                                        taille = 0;
   }
 
   static final public void argumentsFonction() throws ParseException {
@@ -871,6 +868,11 @@ public class Yaka implements YakaConstants {
                         }else if(nbArg < 0){
                                 System.out.println("Erreur dans le nombre de parametre entrer a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
                                                                    "."+(-nbArg)+" arguments attendus en moins.");
+                        }else{
+                                if(!fonc.isEmpty()){
+                                                yvm.call(fonc.peek());
+                                                yvmAsm.call(fonc.pop());
+                                }
                         }
   }
 
