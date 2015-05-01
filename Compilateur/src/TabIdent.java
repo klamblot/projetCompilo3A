@@ -37,6 +37,7 @@ public class TabIdent {
 		locaux.put(cle, id);
 	}
 	
+	
 	public static void clear(){
 		locaux.clear();
 	}

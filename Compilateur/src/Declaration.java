@@ -58,7 +58,7 @@ public class Declaration {
 	/**
 	 * @param type
 	 * @return IdFonctt
-	 * Créer un IdFonct à partir de son type
+	 * Créer un IdFonct à partir du type de son retour
 	 */
 	public Ident createIdentFonc(String type){
 		return new IdFonc(type);

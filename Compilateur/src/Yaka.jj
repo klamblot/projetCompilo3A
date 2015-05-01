@@ -196,7 +196,9 @@ void valConst() : {}{
   				}else{
  					if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
  						tabIdent.rangeIdentLoc(declaration.getSaveName(), tabIdent.chercheIdentGlob(YakaTokenManager.identLu));
- 					}else System.out.println("Erreur : Variable non declaree");
+ 					}else {
+ 						System.out.println("Erreur : Variable non declaree");
+ 					}
  				}
  			}	
  | <VRAI> 	{
@@ -295,7 +297,7 @@ void affectation() : {}
 		  							System.out.println("erreur de type au niveau de l'affectation");
 								}
 							}else{
-									System.out.println("Erreur : Affectation impossible pour une constante");
+								System.out.println("Erreur : Affectation impossible pour une constante");
 							}
 						}
 					}
@@ -377,7 +379,7 @@ void conditionnelle() : {}
 							yvm.jump("FSI"+cond.peek());
 							yvmAsm.jump("FSI"+cond.peek());
 							
-							 yvm.sinon(cond.peek());
+							yvm.sinon(cond.peek());
 			  				yvmAsm.sinon(cond.peek());
 						}
 	( <SINON> suiteInstr() )?
@@ -521,6 +523,7 @@ void valeur () : {}
 
  | <ident> 	{	if (tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
  					fonc.push(YakaTokenManager.identLu);
+ 					System.out.println(YakaTokenManager.identLu);
  					yvm.reserveRetour();
  					yvmAsm.reserveRetour();
 		 		}else if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
@@ -532,7 +535,7 @@ void valeur () : {}
 		 				yvm.iload(((IdVar) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getOffset());
 		 				yvmAsm.iload(((IdVar) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getOffset());
 		 			}
- 				}else System.out.println("Variable ou fonction non déclaré");
+ 				}else System.out.println("Variable ou fonction non declaree");
  				
 	 		} 
  (argumentsFonction())?	{
@@ -541,7 +544,7 @@ void valeur () : {}
  								yvmAsm.call(fonc.pop());
  							}else{
  								System.out.println("A pus fonction a pop");
- 							 }
+ 							}
  						}
  						
  | <VRAI> 	{	
@@ -597,14 +600,14 @@ void opNeg() : {}
 
 void declFonction() : {}
 {
-	type()
-	<FONCTION> {typeRetourFct = declaration.getSaveName();}
+	type() {typeRetourFct = declaration.getSaveName();}
+	<FONCTION>
 	<ident> {
   				if(tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
   					System.out.println("Erreur : Fonction deja  declaree");
-
   				}else{
   					nomFct=YakaTokenManager.identLu;
+  					tabIdent.rangeIdentGlob(nomFct, declaration.createIdentFonc(typeRetourFct));
   				}
   			
 	}
@@ -612,8 +615,10 @@ void declFonction() : {}
 	bloc()
 	<FFONCTION>
 	{
-		yvm.fermeBloc(((IdFonc)tabIdent.chercheIdentGlob(declaration.getSaveName())).getNbParam());
-		yvmAsm.fermeBloc(((IdFonc)tabIdent.chercheIdentGlob(declaration.getSaveName())).getNbParam());
+		int nbParam = ((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam();
+		yvm.fermeBloc(nbParam * 2);
+		yvmAsm.fermeBloc(nbParam * 2);
+		tabIdent.clear();
 	}
 }
 
@@ -629,14 +634,15 @@ void paramForms() : {}
 
 void paramForm() : {}
 {
-	type() <ident>{
-	  			if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
-	  				System.out.println("Erreur : Variable deja declaree");
-	  			}else{
-	  				tabIdent.rangeIdentLoc(YakaTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName(), ((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam()+1));
-	  				 ((IdFonc)tabIdent.chercheIdentGlob(nomFct)).addParam(typeRetourFct);
-	  			}
-	  		}	
+	type()
+	<ident>{
+		  		if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
+		 			System.out.println("Erreur : Variable deja declaree");
+		  		}else{
+		  			((IdFonc)tabIdent.chercheIdentGlob(nomFct)).addParam(declaration.getSaveName());
+		  			tabIdent.rangeIdentLoc(YakaTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName(), ((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam()));
+		  		}
+	  	   }	
 }
 
 void retourne() : {}
@@ -649,8 +655,7 @@ void retourne() : {}
 	expression(){
 								
 			if(!typeRetourFct.equals(exp.tipToString(exp.popType()))){
-								
-		  		System.out.println("erreur de type au niveau du retour de la fonction");
+				 System.out.println("erreur de type au niveau du retour de la fonction");
 			}
 						
 	
@@ -659,7 +664,7 @@ void retourne() : {}
 
 void argumentsFonction() : {}
 {
-	"("	{int nbArg = ((IdFonc)tabIdent.chercheIdentGlob(declaration.getSaveName())).getNbParam();}
+	"("	{int nbArg = ((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).getNbParam();}
 		(expression() {nbArg--;}
 			(
 				"," 

@@ -7,7 +7,7 @@ public class IdFonc extends Ident {
 	
 	//Constructeur
 	public IdFonc(String type) {
-			super(type);
+			super(type); /* Type du retour de l'IdFonc */
 			param = new ArrayList<String>();
 	}
 
