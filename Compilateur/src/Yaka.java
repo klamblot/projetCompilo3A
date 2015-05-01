@@ -824,8 +824,9 @@ public class Yaka implements YakaConstants {
                                                 System.out.println("erreur de type au niveau du retour de la fonction");
                                         }else{
                                                 if(!inMain){
-                                                        yvm.ireturn(0);
-                                                        yvmAsm.ireturn(0);
+                                                        int nbParam = ((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam();
+                                                        yvm.ireturn((2*(nbParam+2)));
+                                                        yvmAsm.ireturn((2*(nbParam+2)));
                                                 }
                                         }
                                         taille = 0;
