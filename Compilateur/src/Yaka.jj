@@ -616,8 +616,6 @@ void declFonction() : {}
   				}else{
   					nomFct=YakaTokenManager.identLu;
   					tabIdent.rangeIdentGlob(nomFct, declaration.createIdentFonc(typeRetourFct));
-  					System.out.println("");
-  					System.out.println(nomFct+":");
   					yvm.etiquetteFonc(nomFct);
   					yvmAsm.etiquetteFonc(nomFct);
   				}
@@ -695,8 +693,8 @@ void argumentsFonction() : {}
 							if(!typeArg.equals(exp.tipToString(exp.peekType()))){
 								int num=total-nbArg + 1;
 								System.out.println(	"Erreur ligne "+YakaTokenManager.jjFillToken().beginLine+
-													" : fonction : "+fonc.peek()+", l'argument "+num+" n'est pas du type souhiaté. "
-													+typeArg+" attendu, "+exp.tipToString(exp.popType())+" reçu");
+													" : fonction : "+fonc.peek()+", l'argument "+num+" n'est pas du type souhaite. "
+													+typeArg+" attendu, "+exp.tipToString(exp.popType())+" recu");
 							}else{
 								exp.popType();
 							}
@@ -711,8 +709,8 @@ void argumentsFonction() : {}
 									if(!typeArg.equals(exp.tipToString(exp.peekType()))){
 										int num=total-nbArg + 1;
 										System.out.println(	"Erreur ligne "+YakaTokenManager.jjFillToken().beginLine+
-															" : fonction : "+fonc.peek()+", l'argument "+num+" n'est pas du type souhiaté. "
-															+typeArg+" attendu, "+exp.tipToString(exp.popType())+" reçu");
+															" : fonction : "+fonc.peek()+", l'argument "+num+" n'est pas du type souhaite. "
+															+typeArg+" attendu, "+exp.tipToString(exp.popType())+" recu");
 									}else{
 										exp.popType();
 									}
@@ -723,10 +721,10 @@ void argumentsFonction() : {}
 		)? 
 	")" {	if(nbArg > 0){
 
-				System.out.println("Erreur dans le nombre de parametre entrer a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
+				System.out.println("Erreur dans le nombre de parametre entre a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
 								   ". "+nbArg+" arguments attendus en plus.");
 			}else if(nbArg < 0){
-				System.out.println("Erreur dans le nombre de parametre entrer a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
+				System.out.println("Erreur dans le nombre de parametre entre a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
 								   ". "+(-nbArg)+" arguments attendus en moins.");
 			}else{
 				if(!fonc.isEmpty()){	

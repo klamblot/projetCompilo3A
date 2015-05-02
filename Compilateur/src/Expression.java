@@ -44,7 +44,6 @@ public class Expression{
 	 * Méthode qui ajoute un type à la pile des types
 	 */
 	public void saveType(Tip t){
-		System.out.println("push : "+tipToString(t));
 		type.push(t);
 	}
 
@@ -154,7 +153,6 @@ public class Expression{
 	 * Méthode qui renvoie le sommet de la pile type
 	 */
 	public Tip popType(){
-		System.out.println("pop : "+tipToString(type.peek()));
 		return type.pop();
 	}
 	
