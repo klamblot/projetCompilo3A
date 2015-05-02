@@ -151,8 +151,6 @@ void analyse() : {}
    							yvmAsm.entete(YakaTokenManager.identLu);}
    (declFonction())*
    <PRINCIPAL> {inMain = true;
-  					System.out.println("");
-  					System.out.println("main:");
    					yvm.etiquetteFonc("main");
    					yvmAsm.etiquetteFonc("main");
    			   }
@@ -694,7 +692,7 @@ void argumentsFonction() : {}
 								int num=total-nbArg + 1;
 								System.out.println(	"Erreur ligne "+YakaTokenManager.jjFillToken().beginLine+
 													" : fonction : "+fonc.peek()+", l'argument "+num+" n'est pas du type souhaite. "
-													+typeArg+" attendu, "+exp.tipToString(exp.popType())+" recu");
+													+typeArg+" attendu, "+exp.tipToString(exp.popType())+" recu.");
 							}else{
 								exp.popType();
 							}
@@ -710,7 +708,7 @@ void argumentsFonction() : {}
 										int num=total-nbArg + 1;
 										System.out.println(	"Erreur ligne "+YakaTokenManager.jjFillToken().beginLine+
 															" : fonction : "+fonc.peek()+", l'argument "+num+" n'est pas du type souhaite. "
-															+typeArg+" attendu, "+exp.tipToString(exp.popType())+" recu");
+															+typeArg+" attendu, "+exp.tipToString(exp.popType())+" recu.");
 									}else{
 										exp.popType();
 									}

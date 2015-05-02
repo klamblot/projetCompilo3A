@@ -69,8 +69,6 @@ public class Yaka implements YakaConstants {
     }
     jj_consume_token(PRINCIPAL);
                 inMain = true;
-                                        System.out.println("");
-                                        System.out.println("main:");
                                         yvm.etiquetteFonc("main");
                                         yvmAsm.etiquetteFonc("main");
     bloc();
@@ -349,7 +347,7 @@ public class Yaka implements YakaConstants {
                                                                 }else if("BOOLEEN".equals(exp.tipToString(exp.peekType()))){
                                                                         yvm.ecrireBool();
                                                                         yvmAsm.ecrireBool();
-                                                                }
+                                                                }else System.out.println("Erreur de type dans l'expression entree");
                                                                 exp.popType();
         break;
       case chaine:
@@ -616,8 +614,6 @@ public class Yaka implements YakaConstants {
       jj_consume_token(ident);
                         if (tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
                                         fonc.push(YakaTokenManager.identLu);
-                                        System.out.println("");
-                                        System.out.println(YakaTokenManager.identLu);
                                         exp.saveType(exp.stringToTip(tabIdent.chercheIdentGlob(YakaTokenManager.identLu).getType()));
                                         yvm.reserveRetour();
                                         yvmAsm.reserveRetour();
@@ -763,8 +759,6 @@ public class Yaka implements YakaConstants {
                                 }else{
                                         nomFct=YakaTokenManager.identLu;
                                         tabIdent.rangeIdentGlob(nomFct, declaration.createIdentFonc(typeRetourFct));
-                                        System.out.println("");
-                                        System.out.println(nomFct+":");
                                         yvm.etiquetteFonc(nomFct);
                                         yvmAsm.etiquetteFonc(nomFct);
                                 }
@@ -857,8 +851,8 @@ public class Yaka implements YakaConstants {
                                                         if(!typeArg.equals(exp.tipToString(exp.peekType()))){
                                                                 int num=total-nbArg + 1;
                                                                 System.out.println(     "Erreur ligne "+YakaTokenManager.jjFillToken().beginLine+
-                                                                                                        " : fonction : "+fonc.peek()+", l'argument "+num+" n'est pas du type souhiat\u00e9. "
-                                                                                                        +typeArg+" attendu, "+exp.tipToString(exp.popType())+" re\u00e7u");
+                                                                                                        " : fonction : "+fonc.peek()+", l'argument "+num+" n'est pas du type souhaite. "
+                                                                                                        +typeArg+" attendu, "+exp.tipToString(exp.popType())+" recu.");
                                                         }else{
                                                                 exp.popType();
                                                         }
@@ -881,8 +875,8 @@ public class Yaka implements YakaConstants {
                                                                         if(!typeArg.equals(exp.tipToString(exp.peekType()))){
                                                                                 int num=total-nbArg + 1;
                                                                                 System.out.println(     "Erreur ligne "+YakaTokenManager.jjFillToken().beginLine+
-                                                                                                                        " : fonction : "+fonc.peek()+", l'argument "+num+" n'est pas du type souhiat\u00e9. "
-                                                                                                                        +typeArg+" attendu, "+exp.tipToString(exp.popType())+" re\u00e7u");
+                                                                                                                        " : fonction : "+fonc.peek()+", l'argument "+num+" n'est pas du type souhaite. "
+                                                                                                                        +typeArg+" attendu, "+exp.tipToString(exp.popType())+" recu.");
                                                                         }else{
                                                                                 exp.popType();
                                                                         }
@@ -896,10 +890,11 @@ public class Yaka implements YakaConstants {
     }
     jj_consume_token(44);
                 if(nbArg > 0){
-                                System.out.println("Erreur dans le nombre de parametre entrer a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
+
+                                System.out.println("Erreur dans le nombre de parametre entre a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
                                                                    ". "+nbArg+" arguments attendus en plus.");
                         }else if(nbArg < 0){
-                                System.out.println("Erreur dans le nombre de parametre entrer a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
+                                System.out.println("Erreur dans le nombre de parametre entre a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
                                                                    ". "+(-nbArg)+" arguments attendus en moins.");
                         }else{
                                 if(!fonc.isEmpty()){
