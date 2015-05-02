@@ -187,7 +187,7 @@ void valConst() : {}{
   <entier> 	{	
 
   				if(tabIdent.existeIdentLoc(declaration.getSaveName())){
-  					System.out.println("Erreur : Constante deja  declaree");
+  					System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La constante "+declaration.getSaveName()+" est deja  declaree.");
   				}else{
   					tabIdent.rangeIdentLoc(declaration.getSaveName(), declaration.createIdentConst("ENTIER", YakaTokenManager.entierLu));
   				}
@@ -195,19 +195,19 @@ void valConst() : {}{
  | <ident>	{	
 
  				if(tabIdent.existeIdentLoc(declaration.getSaveName())){
-  						System.out.println("Erreur : Variable deja  declaree");
+  						System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+declaration.getSaveName()+" est deja  declaree.");
   				}else{
  					if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
  						tabIdent.rangeIdentLoc(declaration.getSaveName(), tabIdent.chercheIdentGlob(YakaTokenManager.identLu));
  					}else {
- 						System.out.println("Erreur : Variable non declaree");
+ 						System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+YakaTokenManager.identLu+" n'est pas declaree.");
  					}
  				}
  			}	
  | <VRAI> 	{
 
  				if(tabIdent.existeIdentLoc(declaration.getSaveName())){
-  					System.out.println("Erreur : Variable deja  declaree");
+  					System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+declaration.getSaveName()+" est deja  declaree.");
   				}else{
  					tabIdent.rangeIdentLoc(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", -1));
  				}
@@ -216,7 +216,7 @@ void valConst() : {}{
 
 
  				if(tabIdent.existeIdentLoc(declaration.getSaveName())){
-  					System.out.println("Erreur : Variable deja  declaree");
+  					System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+declaration.getSaveName()+" est deja  declaree.");
   				}else{
  					tabIdent.rangeIdentLoc(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", 0));
  				}	
@@ -229,7 +229,7 @@ void declVar() : {}
   <VAR> type()	
   <ident>		{
   					if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
-  						System.out.println("Erreur : Variable deja  declaree");
+  						System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+YakaTokenManager.identLu+" est deja  declaree.");
   					}else{
   						tabIdent.rangeIdentLoc(YakaTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName()));
   						taille += 2;
@@ -239,7 +239,7 @@ void declVar() : {}
       <ident> 	{
 
 					if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
-  						System.out.println("Erreur : Variable deja declaree");
+  						System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+YakaTokenManager.identLu+" est deja  declaree.");
 
   					}else{
   						tabIdent.rangeIdentLoc(YakaTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName()));
@@ -287,20 +287,22 @@ void affectation() : {}
   				if(tabIdent.existeIdentLoc(declaration.getSaveName())){
   					typeAffect = tabIdent.chercheIdentLoc(declaration.getSaveName()).getType();
   				}else{ 
-  					System.out.println("Erreur : Variable non declaree");
+  					System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+declaration.getSaveName()+" n'est pas declaree.");
   				}
   			}
   "=" expression() {
   						if(tabIdent.existeIdentLoc(declaration.getSaveName())){
 	  						if(tabIdent.chercheIdentLoc(declaration.getSaveName()) instanceof IdVar){
-		  						if(typeAffect.equals(exp.tipToString(exp.popType()))){
+								String popStack = exp.tipToString(exp.peekType());
+		  						if(typeAffect.equals(popStack)){
 		  							yvm.istore(((IdVar)tabIdent.chercheIdentLoc(declaration.getSaveName())).getOffset());
 		  							yvmAsm.istore(((IdVar)tabIdent.chercheIdentLoc(declaration.getSaveName())).getOffset());
 		  						}else{
-		  							System.out.println("erreur de type au niveau de l'affectation");
+		  							System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : Types non egaux. Le type de "+declaration.getSaveName()+" est "+typeAffect
+		  							+" alors que le type de l'expression est "+popStack+".");
 								}
 							}else{
-								System.out.println("Erreur : Affectation impossible pour une constante");
+								System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : "+declaration.getSaveName()+" est une constante, affectation impossible.");
 							}
 						}
 					}
@@ -313,7 +315,7 @@ void lecture() : {}
 	  						yvm.lireEnt(((IdVar)tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getOffset());
 	  						yvmAsm.lireEnt(((IdVar)tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getOffset());
 	  					}else{
-	  						System.out.println("Erreur : Variable non declaree");
+	  						System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+YakaTokenManager.identLu+" n'est pas declaree.");
 	  					}
   					  }
   ")" 
@@ -328,7 +330,7 @@ void ecriture() : {}
   								}else if("BOOLEEN".equals(exp.tipToString(exp.peekType()))){
   									yvm.ecrireBool();
   									yvmAsm.ecrireBool();
-  								}else System.out.println("Erreur de type dans l'expression entree");
+  								}else System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : Erreur de type dans l'expression entree.");
   								exp.popType();
   							 } 
   							
@@ -353,7 +355,7 @@ void iteration() : {}
 			  }
 	expression() {
 					if (!(exp.tipToString(exp.popType()).equals("BOOLEEN"))){
-						System.out.println("Une expression booleenne est attendu");
+						System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : Une expression booleenne est attendu.");
 					}else{
 						yvm.iffaux("FAIT"+ite.peek());
 						yvmAsm.iffaux("FAIT"+ite.peek());
@@ -377,7 +379,7 @@ void conditionnelle() : {}
 	 
 	<SI> expression() { 
 							if (!(exp.tipToString(exp.popType()).equals("BOOLEEN"))){
-								System.out.println("Une expression booleenne est attendu");
+								System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : Une expression booleenne est attendu.");
 							}
 							
 							cond.push();
@@ -548,7 +550,7 @@ void valeur () : {}
 		 				yvmAsm.iload(((IdVar) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getOffset());
 		 			}
  				}else{
- 					System.out.println("Variable ou fonction non declaree");	
+ 					System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable ou la fonction "+YakaTokenManager.identLu+" n'est pas declaree.");	
 	 			}
 	 		} 
  (argumentsFonction())?	
@@ -610,7 +612,7 @@ void declFonction() : {}
 	<FONCTION>
 	<ident> {
   				if(tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
-  					System.out.println("Erreur : Fonction deja  declaree");
+  					System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La fonction "+YakaTokenManager.identLu+" est deja  declaree.");
   				}else{
   					nomFct=YakaTokenManager.identLu;
   					tabIdent.rangeIdentGlob(nomFct, declaration.createIdentFonc(typeRetourFct));
@@ -647,7 +649,7 @@ void paramForm() : {}
 	type()
 	<ident>{
 		  		if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
-		 			System.out.println("Erreur : Variable deja declaree");
+		 			System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+YakaTokenManager.identLu+" est deja  declaree.");
 		  		}else{
 		  			((IdFonc)tabIdent.chercheIdentGlob(nomFct)).addParam(declaration.getSaveName());
 		  			tabIdent.rangeIdentLoc(YakaTokenManager.identLu, 
@@ -663,12 +665,14 @@ void retourne() : {}
 {
 	<RETOURNE> {	
 					if (inMain){
-						System.out.println("Erreur, impossible de retourner une valeur dans le programme principal");
+						System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : Impossible de retourner une valeur dans le programme principal");
 					}
 			   }
 	expression(){				
-					if(!typeRetourFct.equals(exp.tipToString(exp.popType()))){
-				 		System.out.println("erreur de type au niveau du retour de la fonction");
+					String save = exp.tipToString(exp.popType());
+					if(!typeRetourFct.equals(save)){
+				 		System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La fonction"+nomFct+" retourne un "+typeRetourFct
+		  				+" alors que le type fournis est "+save+".");
 					}else{
 						if(!inMain){
 							int nbParam = ((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam();

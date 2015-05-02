@@ -29,5 +29,14 @@ public class IdFonc extends Ident {
 		return param.size();
 	}
 	
+	public String affiche(String nom){
+		String s=nom+"("+getParam(0)+",";
+		for(int i = 1; i<getNbParam();i++){
+			s+=","+getParam(i);
+		}
+		return s;
+		
+	}
+	
 
 }
