@@ -694,8 +694,8 @@ void argumentsFonction() : {}
 							String typeArg = ((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).getParam(total-nbArg);
 							if(!typeArg.equals(exp.tipToString(exp.peekType()))){
 								int num=total-nbArg + 1;
-								System.out.println(	"Erreur ligne "+YakaTokenManager.jjFillToken().beginLine+
-													" : fonction : "+fonc.peek()+", l'argument "+num+" n'est pas du type souhaite. "
+								System.out.println(	"Erreur l."+YakaTokenManager.jjFillToken().beginLine+
+													" : Fonction : "+((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).affiche(fonc.peek())+", l'argument "+num+" n'est pas du type souhaite. "
 													+typeArg+" attendu, "+exp.tipToString(exp.popType())+" recu.");
 							}else{
 								exp.popType();
@@ -710,8 +710,8 @@ void argumentsFonction() : {}
 									String typeArg = ((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).getParam(total-nbArg);
 									if(!typeArg.equals(exp.tipToString(exp.peekType()))){
 										int num=total-nbArg + 1;
-										System.out.println(	"Erreur ligne "+YakaTokenManager.jjFillToken().beginLine+
-															" : fonction : "+fonc.peek()+", l'argument "+num+" n'est pas du type souhaite. "
+										System.out.println(	"Erreur l."+YakaTokenManager.jjFillToken().beginLine+
+															" : fonction : "+((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).affiche(fonc.peek())+", l'argument "+num+" n'est pas du type souhaite. "
 															+typeArg+" attendu, "+exp.tipToString(exp.popType())+" recu.");
 									}else{
 										exp.popType();
@@ -723,11 +723,9 @@ void argumentsFonction() : {}
 		)? 
 	")" {	if(nbArg > 0){
 
-				System.out.println("Erreur dans le nombre de parametre entre a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
-								   ". "+nbArg+" arguments attendus en plus.");
+				System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : "+nbArg+" arguments attendus en plus.");
 			}else if(nbArg < 0){
-				System.out.println("Erreur dans le nombre de parametre entre a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
-								   ". "+(-nbArg)+" arguments attendus en moins.");
+				System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : "+(-nbArg)+" arguments attendus en moins.");
 			}else{
 				if(!fonc.isEmpty()){	
  					yvm.call(fonc.peek());
