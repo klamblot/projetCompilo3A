@@ -44,6 +44,7 @@ public class Expression{
 	 * Méthode qui ajoute un type à la pile des types
 	 */
 	public void saveType(Tip t){
+		System.out.println("push : "+tipToString(t));
 		type.push(t);
 	}
 
@@ -74,8 +75,8 @@ public class Expression{
 				case DIV :
 				case MUL :
 					if(type1==Tip.ENTIER && type2==Tip.ENTIER){
-						type.push(Tip.ENTIER);
-					}else type.push(Tip.ERREUR);
+						saveType(Tip.ENTIER);
+					}else saveType(Tip.ERREUR);
 					break;
 				
 				case INF:
@@ -83,26 +84,26 @@ public class Expression{
 				case SUPEGAL:
 				case INFEGAL:
 					if(type1==Tip.ENTIER && type2==Tip.ENTIER){
-						type.push(Tip.BOOL);
-					}else type.push(Tip.ERREUR);
+						saveType(Tip.BOOL);
+					}else saveType(Tip.ERREUR);
 					break;
 					
 				case EGAL:
 				case DIFF :
 					if(type1==Tip.ERREUR || type2==Tip.ERREUR || type1!=type2){
-						type.push(Tip.ERREUR);
-					}else type.push(Tip.BOOL);
+						saveType(Tip.ERREUR);
+					}else saveType(Tip.BOOL);
 					break;
 					
 				case ET :
 				case OU :
 					if(type1==Tip.BOOL && type2==Tip.BOOL){
-						type.push(Tip.BOOL);
-					}else type.push(Tip.ERREUR);
+						saveType(Tip.BOOL);
+					}else saveType(Tip.ERREUR);
 					break;
 				
 				default :
-					type.push(Tip.ERREUR);
+					saveType(Tip.ERREUR);
 			
 			}
 			
@@ -120,21 +121,17 @@ public class Expression{
 
 		if(!type.isEmpty() && !oper.isEmpty()){
 
-			if(type.peek() == Tip.ENTIER && oper.peek()==Op.MOINS)
+			if(peekType() == Tip.ENTIER && peekOpera()==Op.MOINS)
 			{
-				type.pop();
 				oper.pop();
-				type.push(Tip.ENTIER);
 			}
-			else if(type.peek() == Tip.BOOL && oper.peek()==Op.NON)
+			else if(peekType() == Tip.BOOL && peekOpera()==Op.NON)
 			{	
-				type.pop();
 				oper.pop();
-				type.push(Tip.BOOL);
 			}
-			else{
-
-				type.push(Tip.ERREUR);
+			else
+			{
+				saveType(Tip.ERREUR);
 			}
 		}
 	}
@@ -157,6 +154,7 @@ public class Expression{
 	 * Méthode qui renvoie le sommet de la pile type
 	 */
 	public Tip popType(){
+		System.out.println("pop : "+tipToString(type.peek()));
 		return type.pop();
 	}
 	

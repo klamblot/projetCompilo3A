@@ -151,6 +151,8 @@ void analyse() : {}
    							yvmAsm.entete(YakaTokenManager.identLu);}
    (declFonction())*
    <PRINCIPAL> {inMain = true;
+  					System.out.println("");
+  					System.out.println("main:");
    					yvm.etiquetteFonc("main");
    					yvmAsm.etiquetteFonc("main");
    			   }
@@ -469,7 +471,9 @@ void simpleExpr() : {}
    			}
 
    )*
-} 
+}
+
+
 void terme() : {}
 {
   facteur() 
@@ -496,6 +500,8 @@ void terme() : {}
 
   )*
 }
+
+
 void facteur() : {}
 {   primaire() 
   |  opNeg() primaire() {
@@ -518,8 +524,7 @@ void facteur() : {}
 void primaire (): {}
 {
    valeur()
- | "(" expression() ")" 
- 
+ | "(" expression() ")"
 }
 
 void valeur () : {}
@@ -544,8 +549,9 @@ void valeur () : {}
 		 				yvm.iload(((IdVar) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getOffset());
 		 				yvmAsm.iload(((IdVar) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getOffset());
 		 			}
- 				}else System.out.println("Variable ou fonction non declaree");
- 				
+ 				}else{
+ 					System.out.println("Variable ou fonction non declaree");	
+	 			}
 	 		} 
  (argumentsFonction())?	
  						
@@ -610,6 +616,8 @@ void declFonction() : {}
   				}else{
   					nomFct=YakaTokenManager.identLu;
   					tabIdent.rangeIdentGlob(nomFct, declaration.createIdentFonc(typeRetourFct));
+  					System.out.println("");
+  					System.out.println(nomFct+":");
   					yvm.etiquetteFonc(nomFct);
   					yvmAsm.etiquetteFonc(nomFct);
   				}
@@ -620,8 +628,8 @@ void declFonction() : {}
 	<FFONCTION>
 	{
 		int nbParam = ((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam();
-		yvm.fermeBloc(nbParam * 2);
-		yvmAsm.fermeBloc(nbParam * 2);
+		yvm.fermeBloc(nbParam*2);
+		yvmAsm.fermeBloc(nbParam*2);
 		tabIdent.clear();
 		declaration.clearOffset();
 		taille = 0;
@@ -677,37 +685,53 @@ void retourne() : {}
 
 void argumentsFonction() : {}
 {
-	"("	{   int nbArg = ((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).getNbParam();
-			int cptArg = 0;	
+	"("	{
+			int nbArg = ((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).getNbParam();
+			int total = nbArg;
 		}
-		(expression() {nbArg--;
-						if(tabIdent.existeIdentGlob(fonc.peek())){
-						  	if(((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).getParam(cptArg).equals(exp.tipToString(exp.popType()))){}
-						  	else System.out.println("Erreur de type dans les parametres entres");
-							cptArg++;
+		(expression() {
+						if(nbArg > 0){
+							String typeArg = ((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).getParam(total-nbArg);
+							if(!typeArg.equals(exp.tipToString(exp.peekType()))){
+								int num=total-nbArg + 1;
+								System.out.println(	"Erreur ligne "+YakaTokenManager.jjFillToken().beginLine+
+													" : fonction : "+fonc.peek()+", l'argument "+num+" n'est pas du type souhiaté. "
+													+typeArg+" attendu, "+exp.tipToString(exp.popType())+" reçu");
+							}else{
+								exp.popType();
+							}
 						}
-					}
+						nbArg--;
+					  }
 			(
 				"," 
-				expression(){nbArg--;
-								if(tabIdent.existeIdentGlob(fonc.peek())){
-						  			if(((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).getParam(cptArg).equals(exp.tipToString(exp.popType()))){}
-						  			else System.out.println("Erreur de type dans les parametres entres");
-									cptArg++;
+				expression(){
+								if(nbArg > 0){
+									String typeArg = ((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).getParam(total-nbArg);
+									if(!typeArg.equals(exp.tipToString(exp.peekType()))){
+										int num=total-nbArg + 1;
+										System.out.println(	"Erreur ligne "+YakaTokenManager.jjFillToken().beginLine+
+															" : fonction : "+fonc.peek()+", l'argument "+num+" n'est pas du type souhiaté. "
+															+typeArg+" attendu, "+exp.tipToString(exp.popType())+" reçu");
+									}else{
+										exp.popType();
+									}
 								}
+								nbArg--;
 							}
 			)*
 		)? 
 	")" {	if(nbArg > 0){
-				System.out.println("Erreur dans le nombre de parametre entre a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
+
+				System.out.println("Erreur dans le nombre de parametre entrer a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
 								   ". "+nbArg+" arguments attendus en plus.");
 			}else if(nbArg < 0){
-				System.out.println("Erreur dans le nombre de parametre entre a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
+				System.out.println("Erreur dans le nombre de parametre entrer a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
 								   ". "+(-nbArg)+" arguments attendus en moins.");
 			}else{
-				if(!fonc.isEmpty()){
- 						yvm.call(fonc.peek());
- 						yvmAsm.call(fonc.pop());
+				if(!fonc.isEmpty()){	
+ 					yvm.call(fonc.peek());
+ 					yvmAsm.call(fonc.pop());
  				}
  			}
 		}
