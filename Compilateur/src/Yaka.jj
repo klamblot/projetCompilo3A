@@ -668,16 +668,17 @@ void retourne() : {}
 						System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : Impossible de retourner une valeur dans le programme principal");
 					}
 			   }
-	expression(){				
-					String save = exp.tipToString(exp.popType());
-					if(!typeRetourFct.equals(save)){
-				 		System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La fonction"+nomFct+" retourne un "+typeRetourFct
-		  				+" alors que le type fournis est "+save+".");
-					}else{
-						if(!inMain){
-							int nbParam = ((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam();
-							yvm.ireturn((2*(nbParam+2)));
-							yvmAsm.ireturn((2*(nbParam+2)));
+	expression(){	if (!inMain){		
+						String save = exp.tipToString(exp.popType());
+						if(!typeRetourFct.equals(save)){
+					 		System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La fonction"+nomFct+" retourne un "+typeRetourFct
+			  				+" alors que le type fournis est "+save+".");
+						}else{
+							if(!inMain){
+								int nbParam = ((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam();
+								yvm.ireturn((2*(nbParam+2)));
+								yvmAsm.ireturn((2*(nbParam+2)));
+							}
 						}
 					}
 				}
@@ -700,6 +701,8 @@ void argumentsFonction() : {}
 							}else{
 								exp.popType();
 							}
+						}else{
+							exp.popType();
 						}
 						nbArg--;
 					  }
@@ -716,6 +719,8 @@ void argumentsFonction() : {}
 									}else{
 										exp.popType();
 									}
+								}else{
+									exp.popType();
 								}
 								nbArg--;
 							}
@@ -723,9 +728,9 @@ void argumentsFonction() : {}
 		)? 
 	")" {	if(nbArg > 0){
 
-				System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : "+nbArg+" arguments attendus en plus.");
+				System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : fonction : "+((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).affiche(fonc.peek())+" : "+nbArg+" arguments attendus en plus.");
 			}else if(nbArg < 0){
-				System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : "+(-nbArg)+" arguments attendus en moins.");
+				System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : fonction : "+((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).affiche(fonc.peek())+" : "+(-nbArg)+" arguments attendus en moins.");
 			}else{
 				if(!fonc.isEmpty()){	
  					yvm.call(fonc.peek());

@@ -145,13 +145,23 @@ public class YVMasm extends YVM{
 
 	@Override
 	public void iload(int offset) {
-		Ecriture.ecrireStringln(file,"\tpush word ptr[bp"+offset+"]");
+		if (offset > 0){
+			Ecriture.ecrireStringln(file,"\tpush word ptr[bp+"+offset+"]");
+		}else{
+			Ecriture.ecrireStringln(file,"\tpush word ptr[bp"+offset+"]");
+		}
+		
 	}
 
 	@Override
 	public void istore(int offset) {
 		Ecriture.ecrireStringln(file,"\tpop ax");
-		Ecriture.ecrireStringln(file,"\tmov word ptr[bp"+offset+"],ax");
+		if (offset > 0){
+			Ecriture.ecrireStringln(file,"\tmov word ptr[bp+"+offset+"],ax");
+		}else{
+			Ecriture.ecrireStringln(file,"\tmov word ptr[bp"+offset+"],ax");
+		}
+		
 	}
 
 	@Override
@@ -211,7 +221,11 @@ public class YVMasm extends YVM{
 	
 	@Override
 	public void lireEnt(int offset){
-		Ecriture.ecrireStringln(file,"\tlea dx,[bp"+offset+"]");
+		if(offset > 0){
+			Ecriture.ecrireStringln(file,"\tlea dx,[bp+"+offset+"]");
+		}else{
+			Ecriture.ecrireStringln(file,"\tlea dx,[bp"+offset+"]");
+		}
 		Ecriture.ecrireStringln(file,"\tpush dx");
 		Ecriture.ecrireStringln(file,"\tcall lirent");
 		
@@ -266,7 +280,12 @@ public class YVMasm extends YVM{
 	@Override
 	public void ireturn(int offset) {
 		Ecriture.ecrireStringln(file,"\tpop ax");
-		Ecriture.ecrireStringln(file,"\tmov [bp+"+offset+"],ax");
+		if (offset > 0){
+			Ecriture.ecrireStringln(file,"\tmov [bp+"+offset+"],ax");
+		}else{
+			Ecriture.ecrireStringln(file,"\tmov [bp"+offset+"],ax");
+		}
+		
 	}
 
 	@Override

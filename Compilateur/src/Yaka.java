@@ -139,7 +139,7 @@ public class Yaka implements YakaConstants {
     case entier:
       jj_consume_token(entier);
                                 if(tabIdent.existeIdentLoc(declaration.getSaveName())){
-                                        System.out.println("Erreur : Constante deja\u00a0 declaree");
+                                        System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La constante "+declaration.getSaveName()+" est deja\u00a0 declaree.");
                                 }else{
                                         tabIdent.rangeIdentLoc(declaration.getSaveName(), declaration.createIdentConst("ENTIER", YakaTokenManager.entierLu));
                                 }
@@ -147,19 +147,19 @@ public class Yaka implements YakaConstants {
     case ident:
       jj_consume_token(ident);
                                 if(tabIdent.existeIdentLoc(declaration.getSaveName())){
-                                                System.out.println("Erreur : Variable deja\u00a0 declaree");
+                                                System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+declaration.getSaveName()+" est deja\u00a0 declaree.");
                                 }else{
                                         if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
                                                 tabIdent.rangeIdentLoc(declaration.getSaveName(), tabIdent.chercheIdentGlob(YakaTokenManager.identLu));
                                         }else {
-                                                System.out.println("Erreur : Variable non declaree");
+                                                System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+YakaTokenManager.identLu+" n'est pas declaree.");
                                         }
                                 }
       break;
     case VRAI:
       jj_consume_token(VRAI);
                                 if(tabIdent.existeIdentLoc(declaration.getSaveName())){
-                                        System.out.println("Erreur : Variable deja\u00a0 declaree");
+                                        System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+declaration.getSaveName()+" est deja\u00a0 declaree.");
                                 }else{
                                         tabIdent.rangeIdentLoc(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", -1));
                                 }
@@ -167,7 +167,7 @@ public class Yaka implements YakaConstants {
     case FAUX:
       jj_consume_token(FAUX);
                                 if(tabIdent.existeIdentLoc(declaration.getSaveName())){
-                                        System.out.println("Erreur : Variable deja\u00a0 declaree");
+                                        System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+declaration.getSaveName()+" est deja\u00a0 declaree.");
                                 }else{
                                         tabIdent.rangeIdentLoc(declaration.getSaveName(), declaration.createIdentConst("BOOLEEN", 0));
                                 }
@@ -184,7 +184,7 @@ public class Yaka implements YakaConstants {
     type();
     jj_consume_token(ident);
                                         if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
-                                                System.out.println("Erreur : Variable deja\u00a0 declaree");
+                                                System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+YakaTokenManager.identLu+" est deja\u00a0 declaree.");
                                         }else{
                                                 tabIdent.rangeIdentLoc(YakaTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName()));
                                                 taille += 2;
@@ -202,7 +202,7 @@ public class Yaka implements YakaConstants {
       jj_consume_token(40);
       jj_consume_token(ident);
                                         if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
-                                                System.out.println("Erreur : Variable deja declaree");
+                                                System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+YakaTokenManager.identLu+" est deja\u00a0 declaree.");
 
                                         }else{
                                                 tabIdent.rangeIdentLoc(YakaTokenManager.identLu, declaration.createIdentVar(declaration.getSaveName()));
@@ -296,20 +296,22 @@ public class Yaka implements YakaConstants {
                                 if(tabIdent.existeIdentLoc(declaration.getSaveName())){
                                         typeAffect = tabIdent.chercheIdentLoc(declaration.getSaveName()).getType();
                                 }else{
-                                        System.out.println("Erreur : Variable non declaree");
+                                        System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+declaration.getSaveName()+" n'est pas declaree.");
                                 }
     jj_consume_token(42);
     expression();
                                                 if(tabIdent.existeIdentLoc(declaration.getSaveName())){
                                                         if(tabIdent.chercheIdentLoc(declaration.getSaveName()) instanceof IdVar){
-                                                                if(typeAffect.equals(exp.tipToString(exp.popType()))){
+                                                                String popStack = exp.tipToString(exp.peekType());
+                                                                if(typeAffect.equals(popStack)){
                                                                         yvm.istore(((IdVar)tabIdent.chercheIdentLoc(declaration.getSaveName())).getOffset());
                                                                         yvmAsm.istore(((IdVar)tabIdent.chercheIdentLoc(declaration.getSaveName())).getOffset());
                                                                 }else{
-                                                                        System.out.println("erreur de type au niveau de l'affectation");
+                                                                        System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : Types non egaux. Le type de "+declaration.getSaveName()+" est "+typeAffect
+                                                                        +" alors que le type de l'expression est "+popStack+".");
                                                                 }
                                                         }else{
-                                                                System.out.println("Erreur : Affectation impossible pour une constante");
+                                                                System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : "+declaration.getSaveName()+" est une constante, affectation impossible.");
                                                         }
                                                 }
   }
@@ -322,7 +324,7 @@ public class Yaka implements YakaConstants {
                                                         yvm.lireEnt(((IdVar)tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getOffset());
                                                         yvmAsm.lireEnt(((IdVar)tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getOffset());
                                                 }else{
-                                                        System.out.println("Erreur : Variable non declaree");
+                                                        System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+YakaTokenManager.identLu+" n'est pas declaree.");
                                                 }
     jj_consume_token(44);
   }
@@ -347,7 +349,7 @@ public class Yaka implements YakaConstants {
                                                                 }else if("BOOLEEN".equals(exp.tipToString(exp.peekType()))){
                                                                         yvm.ecrireBool();
                                                                         yvmAsm.ecrireBool();
-                                                                }else System.out.println("Erreur de type dans l'expression entree");
+                                                                }else System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : Erreur de type dans l'expression entree.");
                                                                 exp.popType();
         break;
       case chaine:
@@ -381,7 +383,7 @@ public class Yaka implements YakaConstants {
                                 yvmAsm.faire(ite.peek());
     expression();
                                         if (!(exp.tipToString(exp.popType()).equals("BOOLEEN"))){
-                                                System.out.println("Une expression booleenne est attendu");
+                                                System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : Une expression booleenne est attendu.");
                                         }else{
                                                 yvm.iffaux("FAIT"+ite.peek());
                                                 yvmAsm.iffaux("FAIT"+ite.peek());
@@ -399,7 +401,7 @@ public class Yaka implements YakaConstants {
     jj_consume_token(SI);
     expression();
                                                         if (!(exp.tipToString(exp.popType()).equals("BOOLEEN"))){
-                                                                System.out.println("Une expression booleenne est attendu");
+                                                                System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : Une expression booleenne est attendu.");
                                                         }
 
                                                         cond.push();
@@ -627,7 +629,7 @@ public class Yaka implements YakaConstants {
                                                 yvmAsm.iload(((IdVar) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getOffset());
                                         }
                                 }else{
-                                        System.out.println("Variable ou fonction non declaree");
+                                        System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable ou la fonction "+YakaTokenManager.identLu+" n'est pas declaree.");
                                 }
       switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
       case 43:
@@ -755,7 +757,7 @@ public class Yaka implements YakaConstants {
     jj_consume_token(FONCTION);
     jj_consume_token(ident);
                                 if(tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
-                                        System.out.println("Erreur : Fonction deja\u00a0 declaree");
+                                        System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La fonction "+YakaTokenManager.identLu+" est deja\u00a0 declaree.");
                                 }else{
                                         nomFct=YakaTokenManager.identLu;
                                         tabIdent.rangeIdentGlob(nomFct, declaration.createIdentFonc(typeRetourFct));
@@ -805,7 +807,7 @@ public class Yaka implements YakaConstants {
     type();
     jj_consume_token(ident);
                                 if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
-                                        System.out.println("Erreur : Variable deja declaree");
+                                        System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+YakaTokenManager.identLu+" est deja\u00a0 declaree.");
                                 }else{
                                         ((IdFonc)tabIdent.chercheIdentGlob(nomFct)).addParam(declaration.getSaveName());
                                         tabIdent.rangeIdentLoc(YakaTokenManager.identLu,
@@ -819,16 +821,20 @@ public class Yaka implements YakaConstants {
   static final public void retourne() throws ParseException {
     jj_consume_token(RETOURNE);
                                         if (inMain){
-                                                System.out.println("Erreur, impossible de retourner une valeur dans le programme principal");
+                                                System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : Impossible de retourner une valeur dans le programme principal");
                                         }
     expression();
-                                        if(!typeRetourFct.equals(exp.tipToString(exp.popType()))){
-                                                System.out.println("erreur de type au niveau du retour de la fonction");
-                                        }else{
-                                                if(!inMain){
-                                                        int nbParam = ((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam();
-                                                        yvm.ireturn((2*(nbParam+2)));
-                                                        yvmAsm.ireturn((2*(nbParam+2)));
+                        if (!inMain){
+                                                String save = exp.tipToString(exp.popType());
+                                                if(!typeRetourFct.equals(save)){
+                                                        System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La fonction"+nomFct+" retourne un "+typeRetourFct
+                                                        +" alors que le type fournis est "+save+".");
+                                                }else{
+                                                        if(!inMain){
+                                                                int nbParam = ((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam();
+                                                                yvm.ireturn((2*(nbParam+2)));
+                                                                yvmAsm.ireturn((2*(nbParam+2)));
+                                                        }
                                                 }
                                         }
   }
@@ -850,12 +856,14 @@ public class Yaka implements YakaConstants {
                                                         String typeArg = ((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).getParam(total-nbArg);
                                                         if(!typeArg.equals(exp.tipToString(exp.peekType()))){
                                                                 int num=total-nbArg + 1;
-                                                                System.out.println(     "Erreur ligne "+YakaTokenManager.jjFillToken().beginLine+
-                                                                                                        " : fonction : "+fonc.peek()+", l'argument "+num+" n'est pas du type souhaite. "
+                                                                System.out.println(     "Erreur l."+YakaTokenManager.jjFillToken().beginLine+
+                                                                                                        " : Fonction : "+((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).affiche(fonc.peek())+", l'argument "+num+" n'est pas du type souhaite. "
                                                                                                         +typeArg+" attendu, "+exp.tipToString(exp.popType())+" recu.");
                                                         }else{
                                                                 exp.popType();
                                                         }
+                                                }else{
+                                                        exp.popType();
                                                 }
                                                 nbArg--;
       label_10:
@@ -874,12 +882,14 @@ public class Yaka implements YakaConstants {
                                                                         String typeArg = ((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).getParam(total-nbArg);
                                                                         if(!typeArg.equals(exp.tipToString(exp.peekType()))){
                                                                                 int num=total-nbArg + 1;
-                                                                                System.out.println(     "Erreur ligne "+YakaTokenManager.jjFillToken().beginLine+
-                                                                                                                        " : fonction : "+fonc.peek()+", l'argument "+num+" n'est pas du type souhaite. "
+                                                                                System.out.println(     "Erreur l."+YakaTokenManager.jjFillToken().beginLine+
+                                                                                                                        " : fonction : "+((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).affiche(fonc.peek())+", l'argument "+num+" n'est pas du type souhaite. "
                                                                                                                         +typeArg+" attendu, "+exp.tipToString(exp.popType())+" recu.");
                                                                         }else{
                                                                                 exp.popType();
                                                                         }
+                                                                }else{
+                                                                        exp.popType();
                                                                 }
                                                                 nbArg--;
       }
@@ -891,11 +901,9 @@ public class Yaka implements YakaConstants {
     jj_consume_token(44);
                 if(nbArg > 0){
 
-                                System.out.println("Erreur dans le nombre de parametre entre a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
-                                                                   ". "+nbArg+" arguments attendus en plus.");
+                                System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : fonction : "+((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).affiche(fonc.peek())+" : "+nbArg+" arguments attendus en plus.");
                         }else if(nbArg < 0){
-                                System.out.println("Erreur dans le nombre de parametre entre a la ligne : "+YakaTokenManager.jjFillToken().beginLine+
-                                                                   ". "+(-nbArg)+" arguments attendus en moins.");
+                                System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : fonction : "+((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).affiche(fonc.peek())+" : "+(-nbArg)+" arguments attendus en moins.");
                         }else{
                                 if(!fonc.isEmpty()){
                                         yvm.call(fonc.peek());

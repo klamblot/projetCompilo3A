@@ -30,10 +30,11 @@ public class IdFonc extends Ident {
 	}
 	
 	public String affiche(String nom){
-		String s=nom+"("+getParam(0)+",";
+		String s=nom+"("+getParam(0);
 		for(int i = 1; i<getNbParam();i++){
 			s+=","+getParam(i);
 		}
+		s+=")";
 		return s;
 		
 	}
