@@ -10,7 +10,9 @@ public class Yaka implements YakaConstants {
         static int taille = 0;
 
         static String typeAffect,typeRetourFct,nomFct;
+
         static boolean inMain = false;
+        static boolean inGlob = false;
 
         static EtiqUtil ite = new EtiqUtil();
         static EtiqUtil cond = new EtiqUtil();
@@ -615,11 +617,13 @@ public class Yaka implements YakaConstants {
     case ident:
       jj_consume_token(ident);
                         if (tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
+                                        inGlob = true;
                                         fonc.push(YakaTokenManager.identLu);
                                         exp.saveType(exp.stringToTip(tabIdent.chercheIdentGlob(YakaTokenManager.identLu).getType()));
                                         yvm.reserveRetour();
                                         yvmAsm.reserveRetour();
                                 }else if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
+                                        inGlob = false;
                                         exp.saveType(exp.stringToTip(tabIdent.chercheIdentLoc(YakaTokenManager.identLu).getType()));
                                         if(tabIdent.chercheIdentLoc(YakaTokenManager.identLu) instanceof IdConst){
                                                 yvm.iconst(((IdConst) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getValeur());
@@ -841,8 +845,15 @@ public class Yaka implements YakaConstants {
 
   static final public void argumentsFonction() throws ParseException {
     jj_consume_token(43);
-                        int nbArg = ((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).getNbParam();
-                        int total = nbArg;
+                        int nbArg;
+                        int total;
+                        if(inGlob){
+                                nbArg = ((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).getNbParam();
+                                total = nbArg;
+                        }else{
+                                nbArg = 0;
+                                total = nbArg;
+                        }
     switch ((jj_ntk==-1)?jj_ntk():jj_ntk) {
     case VRAI:
     case FAUX:
@@ -852,7 +863,7 @@ public class Yaka implements YakaConstants {
     case 43:
     case 51:
       expression();
-                                                if(nbArg > 0){
+                                                if(nbArg > 0 && inGlob){
                                                         String typeArg = ((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).getParam(total-nbArg);
                                                         if(!typeArg.equals(exp.tipToString(exp.peekType()))){
                                                                 int num=total-nbArg + 1;
@@ -862,7 +873,7 @@ public class Yaka implements YakaConstants {
                                                         }else{
                                                                 exp.popType();
                                                         }
-                                                }else{
+                                                }else if(inGlob){
                                                         exp.popType();
                                                 }
                                                 nbArg--;
@@ -878,7 +889,7 @@ public class Yaka implements YakaConstants {
         }
         jj_consume_token(40);
         expression();
-                                                                if(nbArg > 0){
+                                                                if(nbArg > 0 && inGlob){
                                                                         String typeArg = ((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).getParam(total-nbArg);
                                                                         if(!typeArg.equals(exp.tipToString(exp.peekType()))){
                                                                                 int num=total-nbArg + 1;
@@ -888,7 +899,7 @@ public class Yaka implements YakaConstants {
                                                                         }else{
                                                                                 exp.popType();
                                                                         }
-                                                                }else{
+                                                                }else if(inGlob){
                                                                         exp.popType();
                                                                 }
                                                                 nbArg--;
@@ -899,8 +910,9 @@ public class Yaka implements YakaConstants {
       ;
     }
     jj_consume_token(44);
-                if(nbArg > 0){
-
+                        if(!inGlob && nbArg !=0){
+                                System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+", une variable ne peut accepter des arguments");
+                        }else if(nbArg > 0){
                                 System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : fonction : "+((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).affiche(fonc.peek())+" : "+nbArg+" arguments attendus en plus.");
                         }else if(nbArg < 0){
                                 System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : fonction : "+((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).affiche(fonc.peek())+" : "+(-nbArg)+" arguments attendus en moins.");
