@@ -24,7 +24,7 @@ public class Yaka {
 	static String typeAffect,typeRetourFct,nomFct;
 	
 	static boolean inMain = false;
-	static boolean inGlob = false;
+	static boolean needArg =false;
 	
 	static EtiqUtil ite = new EtiqUtil();
 	static EtiqUtil cond = new EtiqUtil();
@@ -295,7 +295,7 @@ void affectation() : {}
   "=" expression() {
   						if(tabIdent.existeIdentLoc(declaration.getSaveName())){
 	  						if(tabIdent.chercheIdentLoc(declaration.getSaveName()) instanceof IdVar){
-								String popStack = exp.tipToString(exp.peekType());
+								String popStack = exp.tipToString(exp.popType());
 		  						if(typeAffect.equals(popStack)){
 		  							yvm.istore(((IdVar)tabIdent.chercheIdentLoc(declaration.getSaveName())).getOffset());
 		  							yvmAsm.istore(((IdVar)tabIdent.chercheIdentLoc(declaration.getSaveName())).getOffset());
@@ -538,26 +538,36 @@ void valeur () : {}
 			} 		
 
  | <ident> 	{	if (tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
- 					inGlob = true;
  					fonc.push(YakaTokenManager.identLu);
+ 					needArg = true;
  					exp.saveType(exp.stringToTip(tabIdent.chercheIdentGlob(YakaTokenManager.identLu).getType()));
  					yvm.reserveRetour();
  					yvmAsm.reserveRetour();
-		 		}else if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
-		 			inGlob = false;
-		 			exp.saveType(exp.stringToTip(tabIdent.chercheIdentLoc(YakaTokenManager.identLu).getType()));
-		 			if(tabIdent.chercheIdentLoc(YakaTokenManager.identLu) instanceof IdConst){
-		 				yvm.iconst(((IdConst) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getValeur());
-		 				yvmAsm.iconst(((IdConst) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getValeur());
-		 			}else{
-		 				yvm.iload(((IdVar) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getOffset());
-		 				yvmAsm.iload(((IdVar) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getOffset());
-		 			}
- 				}else{
- 					System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable ou la fonction "+YakaTokenManager.identLu+" n'est pas declaree.");	
+		 		}else{
+		 		  	fonc.push("ERRFONC");		 		  	if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
+		 				exp.saveType(exp.stringToTip(tabIdent.chercheIdentLoc(YakaTokenManager.identLu).getType()));
+		 				if(tabIdent.chercheIdentLoc(YakaTokenManager.identLu) instanceof IdConst){
+		 					yvm.iconst(((IdConst) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getValeur());
+		 					yvmAsm.iconst(((IdConst) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getValeur());
+		 				}else{
+		 					yvm.iload(((IdVar) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getOffset());
+		 					yvmAsm.iload(((IdVar) tabIdent.chercheIdentLoc(YakaTokenManager.identLu)).getOffset());
+		 				}
+ 					}else{
+ 						System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable ou la fonction "+YakaTokenManager.identLu+" n'est pas declaree.");
+ 						exp.saveType(exp.stringToTip("ERREUR"));
+	 				}
 	 			}
 	 		} 
- (argumentsFonction())?	
+ (argumentsFonction())? {
+   							if(needArg){
+								System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : Aucun argument entre lors de l'appel de la fonction "
+													+((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).affiche(fonc.peek()));
+								needArg = false;
+   							}
+   							fonc.pop();
+   						}
+      
  						
  | <VRAI> 	{	
  				exp.saveType(Expression.Tip.BOOL);
@@ -690,9 +700,11 @@ void retourne() : {}
 
 void argumentsFonction() : {}
 {
-	"("	{	
+	"("	{
+	  		needArg = false;
 			int nbArg;
 			int total;
+			boolean inGlob = !fonc.peek().equals("ERRFONC");
 			if(inGlob){
 				nbArg = ((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).getNbParam();
 				total = nbArg;
@@ -708,13 +720,10 @@ void argumentsFonction() : {}
 								int num=total-nbArg + 1;
 								System.out.println(	"Erreur l."+YakaTokenManager.jjFillToken().beginLine+
 													" : Fonction : "+((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).affiche(fonc.peek())+", l'argument "+num+" n'est pas du type souhaite. "
-													+typeArg+" attendu, "+exp.tipToString(exp.popType())+" recu.");
-							}else{
-								exp.popType();
+													+typeArg+" attendu, "+exp.tipToString(exp.peekType())+" recu.");
 							}
-						}else if(inGlob){
-							exp.popType();
 						}
+						exp.popType();
 						nbArg--;
 					  }
 			(
@@ -725,30 +734,25 @@ void argumentsFonction() : {}
 									if(!typeArg.equals(exp.tipToString(exp.peekType()))){
 										int num=total-nbArg + 1;
 										System.out.println(	"Erreur l."+YakaTokenManager.jjFillToken().beginLine+
-															" : fonction : "+((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).affiche(fonc.peek())+", l'argument "+num+" n'est pas du type souhaite. "
+															" : Fonction : "+((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).affiche(fonc.peek())+", l'argument "+num+" n'est pas du type souhaite. "
 															+typeArg+" attendu, "+exp.tipToString(exp.popType())+" recu.");
-									}else{
-										exp.popType();
 									}
-								}else if(inGlob){
-									exp.popType();
 								}
+								exp.popType();
 								nbArg--;
 							}
 			)*
 		)? 
 	")" {	
-			if(!inGlob && nbArg !=0){
-				System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+", une variable ne peut accepter des arguments");
+			if(!inGlob){
+				System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : Une variable ne peut pas accepter d'arguments");
 			}else if(nbArg > 0){
-				System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : fonction : "+((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).affiche(fonc.peek())+" : "+nbArg+" arguments attendus en plus.");
+				System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : Fonction "+((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).affiche(fonc.peek())+" : "+nbArg+" argument(s) attendu(s) en plus.");
 			}else if(nbArg < 0){
-				System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : fonction : "+((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).affiche(fonc.peek())+" : "+(-nbArg)+" arguments attendus en moins.");
-			}else{
-				if(!fonc.isEmpty()){	
+				System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : Fonction "+((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).affiche(fonc.peek())+" : "+(-nbArg)+" argument(s) attendu(s) en moins.");
+			}else{	
  					yvm.call(fonc.peek());
- 					yvmAsm.call(fonc.pop());
- 				}
+ 					yvmAsm.call(fonc.peek());
  			}
 		}
 }
