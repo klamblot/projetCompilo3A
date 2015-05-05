@@ -1,9 +1,14 @@
 
 
+/**
+ * Classe qui gère les variables utilisées pour la déclaration des variables, des constantes et des fonctions
+ */
 public class Declaration {
 
 	private int offSet = 0; 	//Offset courant : Position de l'élément en sommet de pile
 	private String saveName;	//Variable pour sauvegarder un nom pour créer un Ident ensuite
+	
+/*-------Getters/Setters-------------*/
 	
 
 	public int getOffSet() {
@@ -22,11 +27,12 @@ public class Declaration {
 		this.saveName = saveName;
 	}
 	
+/*-------------------------------------*/
 	
 	/**
 	 * @param type
 	 * @return IdVar
-	 * Créer un nouvel IdVar à partir du type et met son offset en sommet de pile
+	 * Crée un nouvel IdVar à partir du type et met son offset en sommet de pile
 	 * Décale l'offset
 	 */
 	public Ident createIdentVar(String type){
@@ -38,7 +44,7 @@ public class Declaration {
 	 * @param type
 	 * @param offset
 	 * @return IdVar
-	 * Créer un nouvel IdVar à partir du type et son offset
+	 * Crée un nouvel IdVar à partir du type et son offset
 	 */
 	public Ident createIdentVar(String type, int off){
 		return new IdVar(type,off);
@@ -49,7 +55,7 @@ public class Declaration {
 	 * @param type
 	 * @param valeur
 	 * @return IdConst
-	 * Créer un IdConst à partir de son type et de sa valeur
+	 * Crée un IdConst à partir de son type et de sa valeur
 	 */
 	public Ident createIdentConst(String type, int valeur){
 		return new IdConst(type, valeur);
@@ -58,12 +64,16 @@ public class Declaration {
 	/**
 	 * @param type
 	 * @return IdFonctt
-	 * Créer un IdFonct à partir du type de son retour
+	 * Crée un IdFonct à partir du type de son retour
 	 */
 	public Ident createIdentFonc(String type){
 		return new IdFonc(type);
 	}
 	
+	
+	/**
+	 * Met à zero l'offset
+	 */
 	public void clearOffset(){
 		offSet = 0;
 	}

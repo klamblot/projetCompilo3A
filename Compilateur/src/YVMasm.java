@@ -1,9 +1,9 @@
-
-
 import java.io.OutputStream;
 
 
-
+/**
+ * Classe avec toutes les méthodes pour écrire le fichier .asm
+ */
 public class YVMasm extends YVM{
 	
 	OutputStream file;

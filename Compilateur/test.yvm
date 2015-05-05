@@ -1,0 +1,42 @@
+entete
+max:
+ouvbloc 6
+iload 6
+istore -6
+iload -6
+iload 4
+isup
+iffaux SINON1
+iload -6
+ireturn 8
+goto FSI1
+SINON1:
+iload 4
+ireturn 8
+FSI1:
+fermebloc 4
+sup:
+ouvbloc 0
+iload 6
+iload 4
+isup
+ireturn 8
+fermebloc 4
+main:
+ouvbloc 8
+iconst 5
+istore -2
+lireEnt -4
+aLaLigne
+reserveRetour
+reserveRetour
+iconst 1
+iconst 2
+iconst 3
+reserveRetour
+call sup
+istore -8
+aLaLigne
+iload -6
+ecrireEnt
+queue

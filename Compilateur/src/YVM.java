@@ -1,5 +1,8 @@
 import java.io.OutputStream;
 
+/**
+ * Classe avec toutes les méthodes pour écrire le fichier .yvm
+ */
 public class YVM {
 	
 	OutputStream file;

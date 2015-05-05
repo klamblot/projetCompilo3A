@@ -1,9 +1,12 @@
 import java.util.Stack;
 
 
+/**
+ * Classe utilisée pour le controle de type dans les expressions. Pour cela, on utilise deux piles pour stocker les operateurs et les types des operandes.  
+ */
 public class Expression{
 	
-	private Stack<Tip> type; 	//Pile des types des opérandes pour le controle de type
+	private Stack<Tip> type; 	//Pile des types des opérandes
 	private Stack<Op> oper; 	//Pile des opérateurs
 
 	/**

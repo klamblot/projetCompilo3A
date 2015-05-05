@@ -8,12 +8,15 @@ public class Yaka implements YakaConstants {
         static YVM yvm = new YVM();
         static YVMasm yvmAsm = new YVMasm();
 
-        static int taille = 0;
+        static int taille = 0; //Variable qui contient la valeur de la taille occupee par les constantes et les variables
 
-        static String typeAffect,typeRetourFct,nomFct;
+        static String typeAffect;      //Variable qui permet de sauvegarder le type de la variable affectee
+        static String nomAffect;       //Variable qui permet de sauvegarder le nom de la variable affectee
+        static String typeRetourFct;   //Variable qui permet de sauvegarder le type de retour de la fonction courante
+        static String nomFct;          //Variable qui permet de sauvegarder le nom de retour de la fonction courante
 
-        static boolean inMain = false;
-        static boolean needArg =false;
+        static boolean inMain = false; //Variable qui indique quand on se trouve dans le programme principal
+        static boolean needArg =false; //Variable qui se met a true quand il y a un appel de fonction pour verifier si des parametres sont bien rentres
 
         static EtiqUtil ite = new EtiqUtil();
         static EtiqUtil cond = new EtiqUtil();
@@ -315,26 +318,26 @@ void suiteInstr() throws ParseException {
 
   static final public void affectation() throws ParseException {
     jj_consume_token(ident);
-declaration.setSaveName(YakaTokenManager.identLu);
-                                if(tabIdent.existeIdentLoc(declaration.getSaveName())){
-                                        typeAffect = tabIdent.chercheIdentLoc(declaration.getSaveName()).getType();
+nomAffect=YakaTokenManager.identLu;
+                                if(tabIdent.existeIdentLoc(nomAffect)){
+                                        typeAffect = tabIdent.chercheIdentLoc(nomAffect).getType();
                                 }else{
-                                        System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+declaration.getSaveName()+" n'est pas declaree.");
+                                        System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+nomAffect+" n'est pas declaree.");
                                 }
     jj_consume_token(42);
     expression();
-if(tabIdent.existeIdentLoc(declaration.getSaveName())){
-                                                        if(tabIdent.chercheIdentLoc(declaration.getSaveName()) instanceof IdVar){
+if(tabIdent.existeIdentLoc(nomAffect)){
+                                                        if(tabIdent.chercheIdentLoc(nomAffect) instanceof IdVar){
                                                                 String popStack = exp.tipToString(exp.popType());
                                                                 if(typeAffect.equals(popStack)){
-                                                                        yvm.istore(((IdVar)tabIdent.chercheIdentLoc(declaration.getSaveName())).getOffset());
-                                                                        yvmAsm.istore(((IdVar)tabIdent.chercheIdentLoc(declaration.getSaveName())).getOffset());
+                                                                        yvm.istore(((IdVar)tabIdent.chercheIdentLoc(nomAffect)).getOffset());
+                                                                        yvmAsm.istore(((IdVar)tabIdent.chercheIdentLoc(nomAffect)).getOffset());
                                                                 }else{
-                                                                        System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : Types non egaux. Le type de "+declaration.getSaveName()+" est "+typeAffect
+                                                                        System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : Types non egaux. Le type de "+nomAffect+" est "+typeAffect
                                                                         +" alors que le type de l'expression est "+popStack+".");
                                                                 }
                                                         }else{
-                                                                System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : "+declaration.getSaveName()+" est une constante, affectation impossible.");
+                                                                System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : "+nomAffect+" est une constante, affectation impossible.");
                                                         }
                                                 }
   }

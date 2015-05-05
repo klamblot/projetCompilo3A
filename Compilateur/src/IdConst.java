@@ -13,6 +13,7 @@ public class IdConst extends Ident{
 		valeur=val;
 	}
 	
+/*----------Getters--------------*/
 	public String getType() {
 		return super.getType();
 	}

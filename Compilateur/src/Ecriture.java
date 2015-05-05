@@ -1,9 +1,10 @@
-
-
 import java.io.*;
 
 //quelques primitives d'écriture à l'ecran  ou dans un fichier
 
+/**
+ * Classe utilisée pour l'écriture des fichiers de sortie
+ */
 public class Ecriture {   
     private static void erreur(IOException e) {
         System.out.println(e.getMessage());
