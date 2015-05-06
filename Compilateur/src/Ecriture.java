@@ -8,8 +8,8 @@ import java.io.*;
 public class Ecriture {   
     private static void erreur(IOException e) {
         System.out.println(e.getMessage());
-	System.out.println("Erreur fatale");
-	System.exit(1);
+        System.out.println("Erreur fatale");
+        System.exit(1);
     }
 
     public static OutputStream ouvrir(String nomFich) {
