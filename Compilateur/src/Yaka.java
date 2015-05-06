@@ -76,8 +76,8 @@ yvm.entete(YakaTokenManager.identLu);
     }
     jj_consume_token(PRINCIPAL);
 inMain = true;
-                                        yvm.etiquetteFonc("main");
-                                        yvmAsm.etiquetteFonc("main");
+                                        yvm.main();
+                                        yvmAsm.main();
     bloc();
     jj_consume_token(FPRINCIPAL);
     jj_consume_token(FPROGRAMME);

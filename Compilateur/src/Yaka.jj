@@ -156,11 +156,11 @@ void analyse() : {}
    							yvmAsm.entete(YakaTokenManager.identLu);}
    (declFonction())*
    <PRINCIPAL> {inMain = true;
-   					yvm.etiquetteFonc("main");
-   					yvmAsm.etiquetteFonc("main");
+   					yvm.main();
+   					yvmAsm.main();
    			   }
    bloc()
-   <FPRINCIPAL>
+   <FPRINCIPAL> 
    <FPROGRAMME> { yvm.queue();
    				  yvmAsm.queue();}
 }

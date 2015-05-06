@@ -195,6 +195,10 @@ public class YVMasm extends YVM{
 		Ecriture.ecrireStringln(file,".model SMALL");
 		Ecriture.ecrireStringln(file,".586");
 		Ecriture.ecrireStringln(file,".CODE");
+	}
+	
+	@Override
+	public void main(){
 		Ecriture.ecrireStringln(file,"debut :");
 		Ecriture.ecrireStringln(file,"\tSTARTUPCODE");
 	}
@@ -210,8 +214,8 @@ public class YVMasm extends YVM{
 	@Override
 	public void ecrireChaine(String chaine){
 		Ecriture.ecrireStringln(file,".DATA");
-		chaine = chaine.substring(0, chaine.length()-1);
-		Ecriture.ecrireStringln(file,"\tmess"+messCount+" DB "+chaine+"$\"");
+		chaine = chaine.substring(1, chaine.length()-1);
+		Ecriture.ecrireStringln(file,"\tmess"+messCount+" DB \""+chaine+"$\"");
 		Ecriture.ecrireStringln(file,".CODE");
 		Ecriture.ecrireStringln(file,"\tlea dx,mess"+messCount);
 		messCount++;

@@ -102,6 +102,10 @@ public class YVM {
 		file = Ecriture.ouvrir(nomProgramme+".yvm");
 		Ecriture.ecrireStringln(file,"entete");
 	}
+		
+	public void main(){
+		Ecriture.ecrireStringln(file,"debut :");
+	}
 	
 	public void queue(){
 		Ecriture.ecrireStringln(file,"queue");
