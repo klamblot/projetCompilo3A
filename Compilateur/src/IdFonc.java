@@ -51,11 +51,14 @@ public class IdFonc extends Ident {
 	 * @return le nom de la fonction avec ses types des paramètres
 	 */
 	public String affiche(String nom){
-		String s=nom+"("+getParam(0);
+		String s=nom;
+		if(getNbParam()!=0){
+		s=s+"("+getParam(0);
 		for(int i = 1; i<getNbParam();i++){
 			s+=","+getParam(i);
 		}
 		s+=")";
+		}else s+="()";
 		return s;
 		
 	}

@@ -28,6 +28,7 @@ public class Yaka {
 	
 	static boolean inMain = false; //Variable qui indique quand on se trouve dans le programme principal
 	static boolean needArg =false; //Variable qui se met a true quand il y a un appel de fonction pour verifier si des parametres sont bien rentres
+	static boolean errFonc = false;//Variable a true si une fonction declaree porte le nom d'une fonction deja declaree
 	
 	static EtiqUtil ite = new EtiqUtil();
 	static EtiqUtil cond = new EtiqUtil();
@@ -630,6 +631,7 @@ void declFonction() : {}
 	<ident> {
   				if(tabIdent.existeIdentGlob(YakaTokenManager.identLu)){
   					System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La fonction "+YakaTokenManager.identLu+" est deja  declaree.");
+  					errFonc=true;
   				}else{
   					nomFct=YakaTokenManager.identLu;
   					tabIdent.rangeIdentGlob(nomFct, declaration.createIdentFonc(typeRetourFct));
@@ -648,6 +650,7 @@ void declFonction() : {}
 		tabIdent.clear();
 		declaration.clearOffset();
 		taille = 0;
+		errFonc=false;
 	}
 }
 
@@ -655,7 +658,7 @@ void paramForms() : {}
 {
 	"(" (paramForm() ( ","paramForm() )* )? ")"
 	{
-	  tabIdent.update(((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam());
+	  if(!errFonc) tabIdent.update(((IdFonc)tabIdent.chercheIdentGlob(nomFct)).getNbParam());
 	}
 	
 }
@@ -665,6 +668,7 @@ void paramForm() : {}
 {
 	type()
 	<ident>{
+			if(!errFonc)			{
 		  		if(tabIdent.existeIdentLoc(YakaTokenManager.identLu)){
 		 			System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La variable "+YakaTokenManager.identLu+" est deja  declaree.");
 		  		}else{
@@ -675,7 +679,8 @@ void paramForm() : {}
 		  								   				             )
 		  								  );
 		  		}
-	  	   }
+	  	   	}
+	  	 	}
 }
 
 void retourne() : {}
@@ -688,7 +693,7 @@ void retourne() : {}
 	expression(){	if (!inMain){		
 						String save = exp.tipToString(exp.popType());
 						if(!typeRetourFct.equals(save)){
-					 		System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La fonction"+nomFct+" retourne un "+typeRetourFct
+					 		System.out.println("Erreur l."+YakaTokenManager.jjFillToken().beginLine+" : La fonction "+nomFct+" retourne un "+typeRetourFct
 			  				+" alors que le type fournis est "+save+".");
 						}else{
 							if(!inMain){
@@ -738,7 +743,7 @@ void argumentsFonction() : {}
 										int num=total-nbArg + 1;
 										System.out.println(	"Erreur l."+YakaTokenManager.jjFillToken().beginLine+
 															" : Fonction : "+((IdFonc)tabIdent.chercheIdentGlob(fonc.peek())).affiche(fonc.peek())+", l'argument "+num+" n'est pas du type souhaite. "
-															+typeArg+" attendu, "+exp.tipToString(exp.popType())+" recu.");
+															+typeArg+" attendu, "+exp.tipToString(exp.peekType())+" recu.");
 									}
 								}
 								exp.popType();
